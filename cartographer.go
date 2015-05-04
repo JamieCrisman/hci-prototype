@@ -30,12 +30,13 @@ func CartographerSetup(){
         IndentJSON: true,
         HTMLContentType: "text/html",
         IsDevelopment: false,
-        UnEscapeHTML: false,
+        UnEscapeHTML: true,
     })
 }
 
 func HomeHandler(w http.ResponseWriter, req *http.Request){
-    fmt.Fprint(w, "Hello~")
+	result := GetAllEntries()
+    Renderer.r.HTML(w, http.StatusOK, "home", map[string]interface{}{"title": "Longest Voyage: Home", "content": "Hello!", "entries": result})
 }
 
 func PageHandler(w http.ResponseWriter, req *http.Request){
@@ -60,8 +61,11 @@ func EntryHandler(w http.ResponseWriter, r *http.Request) {
 	if(aux2 == ""){
 		aux2 = "also okay"
 	}
+	if result.Name == "" {
+		//todo make this goto a 404 page
+		http.Redirect(w, r, "/", http.StatusFound)
+	}
 
-
-	Renderer.r.HTML(w, http.StatusOK, "index", map[string]string{"title": result.Name, "content": result.Content})
+	Renderer.r.HTML(w, http.StatusOK, "simpleEntry", map[string]interface{}{"title": result.Name, "content": template.HTML(result.Content)})
 	//w.Write([]byte(fmt.Sprintf("Hello %s! aux1: %s aux2: %s", result.Name, aux1, aux2)))
 }

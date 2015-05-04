@@ -47,9 +47,9 @@ func ScribeSetup(){
         if err != nil {
             panic(err)
         }
-        err = DB.col.Insert(&PageEntry{Name: "Xoka Merveilles", Slug: "xoka", Active: true, Category: "Projects", Content: "xoka xoka asdfasdf", LastUpdated: 0, CreateDate: 0},
-&PageEntry{Name: "SomeNameOther", Slug: "xopa", Active: true, Category: "Projects", Content: "xopa xopa asdfasdf", LastUpdated: 0, CreateDate: 0},
-&PageEntry{Name: "SomeNameOther2", Slug: "apa", Active: true, Category: "Projects", Content: "apa apa asdfasdf", LastUpdated: 0, CreateDate: 0})
+        err = DB.col.Insert(&PageEntry{Name: "Xoka Merveilles", Slug: "xoka", Active: true, Category: "Projects", Content: "xoka <b>xoka</b> asdfasdf", LastUpdated: 0, CreateDate: 0},
+&PageEntry{Name: "SomeNameOther", Slug: "xopa", Active: true, Category: "Projects", Content: "xopa xopa <i>asdfasdf</i>", LastUpdated: 0, CreateDate: 0},
+&PageEntry{Name: "SomeNameOther2", Slug: "apa", Active: true, Category: "Projects", Content: "<strong>apa apa asdfasdf</strong>", LastUpdated: 0, CreateDate: 0})
         if err != nil {
             panic(err)
         }
@@ -69,3 +69,11 @@ func GetEntry(entry string) PageEntry{
 	return result
 }
 
+func GetAllEntries() []PageEntry{
+    log.Println("Getting every entry ")
+    var result []PageEntry
+    DB.col.Find(nil).All(&result)
+    //log.Println("result: " + len(result))
+
+    return result
+}

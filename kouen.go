@@ -3,6 +3,7 @@ package main
 import (
     "github.com/codegangsta/negroni"
     "github.com/gorilla/mux"
+    "github.com/unrolled/secure"
 //	"github.com/gin-gonic/gin";
 //	"github.com/gin-gonic/gin/binding";
 //	"log"
@@ -47,11 +48,13 @@ func main() {
     mx.HandleFunc("/{entry}/{aux1}", EntryHandler)
     mx.HandleFunc("/{entry}/{aux1}/{aux2}", EntryHandler)
 
-    //r := gin.Default()
-    //html := template.Must(template.New("").Delims(templateDelims[0], templateDelims[1]).ParseFiles("./templates/index.tmpl","./templates/admin.tmpl", "./templates/passwordedFile.tmpl"))
-    //r.SetHTMLTemplate(html)
-    //r.Static("/assets","./public/assets")
+    secureMiddleware := secure.New(secure.Options{
+        FrameDeny: true,
+        IsDevelopment: true,
+    })
+
     n := negroni.Classic()
+    n.Use(negroni.HandlerFunc(secureMiddleware.HandlerFuncWithNext))
     n.UseHandler(mx)
     n.Run(":8080")
 
