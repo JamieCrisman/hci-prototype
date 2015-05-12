@@ -5,6 +5,8 @@ import(
     "gopkg.in/mgo.v2"
     "gopkg.in/mgo.v2/bson"
     "log"
+    "github.com/apexskier/httpauth"
+    "golang.org/x/crypto/bcrypt"
 )
 
 type Library struct{
@@ -14,6 +16,7 @@ type Library struct{
 
 var(
 	DB Library
+    backend httpauth.MongodbAuthBackend
 )
 
 func ScribeSetup(){
@@ -25,6 +28,15 @@ func ScribeSetup(){
     }
     session.SetMode(mgo.Monotonic, true)
     
+    backend, err = httpauth.NewMongodbBackend("mongodb://localhost/", "auth")
+    
+    hash, err := bcrypt.GenerateFromPassword([]byte("adminadmin"), bcrypt.DefaultCost)
+    if err != nil {
+        panic(err)
+    }
+    defaultUser := httpauth.UserData{Username: "admin", Email: "admin@localhost", Hash: hash, Role: "admin"}
+    err = backend.SaveUser(defaultUser)
+
     DB.col = session.DB("kouen").C("entry")
     DB.s = session
 
@@ -56,8 +68,13 @@ func ScribeSetup(){
     }
 }
 
+func GetAuthBackend() httpauth.MongodbAuthBackend {
+    return backend
+}
+
 func ScribeShutdown(){
 	DB.s.Close();
+    backend.Close()
 }
 
 func GetEntry(entry string) PageEntry{

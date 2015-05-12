@@ -44,6 +44,10 @@ func main() {
 
     mx := mux.NewRouter()
     mx.HandleFunc("/", HomeHandler)
+    mx.HandleFunc("/admin", AdminHandler)
+    mx.HandleFunc("/login", LoginHandler).Methods("GET")
+    mx.HandleFunc("/login", PostLoginHandler).Methods("POST")
+    mx.HandleFunc("/logout", LogoutHandler)
     mx.HandleFunc("/{entry}", EntryHandler)
     mx.HandleFunc("/{entry}/{aux1}", EntryHandler)
     mx.HandleFunc("/{entry}/{aux1}/{aux2}", EntryHandler)
