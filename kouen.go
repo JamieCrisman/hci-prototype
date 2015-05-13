@@ -14,16 +14,28 @@ import (
     //"strings"
     //"time"
 //    "encoding/json"
+    "html/template"
 )
 
-type PageEntry struct {
-	Name string
-	Slug string
-	Active bool
+type PageIndex struct {
+    Name string
+    Slug string
+    Active bool
     Category string
-    Content string
     LastUpdated int
     CreateDate int
+}
+
+type PageCommit struct {
+    Name string //matches index
+	Title string //unique(able) to commit
+	Slug string
+    Content string
+    CompiledContent template.HTML
+    LastUpdated int
+    CreateDate int
+    Active bool
+    CommitID string
 }
 
 var (

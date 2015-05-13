@@ -16,7 +16,20 @@
 			<a href="/">Home</a>
 		</nav>
 		<main>
-			{{% .content %}}
+			{{% range .commits %}}
+				<section>
+					<h2>
+						{{% .Title %}}
+					</h2>
+					<div>
+						{{% .CompiledContent %}}
+					</div>
+					<div>
+						{{% .LastUpdated %}}
+						<a href="/{{%.Slug%}}/{{% .CommitID %}}">{{% .CommitID %}}</a>
+					</div>
+				</section>
+			{{% end %}}
 		</main>
 		<footer>{{% template "footer" %}}</footer>
 	</body>

@@ -59,9 +59,14 @@ func EntryHandler(w http.ResponseWriter, r *http.Request) {
 	aux1 := cleanCheck(mux.Vars(r)["aux1"])
 	aux2 := cleanCheck(mux.Vars(r)["aux2"])
 
+	var result []PageCommit
 	//db.find(bson.M{"Slug": entry})
 	log.Println("about to get entry")
-	result := GetEntry(entry)
+	if(aux1 != "all"){
+		result = *GetEntry(entry, aux1)
+	}else{
+		result = *GetAllCommits(entry)
+	}
 	
 	//because I don't have anything using this yet
 	if(aux1 == ""){
@@ -70,12 +75,20 @@ func EntryHandler(w http.ResponseWriter, r *http.Request) {
 	if(aux2 == ""){
 		aux2 = "also okay"
 	}
-	if result.Name == "" {
+	if len(result) == 0 {
 		//todo make this goto a 404 page
+		log.Println("Redirecting!")
 		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+	log.Println("Ready to show page")
+	//TODO:
+	//template.HTML(result.Content) on each of the results
+	for key := range result{
+		result[key].CompiledContent = CompileContent(result[key].Content)
 	}
 
-	Renderer.r.HTML(w, http.StatusOK, "simpleEntry", map[string]interface{}{"title": result.Name, "content": template.HTML(result.Content)})
+	Renderer.r.HTML(w, http.StatusOK, "simpleEntry", map[string]interface{}{"title": result[0].Name, "commits": result})
 	//w.Write([]byte(fmt.Sprintf("Hello %s! aux1: %s aux2: %s", result.Name, aux1, aux2)))
 }
 

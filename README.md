@@ -7,12 +7,12 @@ Wikiesque project
 
 - ~~User Auth~~
 - ~~Proper parsing of variables in url (strip out junk)~~ turns out mux seems to handle some of these already
-- entry index
-- entry commit
+- ~~entry index~~
+- ~~entry commit~~
 - image uploader/manager
-- custom template interpreting
-  - [img: imgurl.jpg]
-  - [entry: entryname, displayname]
+- ~~custom template interpreting~~
+  - ~~[img: imgurl.jpg : alt text]~~
+  - ~~[entry: entryname : displayname : commit : alt text]~~
 - page designs
   - view entry
   - /entry/all (paging)
