@@ -57,6 +57,7 @@ func main() {
     mx := mux.NewRouter()
     mx.HandleFunc("/", HomeHandler)
     mx.HandleFunc("/admin", AdminHandler)
+    mx.HandleFunc("/admin/entry/{entry}/edit", AdminEntryIndex)
     mx.HandleFunc("/login", LoginHandler).Methods("GET")
     mx.HandleFunc("/login", PostLoginHandler).Methods("POST")
     mx.HandleFunc("/logout", LogoutHandler)

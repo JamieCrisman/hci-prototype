@@ -110,6 +110,30 @@ func GetEntry(entry string, commit string) *[]PageCommit{
 
 	return &[]PageCommit{result}
 }
+func GetEntryAdmin(entry string, commit string) *[]PageCommit{
+    log.Println("Getting entry " + entry)
+    var result PageCommit
+    var query bson.M
+    if(commit == ""){
+        query = bson.M{"slug": entry}
+    }else if(commit != ""){
+        query = bson.M{"slug": entry, "commitid": commit}
+    }
+    DB.entries.Find(query).Sort("-createdate").One(&result)
+
+    return &[]PageCommit{result}
+}
+
+func GetAllCommitsAdmin(entry string) *[]PageCommit{
+    log.Println("Getting every commit ")
+    query := bson.M{"slug": entry}
+    
+    var result []PageCommit
+    DB.entries.Find(query).Sort("-createdate").All(&result)
+    //log.Println("result: " + len(result))
+
+    return &result
+}
 
 func GetAllCommits(entry string) *[]PageCommit{
     log.Println("Getting every commit ")
@@ -126,6 +150,15 @@ func GetAllEntries() []PageIndex{
     log.Println("Getting every entry ")
     var result []PageIndex
     DB.indices.Find(bson.M{"active": true}).All(&result)
+    //log.Println("result: " + len(result))
+
+    return result
+}
+
+func GetAllEntriesAdmin() []PageIndex{
+    log.Println("Getting every entry ")
+    var result []PageIndex
+    DB.indices.Find(nil).All(&result)
     //log.Println("result: " + len(result))
 
     return result

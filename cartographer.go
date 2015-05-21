@@ -93,12 +93,9 @@ func EntryHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminHandler(w http.ResponseWriter, r *http.Request){
-	if err := auth.Authorize(w, r, true); err != nil {
-		fmt.Println(err)
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return
-	}
-	Renderer.r.HTML(w, http.StatusOK, "simpleEntry", map[string]interface{}{"title": "AdminPage", "content": "Xoka Ciel"})
+	checkAuth(w,r)
+	result := GetAllEntriesAdmin()
+	Renderer.r.HTML(w, http.StatusOK, "adminIndices", map[string]interface{}{"title": "AdminPage", "entries": result})
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request){
@@ -106,6 +103,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request){
 }
 func PostLoginHandler(w http.ResponseWriter, r *http.Request){
 	login(w,r)
+}
+
+func AdminEntryIndex(w http.ResponseWriter, r *http.Request){
+	checkAuth(w, r)
+	entryName := cleanCheck(mux.Vars(r)["entry"])
+	entry := *GetEntryAdmin(entryName, "")
+	commits := *GetAllCommitsAdmin(entryName)
+	Renderer.r.HTML(w, http.StatusOK, "adminEntries", map[string]interface{}{"title": "AdminPage", "entry": entry, "commits": commits})
 }
 
 
@@ -135,4 +140,12 @@ func cleanCheck(s string) string {
 		panic(err)
 	}
 	return strings.ToLower(reg.ReplaceAllString(s, ""));
+}
+
+func checkAuth(w http.ResponseWriter, r *http.Request){
+	if err := auth.Authorize(w, r, true); err != nil {
+		fmt.Println(err)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
 }

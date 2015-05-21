@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>{{% .title %}}</title>
+		{{% template "includes"%}}
+	</head>
+	<body>
+		<header>
+			<h1>{{% .title %}}</h1>
+		</header>
+		<nav class="container-fluid">
+			<a href="/">Home</a>
+		</nav>
+		<main class="container-fluid">
+			<div class="row">
+				{{%range .entry%}}
+					<div class="col-sm-2 col-sm-offset-6"><a href="/admin/entry/{{% .Slug %}}/new">NEW COMMIT</a></div>
+					<div class="col-sm-2"><a href="/{{% .Slug %}}/all">VIEW ALL</a></div>
+				{{%end%}}
+			</div>
+			{{% range .commits %}}
+				<div class="row">
+					<div class="col-sm-6 text-right">{{% .Name %}}</div>
+					<div class="col-sm-2"><a href="/{{%.Slug%}}/{{%.CommitID%}}">VIEW</a></div>
+					<div class="col-sm-1"><a href="/admin/commit/{{% .Slug %}}/edit">EDIT</a></div>
+					<div class="col-sm-1"><a href="#">DELETE</a></div>
+				</div>
+			{{% end %}}
+		</main>
+		<footer>{{% template "footer" %}}</footer>
+	</body>
+</html>
