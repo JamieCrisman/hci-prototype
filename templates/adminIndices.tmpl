@@ -10,10 +10,11 @@
 		</header>
 		<nav class="container-fluid">
 			<a href="/">Home</a>
+			<a href="/admin">ADMIN</a>
 		</nav>
 		<main class="container-fluid">
 			<div class="row">
-				<div class="col-sm-6 col-sm-offset-6"><a href="#">NEW ENTRY</a></div>
+				<div class="col-sm-6 col-sm-offset-6"><a href="/admin/entry/new">NEW ENTRY</a></div>
 			</div>
 			{{% range .entries %}}
 				<div class="row">
@@ -21,7 +22,6 @@
 					<div class="col-sm-2">VIEW (<a href="/{{%.Slug%}}">LATEST</a>|<a href="/{{%.Slug%}}/all">ALL</a>)</div>
 					<div class="col-sm-1"><a href="/admin/entry/{{% .Slug %}}/new">NEW COMMIT</a></div>
 					<div class="col-sm-1"><a href="/admin/entry/{{% .Slug %}}/edit">EDIT</a></div>
-					<div class="col-sm-1"><a href="#">DELETE</a></div>
 				</div>
 			{{% end %}}
 		</main>

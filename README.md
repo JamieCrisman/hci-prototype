@@ -17,7 +17,7 @@ Wikiesque project
   - view entry
   - /entry/all (paging)
   - home
-  - add entry
+  - ~~add entry~~
   - add commit
   - edit commit
   - edit entry

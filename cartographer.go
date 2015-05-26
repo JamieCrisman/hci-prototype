@@ -10,12 +10,23 @@ import (
 	"github.com/apexskier/httpauth"
 	"regexp"
 	"strings"
+  "encoding/json"
+  "io/ioutil"
 	//"gopkg.in/mgo.v2"
 	//"gopkg.in/mgo.v2/bson"
 )
 
 type Map struct{
 	r *render.Render
+}
+
+type EntryInput struct{
+  Name string
+  Title string
+  Active bool
+  Category string
+  Slug string
+  Content string
 }
 
 var(
@@ -63,7 +74,7 @@ func EntryHandler(w http.ResponseWriter, r *http.Request) {
 	//db.find(bson.M{"Slug": entry})
 	log.Println("about to get entry")
 	if(aux1 != "all"){
-		result = *GetEntry(entry, aux1)
+		result = *GetCommit(entry, aux1)
 	}else{
 		result = *GetAllCommits(entry)
 	}
@@ -108,9 +119,98 @@ func PostLoginHandler(w http.ResponseWriter, r *http.Request){
 func AdminEntryIndex(w http.ResponseWriter, r *http.Request){
 	checkAuth(w, r)
 	entryName := cleanCheck(mux.Vars(r)["entry"])
-	entry := *GetEntryAdmin(entryName, "")
+	entry := *GetCommitAdmin(entryName, "")
 	commits := *GetAllCommitsAdmin(entryName)
 	Renderer.r.HTML(w, http.StatusOK, "adminEntries", map[string]interface{}{"title": "AdminPage", "entry": entry, "commits": commits})
+}
+func AdminEditIndex(w http.ResponseWriter, r *http.Request){
+  checkAuth(w, r)
+  slug := cleanCheck(mux.Vars(r)["entry"])
+  body, err := ioutil.ReadAll(r.Body)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Println(string(body))
+  var t EntryInput   
+  err = json.Unmarshal(body, &t)
+  if err != nil {
+    panic(err)
+  }
+  t.Slug = slug
+  err = UpdateEntry(&t)
+  if err != nil{
+    Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": err})
+    return
+  }
+
+  Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "YAY!", "data": t})
+}
+
+func AdminNewEntry(w http.ResponseWriter, r *http.Request){
+  checkAuth(w, r)
+  Renderer.r.HTML(w, http.StatusOK, "newEntry", map[string]interface{}{"title": "New Entry"})
+}
+
+func AdminCreateEntry(w http.ResponseWriter, r *http.Request){
+  checkAuth(w, r)
+
+  body, err := ioutil.ReadAll(r.Body)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Println(string(body))
+  var t EntryInput   
+  err = json.Unmarshal(body, &t)
+  if err != nil {
+    panic(err)
+  }
+  //fmt.Println(t)
+
+  err = CreateEntry(&t)
+  if err != nil{
+    Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": err})
+    return
+  }
+
+  Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "YAY!", "data": t})
+}
+
+func AdminNewCommit(w http.ResponseWriter, r *http.Request){
+  checkAuth(w, r)
+  entryName := cleanCheck(mux.Vars(r)["entry"])
+  ent := (*GetCommitAdmin(entryName, ""))[0]
+  Renderer.r.HTML(w, http.StatusOK, "newCommit", map[string]interface{}{"title": "New Entry", "name": ent.Name})
+}
+
+func AdminAPIGetEntry(w http.ResponseWriter, r *http.Request){
+  checkAuth(w, r)
+  entryName := cleanCheck(mux.Vars(r)["entry"])
+  ent := (*GetEntryAdmin(entryName))[0]
+  Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "OK", "entry": ent})
+}
+
+func AdminCreateCommit(w http.ResponseWriter, r *http.Request){
+  checkAuth(w, r)
+  entryName := cleanCheck(mux.Vars(r)["entry"])
+  body, err := ioutil.ReadAll(r.Body)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Println(string(body))
+  var t EntryInput   
+  err = json.Unmarshal(body, &t)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Println(t)
+  t.Slug = entryName
+  err = CreateCommit(&t)
+  if err != nil{
+    Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": err})
+    return
+  }
+
+  Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "YAY!"})
 }
 
 

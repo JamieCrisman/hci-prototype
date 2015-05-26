@@ -12,7 +12,7 @@ import (
     //"io"
     //"net/http"
     //"strings"
-    //"time"
+    "time"
 //    "encoding/json"
     "html/template"
 )
@@ -22,8 +22,8 @@ type PageIndex struct {
     Slug string
     Active bool
     Category string
-    LastUpdated int
-    CreateDate int
+    LastUpdated time.Time
+    CreateDate time.Time
 }
 
 type PageCommit struct {
@@ -32,8 +32,8 @@ type PageCommit struct {
 	Slug string
     Content string
     CompiledContent template.HTML
-    LastUpdated int
-    CreateDate int
+    LastUpdated time.Time
+    CreateDate time.Time
     Active bool
     CommitID string
 }
@@ -57,7 +57,13 @@ func main() {
     mx := mux.NewRouter()
     mx.HandleFunc("/", HomeHandler)
     mx.HandleFunc("/admin", AdminHandler)
-    mx.HandleFunc("/admin/entry/{entry}/edit", AdminEntryIndex)
+    mx.HandleFunc("/admin/entry/{entry}/edit", AdminEntryIndex).Methods("GET")
+    mx.HandleFunc("/admin/entry/{entry}/edit", AdminEditIndex).Methods("POST")
+    mx.HandleFunc("/admin/entry/{entry}/new", AdminNewCommit).Methods("GET")
+    mx.HandleFunc("/admin/entry/{entry}/new", AdminCreateCommit).Methods("POST")
+    mx.HandleFunc("/admin/entry/new", AdminNewEntry).Methods("GET")
+    mx.HandleFunc("/admin/entry/new", AdminCreateEntry).Methods("POST")
+    mx.HandleFunc("/api/entry/{entry}", AdminAPIGetEntry).Methods("GET")
     mx.HandleFunc("/login", LoginHandler).Methods("GET")
     mx.HandleFunc("/login", PostLoginHandler).Methods("POST")
     mx.HandleFunc("/logout", LogoutHandler)
