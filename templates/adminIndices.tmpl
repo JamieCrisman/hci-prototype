@@ -18,7 +18,13 @@
 			</div>
 			{{% range .entries %}}
 				<div class="row">
-					<div class="col-sm-6 text-right">{{% .Name %}}</div>
+					<div class="col-sm-6 text-right">
+						{{%if eq .Active true%}}
+							{{% .Name %}}
+						{{%else%}}
+							<strong>{{% .Name %}}</strong>
+						{{%end%}}
+					</div>
 					<div class="col-sm-2">VIEW (<a href="/{{%.Slug%}}">LATEST</a>|<a href="/{{%.Slug%}}/all">ALL</a>)</div>
 					<div class="col-sm-1"><a href="/admin/entry/{{% .Slug %}}/new">NEW COMMIT</a></div>
 					<div class="col-sm-1"><a href="/admin/entry/{{% .Slug %}}/edit">EDIT</a></div>

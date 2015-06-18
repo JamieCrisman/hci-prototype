@@ -22,7 +22,10 @@ app.controller('entryController', function($scope, $http, $upload, $window){
   init();
 
   $scope.deleteIndex = function(){
-    console.log("DELETING!");
+    $http.delete($window.location.pathname).success(function(resp){
+      console.log("deleted this entry");
+      $window.location.href = "/admin";
+    })
   }
 
   $scope.submitEntry = function(){
