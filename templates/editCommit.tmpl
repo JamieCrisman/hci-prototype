@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{% .title %}}</title>
+    {{% template "includes"%}}
+    <script src="/assets/js/angular.min.js"></script>
+    <script src="/assets/js/angular-file-upload.min.js"></script>
+    <script src="/assets/js/angular-file-upload-shim.min.js"></script>
+    <script src="/assets/js/editCommit.js"></script>
+  </head>
+  <body ng-app="commit" ng-controller="commitController">
+    <header>
+      <h1>{{% .title %}}</h1>
+    </header>
+    <nav class="container-fluid">
+      <a href="/">Home</a>
+      <a href="/admin">ADMIN</a>
+    </nav>
+    <main class="container-fluid">
+      <div class="alert alert-info" ng-show="dispError">
+        {{dispError}}
+        <button type="button" class="close" ng-click="clearDispError()"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <h1>{{% .name %}}</h1>
+      <form ng-submit="submitCommit()">
+        <div class="form-group">
+          <label for="CommitTitle">Commit Title</label>
+          <input type="text" class="form-control" id="CommitTitle" placeholder="Commit Title" ng-model="commit.Title" required>
+        </div>
+        <div class="form-group">
+          <label for="Content">Content</label>
+          <textarea class="form-control" id="Content" placeholder="Content..." ng-model="commit.Content" required></textarea>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" checked ng-model="commit.Active"> Activate
+          </label>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+
+      <code>
+        [[entry: xopa : display : all : alt text ]]
+      </code>
+
+    </main>
+  </body>
+</html>

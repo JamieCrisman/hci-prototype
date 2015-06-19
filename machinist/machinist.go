@@ -1,4 +1,4 @@
-package machinist
+package model
 
 import (
     "time"
@@ -12,6 +12,7 @@ type EntryInput struct{
   Category string
   Slug string
   Content string
+  CommitID string
 }
 
 type PageIndex struct {

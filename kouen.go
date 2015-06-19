@@ -26,26 +26,35 @@ var Contains = func(list []string, elem string) bool {
 
 func main() {
     scribe.ScribeSetup()
-    cartographer.CartographerSetup()
+    route.CartographerSetup()
     defer scribe.ScribeShutdown()
-    
+
     mx := mux.NewRouter()
-    mx.HandleFunc("/", cartographer.HomeHandler)
-    mx.HandleFunc("/admin", cartographer.AdminHandler)
-    mx.HandleFunc("/admin/entry/{entry}/edit", cartographer.AdminEntryIndex).Methods("GET")
-    mx.HandleFunc("/admin/entry/{entry}/edit", cartographer.AdminEditIndex).Methods("POST")
-    mx.HandleFunc("/admin/entry/{entry}/edit", cartographer.AdminDeleteIndex).Methods("DELETE")
-    mx.HandleFunc("/admin/entry/{entry}/new", cartographer.AdminNewCommit).Methods("GET")
-    mx.HandleFunc("/admin/entry/{entry}/new", cartographer.AdminCreateCommit).Methods("POST")
-    mx.HandleFunc("/admin/entry/new", cartographer.AdminNewEntry).Methods("GET")
-    mx.HandleFunc("/admin/entry/new", cartographer.AdminCreateEntry).Methods("POST")
-    mx.HandleFunc("/api/entry/{entry}", cartographer.AdminAPIGetEntry).Methods("GET")
-    mx.HandleFunc("/login", cartographer.LoginHandler).Methods("GET")
-    mx.HandleFunc("/login", cartographer.PostLoginHandler).Methods("POST")
-    mx.HandleFunc("/logout", cartographer.LogoutHandler)
-    mx.HandleFunc("/{entry}", cartographer.EntryHandler)
-    mx.HandleFunc("/{entry}/{aux1}", cartographer.EntryHandler)
-    mx.HandleFunc("/{entry}/{aux1}/{aux2}", cartographer.EntryHandler)
+    mx.HandleFunc("/", route.HomeHandler)
+    mx.HandleFunc("/admin", route.AdminHandler)
+    
+    mx.HandleFunc("/api/entry/{entry}", route.AdminAPIGetEntry).Methods("GET")
+    mx.HandleFunc("/api/entry/{entry}/{commit}", route.AdminAPIGetCommit).Methods("GET")
+
+    mx.HandleFunc("/admin/entry/new", route.AdminNewEntry).Methods("GET")
+    mx.HandleFunc("/admin/entry/new", route.AdminCreateEntry).Methods("POST")
+    
+    mx.HandleFunc("/admin/entry/{entry}/edit", route.AdminEntryIndex).Methods("GET")
+    mx.HandleFunc("/admin/entry/{entry}/edit", route.AdminEditIndex).Methods("POST")
+    mx.HandleFunc("/admin/entry/{entry}/edit", route.AdminDeleteIndex).Methods("DELETE")
+
+    mx.HandleFunc("/admin/entry/{entry}/new", route.AdminNewCommit).Methods("GET")
+    mx.HandleFunc("/admin/entry/{entry}/new", route.AdminCreateCommit).Methods("POST")
+    mx.HandleFunc("/admin/entry/{entry}/{commit}/edit", route.AdminEntryCommit).Methods("GET")
+    mx.HandleFunc("/admin/entry/{entry}/{commit}/edit", route.AdminEditCommit).Methods("POST")
+    mx.HandleFunc("/admin/entry/{entry}/{commit}/edit", route.AdminDeleteCommit).Methods("DELETE")
+    
+    mx.HandleFunc("/login", route.LoginHandler).Methods("GET")
+    mx.HandleFunc("/login", route.PostLoginHandler).Methods("POST")
+    mx.HandleFunc("/logout", route.LogoutHandler)
+    mx.HandleFunc("/{entry}", route.EntryHandler)
+    mx.HandleFunc("/{entry}/{aux1}", route.EntryHandler)
+    mx.HandleFunc("/{entry}/{aux1}/{aux2}", route.EntryHandler)
 
     secureMiddleware := secure.New(secure.Options{
         FrameDeny: true,

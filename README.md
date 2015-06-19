@@ -3,7 +3,7 @@
 Wikiesque project
 
 
-###Todo:
+### Todo:
 
 - ~~User Auth~~
 - ~~Proper parsing of variables in url (strip out junk)~~ turns out mux seems to handle some of these already
@@ -13,12 +13,12 @@ Wikiesque project
 - ~~custom template interpreting~~
   - ~~[img: imgurl.jpg : alt text]~~
   - ~~[entry: entryname : displayname : commit : alt text]~~
-- page designs
-  - view entry
+- pages
+  - ~~view entry~~
   - /entry/all (paging)
   - home
   - ~~add entry~~
   - add commit
   - edit commit
-  - edit entry
+  - ~~edit entry~~
 - ~~make sure gulpfile works for sass->css compiling~~

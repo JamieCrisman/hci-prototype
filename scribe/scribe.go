@@ -78,16 +78,16 @@ func ScribeSetup(){
         if err != nil {
             panic(err)
         }
-        err = DB.entries.Insert(&machinist.PageCommit{Name: "Xoka Merveilles", Title: "xoka: commit 1", Slug: "xoka", Active: true, Content: "xoka <b>xoka</b> asdfasdf", CommitID: "abcd",LastUpdated: time.Now(), CreateDate: time.Now()},
-                                &machinist.PageCommit{Name: "SomeNameOther",Title: "xopa: Commit 1", Slug: "xopa", Active: true, Content: "xopa xopa <i>asdfasdf</i>", CommitID: "abcde", LastUpdated: time.Now(), CreateDate: time.Now()},
-                                &machinist.PageCommit{Name: "SomeNameOther",Title: "xopa: Commit 2", Slug: "xopa", Active: true, Content: "xopa xopa <i>asdfasdf</i>", CommitID: "abcdf", LastUpdated: time.Now(), CreateDate: time.Now()},
-                                &machinist.PageCommit{Name: "SomeNameOther2",Title: "apa: commit 1", Slug: "apa", Active: true, Content: "<strong>apa apa asdfasdf</strong>", CommitID: "abcdef", LastUpdated: time.Now(), CreateDate: time.Now()},
-                                &machinist.PageCommit{Name: "SomeNameOther2",Title: "apa: commit 2", Slug: "apa", Active: true, Content: "Hi there! :D [[img: test.png : testing alt text]]<strong>apa apa asdfasdf</strong>", CommitID: "img", LastUpdated: time.Now(), CreateDate: time.Now()},
-                                &machinist.PageCommit{Name: "SomeNameOther2",Title: "apa: commit 3", Slug: "apa", Active: true, Content: "Hi there! :D [[entry: xopa : display : all : alt text ]] [[entry: xopa : : abcde]] [[entry: xopa : : abcdf ]] [[entry: xopa : display ]]  <strong>apa apa asdfasdf</strong>", CommitID: "url", LastUpdated: time.Now(), CreateDate: time.Now()})
+        err = DB.entries.Insert(&model.PageCommit{Name: "Xoka Merveilles", Title: "xoka: commit 1", Slug: "xoka", Active: true, Content: "xoka <b>xoka</b> asdfasdf", CommitID: "abcd",LastUpdated: time.Now(), CreateDate: time.Now()},
+                                &model.PageCommit{Name: "SomeNameOther",Title: "xopa: Commit 1", Slug: "xopa", Active: true, Content: "xopa xopa <i>asdfasdf</i>", CommitID: "abcde", LastUpdated: time.Now(), CreateDate: time.Now()},
+                                &model.PageCommit{Name: "SomeNameOther",Title: "xopa: Commit 2", Slug: "xopa", Active: true, Content: "xopa xopa <i>asdfasdf</i>", CommitID: "abcdf", LastUpdated: time.Now(), CreateDate: time.Now()},
+                                &model.PageCommit{Name: "SomeNameOther2",Title: "apa: commit 1", Slug: "apa", Active: true, Content: "<strong>apa apa asdfasdf</strong>", CommitID: "abcdef", LastUpdated: time.Now(), CreateDate: time.Now()},
+                                &model.PageCommit{Name: "SomeNameOther2",Title: "apa: commit 2", Slug: "apa", Active: true, Content: "Hi there! :D [[img: test.png : testing alt text]]<strong>apa apa asdfasdf</strong>", CommitID: "img", LastUpdated: time.Now(), CreateDate: time.Now()},
+                                &model.PageCommit{Name: "SomeNameOther2",Title: "apa: commit 3", Slug: "apa", Active: true, Content: "Hi there! :D [[entry: xopa : display : all : alt text ]] [[entry: xopa : : abcde]] [[entry: xopa : : abcdf ]] [[entry: xopa : display ]]  <strong>apa apa asdfasdf</strong>", CommitID: "url", LastUpdated: time.Now(), CreateDate: time.Now()})
         
-        err = DB.indices.Insert(&machinist.PageIndex{Name: "Xoka Merveilles", Slug: "xoka", Active: true, Category: "Project", LastUpdated: time.Now(), CreateDate: time.Now()},
-&machinist.PageIndex{Name: "SomeNameOther", Slug: "xopa", Category: "Project", Active: true, LastUpdated: time.Now(), CreateDate: time.Now()},
-&machinist.PageIndex{Name: "SomeNameOther2", Slug: "apa", Category: "Project", Active: true, LastUpdated: time.Now(), CreateDate: time.Now()})
+        err = DB.indices.Insert(&model.PageIndex{Name: "Xoka Merveilles", Slug: "xoka", Active: true, Category: "Project", LastUpdated: time.Now(), CreateDate: time.Now()},
+&model.PageIndex{Name: "SomeNameOther", Slug: "xopa", Category: "Project", Active: true, LastUpdated: time.Now(), CreateDate: time.Now()},
+&model.PageIndex{Name: "SomeNameOther2", Slug: "apa", Category: "Project", Active: true, LastUpdated: time.Now(), CreateDate: time.Now()})
         if err != nil {
             panic(err)
         }
@@ -103,7 +103,7 @@ func ScribeShutdown(){
     backend.Close()
 }
 
-func CreateEntry(e *machinist.EntryInput) error{
+func CreateEntry(e *model.EntryInput) error{
     fmt.Println("adding " + e.Name + " to the database")
     now := time.Now()
     commit := GetMD5Hash( e.Content )[:6]
@@ -113,19 +113,42 @@ func CreateEntry(e *machinist.EntryInput) error{
         return errors.New("Already Exists")
     }
 
-    err := DB.indices.Insert(&machinist.PageIndex{Name: e.Name, Slug: e.Slug, Active: e.Active, Category: e.Category, LastUpdated: now, CreateDate: now})
+    err := DB.indices.Insert(&model.PageIndex{Name: e.Name, Slug: e.Slug, Active: e.Active, Category: e.Category, LastUpdated: now, CreateDate: now})
     if err != nil {
         return err
     }
-    err = DB.entries.Insert(&machinist.PageCommit{Name: e.Name, Title: e.Title, Slug: e.Slug, Active: e.Active, Content: e.Content, CommitID: commit, LastUpdated: now, CreateDate: now})
+    err = DB.entries.Insert(&model.PageCommit{Name: e.Name, Title: e.Title, Slug: e.Slug, Active: e.Active, Content: e.Content, CommitID: commit, LastUpdated: now, CreateDate: now})
     return err
     
 }
 
-func UpdateEntry(e *machinist.EntryInput) error{
+func UpdateEntry(e *model.EntryInput) error{
     fmt.Println("Updating " + e.Name + " to the database")
     now := time.Now()
     err := DB.indices.Update(bson.M{"slug": e.Slug}, bson.M{"$set": bson.M{"active": e.Active, "category": e.Category, "lastupdated": now}})
+    if err != nil {
+        return err
+    }
+    return nil
+}
+func UpdateEntryTime(e *model.EntryInput) error{
+    fmt.Println("Updating " + e.Name + " to the database")
+    now := time.Now()
+    err := DB.indices.Update(bson.M{"slug": e.Slug}, bson.M{"$set": bson.M{"lastupdated": now}})
+    if err != nil {
+        return err
+    }
+    return nil
+}
+
+func UpdateCommit(e *model.EntryInput) error{
+    fmt.Println("Updating " + e.Name + " to the database")
+    now := time.Now()
+    err := DB.entries.Update(bson.M{"slug": e.Slug}, bson.M{"$set": bson.M{"active": e.Active, "title": e.Title, "content": e.Content, "lastupdated": now}})
+    if err != nil {
+        return err
+    }
+    err = UpdateEntryTime(e)
     if err != nil {
         return err
     }
@@ -146,7 +169,7 @@ func DeleteEntry(e string) error{
     
 }
 
-func CreateCommit(e *machinist.EntryInput) error{
+func CreateCommit(e *model.EntryInput) error{
     fmt.Println("adding " + e.Title + " to the database")
     now := time.Now()
     commit := GetMD5Hash( e.Content )[:6]
@@ -159,14 +182,14 @@ func CreateCommit(e *machinist.EntryInput) error{
         check = *GetCommitAdmin(e.Slug, "")
     }
 
-    err := DB.entries.Insert(&machinist.PageCommit{Name: check[0].Name, Title: e.Title, Slug: check[0].Slug, Active: e.Active, Content: e.Content, CommitID: commit, LastUpdated: now, CreateDate: now})
+    err := DB.entries.Insert(&model.PageCommit{Name: check[0].Name, Title: e.Title, Slug: check[0].Slug, Active: e.Active, Content: e.Content, CommitID: commit, LastUpdated: now, CreateDate: now})
     return err   
 }
 
 
-func GetCommit(entry string, commit string) *[]machinist.PageCommit{
+func GetCommit(entry string, commit string) *[]model.PageCommit{
 	log.Println("Getting entry " + entry)
-	var result machinist.PageCommit
+	var result model.PageCommit
     var query bson.M
     if(commit == ""){
         query = bson.M{"slug": entry, "active": true}
@@ -175,13 +198,13 @@ func GetCommit(entry string, commit string) *[]machinist.PageCommit{
     }
 	DB.entries.Find(query).Sort("-createdate").One(&result)
     if(result.Name == ""){
-        return &[]machinist.PageCommit{}
+        return &[]model.PageCommit{}
     }
-	return &[]machinist.PageCommit{result}
+	return &[]model.PageCommit{result}
 }
-func GetCommitAdmin(entry string, commit string) *[]machinist.PageCommit{
+func GetCommitAdmin(entry string, commit string) *[]model.PageCommit{
     log.Println("Getting entry " + entry)
-    var result machinist.PageCommit
+    var result model.PageCommit
     var query bson.M
     if(commit == ""){
         query = bson.M{"slug": entry}
@@ -189,44 +212,44 @@ func GetCommitAdmin(entry string, commit string) *[]machinist.PageCommit{
         query = bson.M{"slug": entry, "commitid": commit}
     }
     DB.entries.Find(query).Sort("-createdate").One(&result)
-    return &[]machinist.PageCommit{result}
+    return &[]model.PageCommit{result}
 }
-func GetAllCommitsAdminWithID(entry string, commit string) *[]machinist.PageCommit{
+func GetAllCommitsAdminWithID(entry string, commit string) *[]model.PageCommit{
     log.Println("Getting every commit ")
     query := bson.M{"slug": entry, "commitid": commit}
     
-    var result []machinist.PageCommit
+    var result []model.PageCommit
     DB.entries.Find(query).Sort("-createdate").All(&result)
     //log.Println("result: " + len(result))
 
     return &result
 }
 
-func GetAllCommitsAdmin(entry string) *[]machinist.PageCommit{
+func GetAllCommitsAdmin(entry string) *[]model.PageCommit{
     log.Println("Getting every commit ")
     query := bson.M{"slug": entry}
     
-    var result []machinist.PageCommit
+    var result []model.PageCommit
     DB.entries.Find(query).Sort("-createdate").All(&result)
     //log.Println("result: " + len(result))
 
     return &result
 }
 
-func GetAllCommits(entry string) *[]machinist.PageCommit{
+func GetAllCommits(entry string) *[]model.PageCommit{
     log.Println("Getting every commit ")
     query := bson.M{"slug": entry, "active": true}
     
-    var result []machinist.PageCommit
+    var result []model.PageCommit
     DB.entries.Find(query).Sort("-createdate").All(&result)
     //log.Println("result: " + len(result))
 
     return &result
 }
 
-func GetEntryAdmin(entry string) *[]machinist.PageIndex{
+func GetEntryAdmin(entry string) *[]model.PageIndex{
     log.Println("Getting every entry ")
-    var result []machinist.PageIndex
+    var result []model.PageIndex
     query := bson.M{}
     if entry != "" {
         query = bson.M{"slug": entry}
@@ -237,18 +260,18 @@ func GetEntryAdmin(entry string) *[]machinist.PageIndex{
     return &result
 }
 
-func GetAllEntries() []machinist.PageIndex{
+func GetAllEntries() []model.PageIndex{
     log.Println("Getting every entry ")
-    var result []machinist.PageIndex
+    var result []model.PageIndex
     DB.indices.Find(bson.M{"active": true}).All(&result)
     //log.Println("result: " + len(result))
 
     return result
 }
 
-func GetAllEntriesAdmin() []machinist.PageIndex{
+func GetAllEntriesAdmin() []model.PageIndex{
     log.Println("Getting every entry ")
-    var result []machinist.PageIndex
+    var result []model.PageIndex
     DB.indices.Find(nil).All(&result)
     //log.Println("result: " + len(result))
 
