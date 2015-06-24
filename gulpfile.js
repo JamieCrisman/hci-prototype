@@ -2,24 +2,35 @@
   'use strict';
 
   var gulp = require('gulp');
+  var $ = require('gulp-load-plugins')();
   var plumber = require('gulp-plumber');
   var args = require('yargs').argv;
   var uglify = require("gulp-uglify");
   var sass = require('gulp-sass');
   var gulpif = require("gulp-if");
+  var del = require('del');
   var reload = require('gulp-livereload');
   var sync = require('gulp-sync')(gulp).sync;
-  var child = require('child_process');
+  var child = require('child_process').spawn;
   var util = require('gulp-util');
   var mincss = require('gulp-minify-css');
+  var concat = require('gulp-concat');
 
   var paths = {
     scripts: [
-      "assets/js/*.js"
+      "bower_components/webcomponentsjs/webcomponents-lite.js",
+      "bower_components/jquery/dist/jquery.js",
+      "assets/js/bootstrap.min.js"
     ],
     sass: [
       './assets/css/*.scss',
       './assets/css/*.css'
+    ],
+    elements: [
+      'polymer/elements/elements.html'
+    ],
+    publicElements: [
+      'public/elements'
     ]
   };
 
@@ -29,7 +40,16 @@
    * Build application server.
    */
   gulp.task('build', function() {
-    return child.spawnSync('go', ['install']);
+    var process = child('go', ['install']);
+
+    process.stderr.on('data', function (buffer) {
+      throw new util.PluginError({
+        plugin: 'Kouen',
+        message: 'Build Failure: \n' + util.colors.red(buffer.toString())
+      });
+    });
+
+    return process;
   });
 
   /*
@@ -40,7 +60,7 @@
       server.kill();
 
     /* Spawn application server */
-    server = child.spawn('/home/awkwardhero/go/bin/kouen');
+    server = child('/home/awkwardhero/go/bin/kouen');
 
     /* Trigger reload upon server start */
     server.stdout.once('data', function() {
@@ -76,11 +96,48 @@
     return gulp.src(paths.sass)
       .pipe(plumber())
       .pipe(sass(sassConfig))
-      //.pipe(gulpif(!args.debug, uglify()))
       .pipe(gulpif(!args.debug, mincss()))
       .pipe(plumber.stop())
       .pipe(gulp.dest('public/assets/css/'));
 
+  });
+
+  gulp.task('scripts', function() {
+    del(['public/assets/js/script.js'], function(){
+      var theScripts = gulp.src(paths.scripts)
+        .pipe(concat('script.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('public/assets/js/'));
+    });
+  });
+
+  gulp.task('vulcanize:setup', function(){
+    del(['public/elements/*'], function(){
+      var bower = gulp.src(['bower_components/**/*'])
+      .pipe(gulp.dest('public/bower_components'));
+
+      var routes = gulp.src(['polymer/elements/routing.html'])
+      .pipe(gulp.dest('public/elements'));
+
+      var vulcanized = gulp.src(paths.elements)
+        .pipe($.rename('elements.vulcanized.html'))
+        .pipe(gulp.dest(paths.publicElements[0]));
+    });
+  })
+
+
+  // Vulcanize imports
+  gulp.task('vulcanize:compile', function () {
+
+    return gulp.src(paths.publicElements[0] + "/elements.vulcanized.html")
+      .pipe($.vulcanize({
+        dest: paths.publicElements[0],
+        strip: true,
+        inlineCss: true,
+        inlineScripts: true
+      }))
+      .pipe(gulp.dest(paths.publicElements[0]))
+      .pipe($.size({title: 'vulcanize'}));
   });
 
   /*
@@ -104,5 +161,6 @@
     ], 'server'));
   });
 
-  gulp.task("default", ["sass", "build", "spawn", "watch"]);
+  gulp.task("vulcanize", ['vulcanize:setup', 'vulcanize:compile']);
+  gulp.task("default", ["sass", "scripts", "vulcanize", "build", "spawn", "watch"]);
 })();

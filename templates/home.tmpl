@@ -4,7 +4,7 @@
 		<title>{{% .title %}}</title>
 		{{% template "includes"%}}
 	</head>
-	<body>
+	<body unresolved>
 		<header>
 			<h1>{{% .title %}}</h1>
 		</header>
@@ -12,13 +12,28 @@
 			<a href="/">Home</a>
 		</nav>
 		<main>
-			{{% .content %}}
-			{{% range .entries %}}
-				<div>
-					<a href="{{% .Slug %}}">{{% .Name %}}</a>
-				</div>
-			{{% end %}}
+			<template is="dom-bind" id="app">
+				<iron-pages attr-for-selected="data-route" selected="{{route}}">
+					<section data-route="home">
+						{{% .content %}}
+						{{% range .entries %}}
+							<div>
+								<a data-route="entry" href="/{{% .Slug %}}">{{% .Name %}}</a>
+							</div>
+						{{% end %}}
+					</section>
+					<section data-route="entry">
+						<h1><span>{{entryName}}</span></h1>
+						<template is="dom-repeat" items="{{entries}}">
+							<h2><span>{{item.Title}}</span></h2>
+							TODO make polymer element to bind html
+						</template>
+					</section>
+				</iron-pages>
+			</template>
+			<paper-button class="colorful" id="butts">testing</paper-button>
 		</main>
-		<footer>{{% template "footer" %}}</footer>
+
+		<script src="assets/js/app.js"></script>
 	</body>
 </html>

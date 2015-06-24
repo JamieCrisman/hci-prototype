@@ -1,0 +1,28 @@
+{
+  "name": "kouen",
+  "version": "0.0.0",
+  "homepage": "https://github.com/JamieCrisman/kouen",
+  "authors": [
+    "James Crisman <Jamie@AwkwardHero.com>"
+  ],
+  "keywords": [
+    "wiki"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~1.0.4",
+    "iron-elements": "PolymerElements/iron-elements#1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#1.0.1",
+    "platinum-elements": "PolymerElements/platinum-elements#1.0.1",
+    "neon-elements": "PolymerElements/neon-elements#1.0.0",
+    "page": "visionmedia/page.js#~1.6.3",
+    "jquery": "~2.1.4"
+  }
+}

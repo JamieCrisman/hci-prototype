@@ -33,6 +33,7 @@ func main() {
     mx.HandleFunc("/", route.HomeHandler)
     mx.HandleFunc("/admin", route.AdminHandler)
     
+    mx.HandleFunc("/api/entry", route.APIGetEntry).Methods("GET")
     mx.HandleFunc("/api/entry/{entry}", route.AdminAPIGetEntry).Methods("GET")
     mx.HandleFunc("/api/entry/{entry}/{commit}", route.AdminAPIGetCommit).Methods("GET")
 

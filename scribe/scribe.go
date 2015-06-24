@@ -187,20 +187,36 @@ func CreateCommit(e *model.EntryInput) error{
 }
 
 
-func GetCommit(entry string, commit string) *[]model.PageCommit{
-	log.Println("Getting entry " + entry)
-	var result model.PageCommit
+func GetCommit(entry string, commit string) *[]model.PageCommit {
+	log.Println("Getting entry " + entry + " : " + commit)
+    
     var query bson.M
-    if(commit == ""){
+    var multiple []model.PageCommit
+    if(commit == "all") {
         query = bson.M{"slug": entry, "active": true}
+        DB.entries.Find(query).Sort("-createdate").All(&multiple)
     }else if(commit != ""){
+        var single model.PageCommit
         query = bson.M{"slug": entry, "commitid": commit, "active": true}
+        DB.entries.Find(query).Sort("-createdate").One(&single)
+        multiple[0] = single
+    }else {
+        var single model.PageCommit
+        query = bson.M{"slug": entry, "active": true}
+        DB.entries.Find(query).Sort("-createdate").One(&single)
+        //multiple[] = single
+        multiple = append(multiple, single)
     }
-	DB.entries.Find(query).Sort("-createdate").One(&result)
-    if(result.Name == ""){
-        return &[]model.PageCommit{}
-    }
-	return &[]model.PageCommit{result}
+
+    // hack
+    // if(result.Name == ""){
+    //     return &[]model.PageCommit{}
+    // }
+	
+    return &multiple
+
+
+
 }
 func GetCommitAdmin(entry string, commit string) *[]model.PageCommit{
     log.Println("Getting entry " + entry)

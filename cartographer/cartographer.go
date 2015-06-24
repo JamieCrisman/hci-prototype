@@ -236,6 +236,14 @@ func AdminNewCommit(w http.ResponseWriter, r *http.Request){
   Renderer.r.HTML(w, http.StatusOK, "newCommit", map[string]interface{}{"title": "New Entry", "name": ent.Name})
 }
 
+func APIGetEntry(w http.ResponseWriter, r *http.Request){
+  entryName := cleanCheck(r.URL.Query().Get("entry"))
+  commitName := cleanCheck(r.URL.Query().Get("commit"))
+  ent := (*scribe.GetCommit(entryName, commitName))
+  fmt.Println(ent)
+  Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "OK", "commit": ent})
+}
+
 func AdminAPIGetEntry(w http.ResponseWriter, r *http.Request){
   checkAuth(w, r)
   entryName := cleanCheck(mux.Vars(r)["entry"])

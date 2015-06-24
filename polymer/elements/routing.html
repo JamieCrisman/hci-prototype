@@ -1,0 +1,69 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<script src="../../bower_components/page/page.js"></script>
+<script>
+  window.addEventListener('WebComponentsReady', function() {
+    // We use Page.js for routing. This is a Micro
+    // client-side router inspired by the Express router
+    // More info: https://visionmedia.github.io/page.js/
+    page('/', function () {
+      app.route = 'home';
+    });
+
+    page('/:entry', function(data) {
+      app.route = 'entry';
+      app.params = data.params;
+
+      var data = {
+        entry: app.params.entry
+      };
+      console.log("harro");
+      $.get("/api/entry", data).done(function(resp){
+        console.log("hi");
+        console.log(resp);
+        app.entryName = resp.commit[0].Name;
+        app.entries = resp.commit;
+        console.log(app.entries);
+      }).fail(function(resp){
+        console.log("error");
+        console.log(resp);
+      });
+
+    });
+
+    page('/:entry/all', function(data) {
+      console.log(data);
+      app.route = 'entry';
+      app.params = data.params;
+      console.log(app.params);
+    });
+
+    page('/:entry/all/:page', function(data) {
+      console.log(data);
+      app.route = 'entry';
+      app.params = data.params;
+      console.log(app.params);
+    });
+
+    page('/:entry/:commit', function(data) {
+      console.log(data);
+      app.route = 'entry';
+      app.params = data.params;
+      console.log(app.params);
+    });
+
+    // add #! before urls
+    page({
+      //hashbang: true
+    });
+
+  });
+</script>

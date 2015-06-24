@@ -49,7 +49,7 @@ func ParseImage(tag string) string {
     if(len(y) > 2){
         alt = "alt=\""+strings.TrimSpace(y[2])+"\""
     }
-    ret := "<img "+alt+" src=\"/assets/images/"+address+"\">"
+    ret := "<iron-image "+alt+" preload fade src=\"/assets/images/"+address+"\"></iron-image>"
     return ret
 }
 
