@@ -16,22 +16,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // More info: https://visionmedia.github.io/page.js/
     page('/', function () {
       app.route = 'home';
+      app.entries = [];
     });
 
     page('/:entry', function(data) {
-      app.route = 'entry';
+      app.route = 'loading';
       app.params = data.params;
-
+      app.entries = [];
       var data = {
         entry: app.params.entry
       };
-      console.log("harro");
       $.get("/api/entry", data).done(function(resp){
-        console.log("hi");
-        console.log(resp);
         app.entryName = resp.commit[0].Name;
         app.entries = resp.commit;
-        console.log(app.entries);
+        app.route = 'entry';
       }).fail(function(resp){
         console.log("error");
         console.log(resp);
@@ -40,29 +38,63 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
     page('/:entry/all', function(data) {
-      console.log(data);
-      app.route = 'entry';
+      app.route = 'loading';
       app.params = data.params;
-      console.log(app.params);
+      app.entries = [];
+      var data = {
+        entry: app.params.entry,
+        commit: "all"
+      };
+      $.get("/api/entry", data).done(function(resp){
+        app.entryName = resp.commit[0].Name;
+        app.entries = resp.commit;
+        app.route = 'entry';
+      }).fail(function(resp){
+        console.log("error");
+        console.log(resp);
+      });
     });
 
     page('/:entry/all/:page', function(data) {
-      console.log(data);
-      app.route = 'entry';
+      app.route = 'loading';      
       app.params = data.params;
-      console.log(app.params);
+      app.entries = [];
+      var data = {
+        entry: app.params.entry,
+        commit: "all",
+        page: app.params.page
+      };
+      $.get("/api/entry", data).done(function(resp){
+        app.route = 'entry';
+        app.entryName = resp.commit[0].Name;
+        app.entries = resp.commit;
+      }).fail(function(resp){
+        console.log("error");
+        console.log(resp);
+      });
     });
 
     page('/:entry/:commit', function(data) {
-      console.log(data);
-      app.route = 'entry';
+      app.route = 'loading';
       app.params = data.params;
-      console.log(app.params);
+      app.entries = [];
+      var data = {
+        entry: app.params.entry,
+        commit: app.params.commit
+      };
+      $.get("/api/entry", data).done(function(resp){
+        app.entryName = resp.commit[0].Name;
+        app.entries = resp.commit;
+        app.route = 'entry';
+      }).fail(function(resp){
+        console.log("error");
+        console.log(resp);
+      });
     });
 
     // add #! before urls
     page({
-      //hashbang: true
+      hashbang: true
     });
 
   });

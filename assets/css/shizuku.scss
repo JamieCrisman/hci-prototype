@@ -1,5 +1,81 @@
+//Colors
+$black: #333;
+$dark-gray: #555;
+$gray: #777;
+
+$blue: #00F;
+
+
+a {
+	&:hover {
+		text-decoration: none;
+		color: $dark-gray;
+	}
+	&:active, &:visited, &:link{
+		text-decoration: none;
+	}
+}
 body {
 	background-color: white;
+	color: $black;
+	.fullbleed {
+	  margin: 0;
+		height: 100vh;
+	}
+}
+
+main {
+	font-family: "freight-text-pro",Georgia,Cambria,"Times New Roman",Times,serif;
+	letter-spacing: 0.01rem;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 22px;
+  line-height: 1.5;
+	.entry-content {
+	  h1 {
+	  	font-size: 2em;
+	  	small {
+	  		font-size: 50%;
+	  	}
+	  }
+	  .commitId {
+	  	text-transform: uppercase;
+	  	opacity: 0.3;
+	  	-webkit-transition: opacity 0.3s ease-in-out;
+		  -moz-transition: opacity 0.3s ease-in-out;
+		  -o-transition: opacity 0.3s ease-in-out;
+		  transition: opacity 0.3s ease-in-out;
+	  	&:hover{
+	  		opacity: 1;
+	  	}
+	  }
+	}
+
+}
+
+nav {
+	padding: 10px 15px;
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	a {
+		font-size: 1.5em;
+		color: $black;
+	}
+}
+
+h1 {
+	&.entry-header {
+		font-size: 1.2em;
+		color: $gray;
+		margin-top: 34px;
+	}
+}
+
+main {
+	height: 100%;
 }
 
 .colorful{
@@ -19,4 +95,8 @@ footer {
 footer a {
 	color: #55f;
 	text-decoration: none;
+}
+
+.blue{
+	background-color: $blue;
 }

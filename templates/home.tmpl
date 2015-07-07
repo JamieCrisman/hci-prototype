@@ -4,34 +4,76 @@
 		<title>{{% .title %}}</title>
 		{{% template "includes"%}}
 	</head>
-	<body unresolved>
-		<header>
-			<h1>{{% .title %}}</h1>
-		</header>
-		<nav>
-			<a href="/">Home</a>
-		</nav>
-		<main>
-			<template is="dom-bind" id="app">
-				<iron-pages attr-for-selected="data-route" selected="{{route}}">
-					<section data-route="home">
-						{{% .content %}}
-						{{% range .entries %}}
-							<div>
-								<a data-route="entry" href="/{{% .Slug %}}">{{% .Name %}}</a>
-							</div>
-						{{% end %}}
-					</section>
-					<section data-route="entry">
-						<h1><span>{{entryName}}</span></h1>
-						<template is="dom-repeat" items="{{entries}}">
-							<h2><span>{{item.Title}}</span></h2>
-							TODO make polymer element to bind html
-						</template>
-					</section>
-				</iron-pages>
-			</template>
-			<paper-button class="colorful" id="butts">testing</paper-button>
+	<body class="fullbleed" unresolved>
+		<main class="vertical">
+			<paper-header-panel mode="waterfall">
+	  		
+	  		<div class="paper-header">
+	  			<nav>
+	  				<ul>
+	  					<li>
+								<a href="/">Longest Voyage</a>
+							</li>
+						</ul>
+					</nav>
+	  		</div>
+
+	  		<div class="content fit">
+					<template is="dom-bind" id="app">
+						<neon-animated-pages attr-for-selected="data-route" selected="{{route}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+							
+							<neon-animatable data-route="home">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-6 col-md-offset-3 entry-content">
+											{{% .content %}}
+											{{% range .entries %}}
+												<div>
+													<a data-route="entry" href="/{{% .Slug %}}">{{% .Name %}}</a>
+												</div>
+											{{% end %}}
+										</div>
+									</div>
+								</div>
+							</neon-animatable>
+							
+							<neon-animatable data-route="entry">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-2">
+											<h1 class="entry-header"><span>{{entryName}}</span></h1>
+										</div>
+										<div class="col-md-6 col-md-offset-1 entry-content">
+											<template is="dom-repeat" items="{{entries}}">
+												<h1>
+													<span inner-h-t-m-l="{{item.Title}}"></span>
+													<small>posted <time is="relative-time" datetime$="{{item.CreateDate}}">
+					  									April 1, 2014
+														</time>
+													</small>
+												</h1>
+												<div inner-h-t-m-l="{{item.CompiledContent}}"></div>
+												<div class="clearfix">
+													<a class="commitId pull-right" href="{{commitURL(item.Slug, item.CommitID)}}"><span>{{item.CommitID}}</span></a>
+												</div>
+												<hr>
+											</template>
+										</div>
+									</div>
+								</div>
+							</neon-animatable>
+							
+							<neon-animatable data-route="loading">
+								<div class="container">
+									<paper-spinner alt="Loading Page" class="col-xs-offset-6" active></paper-spinner>
+								</div>
+							</neon-animatable>
+
+						</neon-animated-pages>
+					</template>
+	  		</div>
+
+			</paper-header-panel>
 		</main>
 
 		<script src="assets/js/app.js"></script>

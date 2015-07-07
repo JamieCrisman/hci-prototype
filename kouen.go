@@ -53,9 +53,9 @@ func main() {
     mx.HandleFunc("/login", route.LoginHandler).Methods("GET")
     mx.HandleFunc("/login", route.PostLoginHandler).Methods("POST")
     mx.HandleFunc("/logout", route.LogoutHandler)
-    mx.HandleFunc("/{entry}", route.EntryHandler)
-    mx.HandleFunc("/{entry}/{aux1}", route.EntryHandler)
-    mx.HandleFunc("/{entry}/{aux1}/{aux2}", route.EntryHandler)
+    //mx.HandleFunc("/{entry}", route.EntryHandler)
+    //mx.HandleFunc("/{entry}/{aux1}", route.EntryHandler)
+    //mx.HandleFunc("/{entry}/{aux1}/{aux2}", route.EntryHandler)
 
     secureMiddleware := secure.New(secure.Options{
         FrameDeny: true,

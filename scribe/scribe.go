@@ -187,23 +187,32 @@ func CreateCommit(e *model.EntryInput) error{
 }
 
 
-func GetCommit(entry string, commit string) *[]model.PageCommit {
+func GetCommit(entry string, commit string) (*[]model.PageCommit, error) {
 	log.Println("Getting entry " + entry + " : " + commit)
     
     var query bson.M
     var multiple []model.PageCommit
     if(commit == "all") {
         query = bson.M{"slug": entry, "active": true}
-        DB.entries.Find(query).Sort("-createdate").All(&multiple)
+        err := DB.entries.Find(query).Sort("-createdate").All(&multiple)
+        if(err != nil) {
+            return nil, err
+        }
     }else if(commit != ""){
         var single model.PageCommit
         query = bson.M{"slug": entry, "commitid": commit, "active": true}
-        DB.entries.Find(query).Sort("-createdate").One(&single)
-        multiple[0] = single
+        err := DB.entries.Find(query).Sort("-createdate").One(&single)
+        if(err != nil) {
+            return nil, err
+        }
+        multiple = append(multiple, single)
     }else {
         var single model.PageCommit
         query = bson.M{"slug": entry, "active": true}
-        DB.entries.Find(query).Sort("-createdate").One(&single)
+        err := DB.entries.Find(query).Sort("-createdate").One(&single)
+        if(err != nil) {
+            return nil, err
+        }
         //multiple[] = single
         multiple = append(multiple, single)
     }
@@ -213,7 +222,7 @@ func GetCommit(entry string, commit string) *[]model.PageCommit {
     //     return &[]model.PageCommit{}
     // }
 	
-    return &multiple
+    return &multiple, nil
 
 
 

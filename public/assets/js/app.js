@@ -10,18 +10,22 @@
     console.log('Our app is ready to rock!');
   });
 
-  var button = document.querySelector("#butts");
-  button.addEventListener('click', function(){
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', encodeURI('/api/entry?entry=asdf'));
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        console.log(xhr.responseText);
-      } else {
-        console.log("bad" + xhr.responseText);
-      }
-    };
-    xhr.send();
-  });
+  app.commitURL = function(entry, commit) {
+    return "/" + entry + "/" + commit;
+  }
+
+  // var button = document.querySelector("#butts");
+  // button.addEventListener('click', function(){
+  //   var xhr = new XMLHttpRequest();
+  //   xhr.open('GET', encodeURI('/api/entry?entry=asdf'));
+  //   xhr.onload = function() {
+  //     if (xhr.status === 200) {
+  //       console.log(xhr.responseText);
+  //     } else {
+  //       console.log("bad" + xhr.responseText);
+  //     }
+  //   };
+  //   xhr.send();
+  // });
 
 })(document);

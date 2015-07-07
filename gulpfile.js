@@ -15,11 +15,13 @@
   var util = require('gulp-util');
   var mincss = require('gulp-minify-css');
   var concat = require('gulp-concat');
+  var vulcanize = require('gulp-vulcanize');
 
   var paths = {
     scripts: [
       "bower_components/webcomponentsjs/webcomponents-lite.js",
       "bower_components/jquery/dist/jquery.js",
+      "bower_components/time-elements/time-elements.js",
       "assets/js/bootstrap.min.js"
     ],
     sass: [
@@ -106,35 +108,30 @@
     del(['public/assets/js/script.js'], function(){
       var theScripts = gulp.src(paths.scripts)
         .pipe(concat('script.js'))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest('public/assets/js/'));
     });
   });
 
-  gulp.task('vulcanize:setup', function(){
+  gulp.task('vulcanize:setup', function(cb){
     del(['public/elements/*'], function(){
-      var bower = gulp.src(['bower_components/**/*'])
-      .pipe(gulp.dest('public/bower_components'));
+      //var bower = gulp.src(['bower_components/**/*'])
+      //.pipe(gulp.dest('public/bower_components'));
 
-      var routes = gulp.src(['polymer/elements/routing.html'])
-      .pipe(gulp.dest('public/elements'));
-
-      var vulcanized = gulp.src(paths.elements)
-        .pipe($.rename('elements.vulcanized.html'))
-        .pipe(gulp.dest(paths.publicElements[0]));
+      cb();
     });
   })
 
 
   // Vulcanize imports
-  gulp.task('vulcanize:compile', function () {
+  gulp.task('vulcanize:compile', ['vulcanize:setup'], function () {
 
-    return gulp.src(paths.publicElements[0] + "/elements.vulcanized.html")
-      .pipe($.vulcanize({
+    return gulp.src(paths.elements)
+      .pipe(vulcanize({
         dest: paths.publicElements[0],
         strip: true,
-        inlineCss: true,
-        inlineScripts: true
+        inlineScripts: true,
+        inlineCss: true
       }))
       .pipe(gulp.dest(paths.publicElements[0]))
       .pipe($.size({title: 'vulcanize'}));

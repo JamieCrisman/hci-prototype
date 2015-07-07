@@ -65,16 +65,22 @@ func EntryHandler(w http.ResponseWriter, r *http.Request) {
 	aux1 := cleanCheck(mux.Vars(r)["aux1"])
 	aux2 := cleanCheck(mux.Vars(r)["aux2"])
 
-	var result []model.PageCommit
+	var result *[]model.PageCommit
+  var err error
 	//db.find(bson.M{"Slug": entry})
 	log.Println("about to get entry")
 	if(aux1 != "all"){
-		result = *scribe.GetCommit(entry, aux1)
+		result, err = scribe.GetCommit(entry, aux1)
 	}else{
-		result = *scribe.GetAllCommits(entry)
+		result = scribe.GetAllCommits(entry)
 	}
+
+  if(err != nil) {
+    Renderer.r.HTML(w, http.StatusBadRequest, "simpleEntry", map[string]interface{}{})
+    return
+  }
 	
-	if len(result) == 0 {
+	if result == nil {
 		//todo make this goto a 404 page
 		log.Println("Redirecting!")
 		http.Redirect(w, r, "/", http.StatusFound)
@@ -84,11 +90,11 @@ func EntryHandler(w http.ResponseWriter, r *http.Request) {
     aux2 = "TODO"
   }
 	log.Println("Ready to show page")
-	for key := range result{
-		result[key].CompiledContent = architect.CompileContent(result[key].Content)
+	for key := range *result{
+		(*result)[key].CompiledContent = architect.CompileContent((*result)[key].Content)
 	}
 
-	Renderer.r.HTML(w, http.StatusOK, "simpleEntry", map[string]interface{}{"title": result[0].Name, "commits": result})
+	Renderer.r.HTML(w, http.StatusOK, "simpleEntry", map[string]interface{}{"title": (*result)[0].Name, "commits": result})
 	//w.Write([]byte(fmt.Sprintf("Hello %s! aux1: %s aux2: %s", result.Name, aux1, aux2)))
 }
 
@@ -239,8 +245,15 @@ func AdminNewCommit(w http.ResponseWriter, r *http.Request){
 func APIGetEntry(w http.ResponseWriter, r *http.Request){
   entryName := cleanCheck(r.URL.Query().Get("entry"))
   commitName := cleanCheck(r.URL.Query().Get("commit"))
-  ent := (*scribe.GetCommit(entryName, commitName))
-  fmt.Println(ent)
+  ent, err := scribe.GetCommit(entryName, commitName)
+  if(err != nil) {
+    Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": "Fail"})
+    return
+  }
+
+  for key := range *ent{
+    (*ent)[key].CompiledContent = architect.CompileContent((*ent)[key].Content)
+  }
   Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "OK", "commit": ent})
 }
 
