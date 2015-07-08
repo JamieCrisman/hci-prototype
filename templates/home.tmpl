@@ -45,18 +45,18 @@
 										</div>
 										<div class="col-md-6 col-md-offset-1 entry-content">
 											<template is="dom-repeat" items="{{entries}}">
-												<h1>
-													<span inner-h-t-m-l="{{item.Title}}"></span>
-													<small>posted <time is="relative-time" datetime$="{{item.CreateDate}}">
-					  									April 1, 2014
-														</time>
+												<div class="mdl-card mdl-shadow--4dp">
+													<div>
+														<h1 class="col-md-10">
+															<span inner-h-t-m-l="{{item.Title}}"></span>
+														</h1>
+														<a class="col-md-2 text-right commitId" href="{{commitURL(item.Slug, item.CommitID)}}"><span>{{item.CommitID}}</span></a>
+													</div>
+													<div class="col-md-12" inner-h-t-m-l="{{item.CompiledContent}}"></div>
+													<small class="col-md-12">
+														posted <time is="relative-time" datetime$="{{item.CreateDate}}">April 1, 2014</time>
 													</small>
-												</h1>
-												<div inner-h-t-m-l="{{item.CompiledContent}}"></div>
-												<div class="clearfix">
-													<a class="commitId pull-right" href="{{commitURL(item.Slug, item.CommitID)}}"><span>{{item.CommitID}}</span></a>
 												</div>
-												<hr>
 											</template>
 										</div>
 									</div>
@@ -65,17 +65,15 @@
 							
 							<neon-animatable data-route="loading">
 								<div class="container">
-									<paper-spinner alt="Loading Page" class="col-xs-offset-6" active></paper-spinner>
+									<div id="loading-page" class="mdl-progress mdl-js-progress mdl-progress__indeterminate progress-demo"></div>
 								</div>
 							</neon-animatable>
 
 						</neon-animated-pages>
 					</template>
 	  		</div>
-
 			</paper-header-panel>
 		</main>
-
 		<script src="assets/js/app.js"></script>
 	</body>
 </html>
