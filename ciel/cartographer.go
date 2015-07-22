@@ -1,9 +1,6 @@
-package route
+package ciel
 
 import (
-  "kouen/scribe"
-  "kouen/architect"
-  "kouen/machinist"
 	"fmt"
 	"net/http"
 	"github.com/gorilla/mux"
@@ -33,7 +30,7 @@ func CartographerSetup(){
 	var roles = make(map[string]httpauth.Role, 2)
 	roles["user"] = 2
 	roles["admin"] = 4
-	auth, _ = httpauth.NewAuthorizer(scribe.GetAuthBackend(), []byte("XokaLongestVoyage"), "admin", roles)
+	auth, _ = httpauth.NewAuthorizer(GetAuthBackend(), []byte("XokaLongestVoyage"), "admin", roles)
 
 	Renderer.r = render.New(render.Options{
         Directory: "templates",
@@ -50,7 +47,7 @@ func CartographerSetup(){
 }
 
 func HomeHandler(w http.ResponseWriter, req *http.Request){
-	result := scribe.GetAllEntries()
+	result := GetAllEntries()
     Renderer.r.HTML(w, http.StatusOK, "home", map[string]interface{}{"title": "Longest Voyage: Home", "content": "Hello!", "entries": result})
 }
 
@@ -65,14 +62,14 @@ func EntryHandler(w http.ResponseWriter, r *http.Request) {
 	aux1 := cleanCheck(mux.Vars(r)["aux1"])
 	aux2 := cleanCheck(mux.Vars(r)["aux2"])
 
-	var result *[]model.PageCommit
+	var result *[]PageCommit
   var err error
 	//db.find(bson.M{"Slug": entry})
 	log.Println("about to get entry")
 	if(aux1 != "all"){
-		result, err = scribe.GetCommit(entry, aux1)
+		result, err = GetCommit(entry, aux1)
 	}else{
-		result = scribe.GetAllCommits(entry)
+		result = GetAllCommits(entry)
 	}
 
   if(err != nil) {
@@ -91,7 +88,7 @@ func EntryHandler(w http.ResponseWriter, r *http.Request) {
   }
 	log.Println("Ready to show page")
 	for key := range *result{
-		(*result)[key].CompiledContent = architect.CompileContent((*result)[key].Content)
+		(*result)[key].CompiledContent = CompileContent((*result)[key].Content)
 	}
 
 	Renderer.r.HTML(w, http.StatusOK, "simpleEntry", map[string]interface{}{"title": (*result)[0].Name, "commits": result})
@@ -100,7 +97,7 @@ func EntryHandler(w http.ResponseWriter, r *http.Request) {
 
 func AdminHandler(w http.ResponseWriter, r *http.Request){
 	checkAuth(w,r)
-	result := scribe.GetAllEntriesAdmin()
+	result := GetAllEntriesAdmin()
 	Renderer.r.HTML(w, http.StatusOK, "adminIndices", map[string]interface{}{"title": "AdminPage", "entries": result})
 }
 
@@ -114,8 +111,8 @@ func PostLoginHandler(w http.ResponseWriter, r *http.Request){
 func AdminEntryIndex(w http.ResponseWriter, r *http.Request){
 	checkAuth(w, r)
 	entryName := cleanCheck(mux.Vars(r)["entry"])
-	entry := *scribe.GetCommitAdmin(entryName, "")
-	commits := *scribe.GetAllCommitsAdmin(entryName)
+	entry := *GetCommitAdmin(entryName, "")
+	commits := *GetAllCommitsAdmin(entryName)
   if(entry[0].Slug == ""){
     http.Redirect(w, r, "/admin", http.StatusBadRequest)
   }
@@ -129,13 +126,13 @@ func AdminEditIndex(w http.ResponseWriter, r *http.Request){
     panic(err)
   }
   log.Println(string(body))
-  var t model.EntryInput   
+  var t EntryInput   
   err = json.Unmarshal(body, &t)
   if err != nil {
     panic(err)
   }
   t.Slug = slug
-  err = scribe.UpdateEntry(&t)
+  err = UpdateEntry(&t)
   if err != nil{
     Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": err})
     return
@@ -147,7 +144,7 @@ func AdminEditIndex(w http.ResponseWriter, r *http.Request){
 func AdminDeleteIndex(w http.ResponseWriter, r *http.Request){
   checkAuth(w, r)
   slug := cleanCheck(mux.Vars(r)["entry"])
-  err := scribe.DeleteEntry(slug)
+  err := DeleteEntry(slug)
   if err != nil{
     Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": err})
     return
@@ -169,14 +166,14 @@ func AdminCreateEntry(w http.ResponseWriter, r *http.Request){
     panic(err)
   }
   fmt.Println(string(body))
-  var t model.EntryInput   
+  var t EntryInput   
   err = json.Unmarshal(body, &t)
   if err != nil {
     panic(err)
   }
   //fmt.Println(t)
 
-  err = scribe.CreateEntry(&t)
+  err = CreateEntry(&t)
   if err != nil{
     Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": err})
     return
@@ -189,7 +186,7 @@ func AdminEntryCommit(w http.ResponseWriter, r *http.Request){
   checkAuth(w, r)
   entryName := cleanCheck(mux.Vars(r)["entry"])
   commitName := cleanCheck(mux.Vars(r)["commit"])
-  commit := *scribe.GetCommitAdmin(entryName, commitName)
+  commit := *GetCommitAdmin(entryName, commitName)
   if(commit[0].Slug == ""){
     http.Redirect(w, r, "/admin", http.StatusBadRequest)
   }
@@ -205,14 +202,14 @@ func AdminEditCommit(w http.ResponseWriter, r *http.Request){
     panic(err)
   }
   log.Println(string(body))
-  var t model.EntryInput
+  var t EntryInput
   err = json.Unmarshal(body, &t)
   if err != nil {
     panic(err)
   }
   t.Slug = slug
   t.CommitID = commit
-  err = scribe.UpdateCommit(&t)
+  err = UpdateCommit(&t)
   if err != nil{
     Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": err})
     return
@@ -225,7 +222,7 @@ func AdminDeleteCommit(w http.ResponseWriter, r *http.Request){
   checkAuth(w, r)
   //TODO:!!!!
   /*slug := cleanCheck(mux.Vars(r)["entry"])
-  err := scribe.DeleteEntry(slug)
+  err := DeleteEntry(slug)
   if err != nil{
     Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": err})
     return
@@ -238,21 +235,21 @@ func AdminDeleteCommit(w http.ResponseWriter, r *http.Request){
 func AdminNewCommit(w http.ResponseWriter, r *http.Request){
   checkAuth(w, r)
   entryName := cleanCheck(mux.Vars(r)["entry"])
-  ent := (*scribe.GetCommitAdmin(entryName, ""))[0]
+  ent := (*GetCommitAdmin(entryName, ""))[0]
   Renderer.r.HTML(w, http.StatusOK, "newCommit", map[string]interface{}{"title": "New Entry", "name": ent.Name})
 }
 
 func APIGetEntry(w http.ResponseWriter, r *http.Request){
   entryName := cleanCheck(r.URL.Query().Get("entry"))
   commitName := cleanCheck(r.URL.Query().Get("commit"))
-  ent, err := scribe.GetCommit(entryName, commitName)
+  ent, err := GetCommit(entryName, commitName)
   if(err != nil) {
     Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": "Fail"})
     return
   }
 
   for key := range *ent{
-    (*ent)[key].CompiledContent = architect.CompileContent((*ent)[key].Content)
+    (*ent)[key].CompiledContent = CompileContent((*ent)[key].Content)
   }
   Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "OK", "commit": ent})
 }
@@ -260,14 +257,14 @@ func APIGetEntry(w http.ResponseWriter, r *http.Request){
 func AdminAPIGetEntry(w http.ResponseWriter, r *http.Request){
   checkAuth(w, r)
   entryName := cleanCheck(mux.Vars(r)["entry"])
-  ent := (*scribe.GetEntryAdmin(entryName))[0]
+  ent := (*GetEntryAdmin(entryName))[0]
   Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "OK", "entry": ent})
 }
 func AdminAPIGetCommit(w http.ResponseWriter, r *http.Request){
   checkAuth(w, r)
   entryName := cleanCheck(mux.Vars(r)["entry"])
   commitName := cleanCheck(mux.Vars(r)["commit"])
-  ent := (*scribe.GetCommitAdmin(entryName, commitName))[0]
+  ent := (*GetCommitAdmin(entryName, commitName))[0]
   Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "OK", "commit": ent})
 }
 
@@ -279,14 +276,14 @@ func AdminCreateCommit(w http.ResponseWriter, r *http.Request){
     panic(err)
   }
   fmt.Println(string(body))
-  var t model.EntryInput   
+  var t EntryInput   
   err = json.Unmarshal(body, &t)
   if err != nil {
     panic(err)
   }
   fmt.Println(t)
   t.Slug = entryName
-  err = scribe.CreateCommit(&t)
+  err = CreateCommit(&t)
   if err != nil{
     Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": err})
     return

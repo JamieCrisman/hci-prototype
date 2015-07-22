@@ -2,3 +2,8 @@
 /bower_components/
 ./kouen
 npm*
+logs/*
+!.gitkeep
+tmp
+.DS_Store
+.idea

@@ -4,8 +4,7 @@ import (
     "github.com/codegangsta/negroni"
     "github.com/gorilla/mux"
     "github.com/unrolled/secure"
-    "kouen/scribe"
-    "kouen/cartographer"
+    "kouen/ciel"
 //	"github.com/gin-gonic/gin";
 //	"github.com/gin-gonic/gin/binding";
 //	"log"
@@ -25,34 +24,34 @@ var Contains = func(list []string, elem string) bool {
 } 
 
 func main() {
-    scribe.ScribeSetup()
-    route.CartographerSetup()
-    defer scribe.ScribeShutdown()
+    ciel.ScribeSetup()
+    ciel.CartographerSetup()
+    defer ciel.ScribeShutdown()
 
     mx := mux.NewRouter()
-    mx.HandleFunc("/", route.HomeHandler)
-    mx.HandleFunc("/admin", route.AdminHandler)
+    mx.HandleFunc("/", ciel.HomeHandler)
+    mx.HandleFunc("/admin", ciel.AdminHandler)
     
-    mx.HandleFunc("/api/entry", route.APIGetEntry).Methods("GET")
-    mx.HandleFunc("/api/entry/{entry}", route.AdminAPIGetEntry).Methods("GET")
-    mx.HandleFunc("/api/entry/{entry}/{commit}", route.AdminAPIGetCommit).Methods("GET")
+    mx.HandleFunc("/api/entry", ciel.APIGetEntry).Methods("GET")
+    mx.HandleFunc("/api/entry/{entry}", ciel.AdminAPIGetEntry).Methods("GET")
+    mx.HandleFunc("/api/entry/{entry}/{commit}", ciel.AdminAPIGetCommit).Methods("GET")
 
-    mx.HandleFunc("/admin/entry/new", route.AdminNewEntry).Methods("GET")
-    mx.HandleFunc("/admin/entry/new", route.AdminCreateEntry).Methods("POST")
+    mx.HandleFunc("/admin/entry/new", ciel.AdminNewEntry).Methods("GET")
+    mx.HandleFunc("/admin/entry/new", ciel.AdminCreateEntry).Methods("POST")
     
-    mx.HandleFunc("/admin/entry/{entry}/edit", route.AdminEntryIndex).Methods("GET")
-    mx.HandleFunc("/admin/entry/{entry}/edit", route.AdminEditIndex).Methods("POST")
-    mx.HandleFunc("/admin/entry/{entry}/edit", route.AdminDeleteIndex).Methods("DELETE")
+    mx.HandleFunc("/admin/entry/{entry}/edit", ciel.AdminEntryIndex).Methods("GET")
+    mx.HandleFunc("/admin/entry/{entry}/edit", ciel.AdminEditIndex).Methods("POST")
+    mx.HandleFunc("/admin/entry/{entry}/edit", ciel.AdminDeleteIndex).Methods("DELETE")
 
-    mx.HandleFunc("/admin/entry/{entry}/new", route.AdminNewCommit).Methods("GET")
-    mx.HandleFunc("/admin/entry/{entry}/new", route.AdminCreateCommit).Methods("POST")
-    mx.HandleFunc("/admin/entry/{entry}/{commit}/edit", route.AdminEntryCommit).Methods("GET")
-    mx.HandleFunc("/admin/entry/{entry}/{commit}/edit", route.AdminEditCommit).Methods("POST")
-    mx.HandleFunc("/admin/entry/{entry}/{commit}/edit", route.AdminDeleteCommit).Methods("DELETE")
+    mx.HandleFunc("/admin/entry/{entry}/new", ciel.AdminNewCommit).Methods("GET")
+    mx.HandleFunc("/admin/entry/{entry}/new", ciel.AdminCreateCommit).Methods("POST")
+    mx.HandleFunc("/admin/entry/{entry}/{commit}/edit", ciel.AdminEntryCommit).Methods("GET")
+    mx.HandleFunc("/admin/entry/{entry}/{commit}/edit", ciel.AdminEditCommit).Methods("POST")
+    mx.HandleFunc("/admin/entry/{entry}/{commit}/edit", ciel.AdminDeleteCommit).Methods("DELETE")
     
-    mx.HandleFunc("/login", route.LoginHandler).Methods("GET")
-    mx.HandleFunc("/login", route.PostLoginHandler).Methods("POST")
-    mx.HandleFunc("/logout", route.LogoutHandler)
+    mx.HandleFunc("/login", ciel.LoginHandler).Methods("GET")
+    mx.HandleFunc("/login", ciel.PostLoginHandler).Methods("POST")
+    mx.HandleFunc("/logout", ciel.LogoutHandler)
     //mx.HandleFunc("/{entry}", route.EntryHandler)
     //mx.HandleFunc("/{entry}/{aux1}", route.EntryHandler)
     //mx.HandleFunc("/{entry}/{aux1}/{aux2}", route.EntryHandler)
