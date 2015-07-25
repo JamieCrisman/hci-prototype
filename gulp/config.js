@@ -12,30 +12,19 @@ module.exports = {
     srcAll: ['gulpfile.js', 'app/**/*.js'],
     specs: 'app/**/*-spec.js'
   },
-  less: {
-    src: 'project/app/index.less',
-    targets: 'project/app/**/*.less',
-    dest: 'build/css',
-    destMaps: './maps', // relative to dest folder
-    browsers: [
-      '> 1%',
-      'last 3 versions',
-      'ie 8', 'ie 9'
-    ]
-  },
   css: {
     src: 'css/**/*.css'
   },
   app: {
-    src: 'project/app/index.js',
-    dest: './build' // webpack requires absolute paths
+    src: 'app/index.js',
+    dest: 'public/*'
   },
   vendor: {
-    src: 'project/app/vendor.js',
-    dest: './build'
+    src: 'app/vendor.js',
+    dest: './public'
   },
   markup: {
-    src: 'project/app/index.html',
+    src: 'app/index.html',
     dest: './public'
   },
   templates: {
@@ -43,16 +32,24 @@ module.exports = {
     base: 'src',
     dest: './public'
   },
+  scripts: {
+    dest: 'public/js'
+  },
+  styles: {
+    dest: 'public/css'
+  },
   paths: {
     scripts: [
       "bower_components/webcomponentsjs/webcomponents-lite.js",
       "bower_components/jquery/dist/jquery.js",
       "bower_components/time-elements/time-elements.js",
-      "assets/js/bootstrap.min.js"
+      "bower_components/dist/js/bootstrap.js",
+      "bower_components/angular/angular.js",
+      "bower_components/angular-loader/angular-loader",
+      "bower_components/angular-ui-router/release/angular-ui-router.js",
     ],
     sass: [
-      './assets/css/*.scss',
-      './assets/css/*.css'
+      "app/assets/css/kouen.scss"
     ],
     elements: [
       'polymer/elements/elements.html'

@@ -48,7 +48,7 @@ func CartographerSetup(){
 
 func HomeHandler(w http.ResponseWriter, req *http.Request){
 	result := GetAllEntries()
-    Renderer.r.HTML(w, http.StatusOK, "home", map[string]interface{}{"title": "Longest Voyage: Home", "content": "Hello!", "entries": result})
+  Renderer.r.HTML(w, http.StatusOK, "home", map[string]interface{}{"title": "Longest Voyage: Home", "content": "Hello!", "entries": result})
 }
 
 func PageHandler(w http.ResponseWriter, req *http.Request){

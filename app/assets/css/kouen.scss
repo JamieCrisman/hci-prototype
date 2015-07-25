@@ -1,0 +1,134 @@
+//Colors
+$black: #333;
+$dark-gray: #555;
+$gray: #777;
+$light-gray: #F0F0F0;
+$blue: #00F;
+
+@mixin vendor($property, $value...){
+  -webkit-#{$property}:$value;
+    -moz-#{$property}:$value;
+      -ms-#{$property}:$value;
+        -o-#{$property}:$value;
+          #{$property}:$value;
+}
+
+html, body {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+a {
+  &:hover {
+    text-decoration: none;
+    color: $dark-gray;
+  }
+  &:active, &:visited, &:link{
+    text-decoration: none;
+  }
+}
+body {
+  background-color: $light-gray;
+  color: $black;
+  font-family: "freight-text-pro",Georgia,Cambria,"Times New Roman",Times,serif;
+  letter-spacing: 0.01rem;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.4em;
+  line-height: 1.5em;
+}
+
+.navigation {
+  background-color: $black;
+  color: $light-gray;
+  a {
+    color: $light-gray;
+    &:hover {
+      color: darken($light-gray, 15%);
+    }
+  }
+
+  .menu-icon {
+    position: fixed;
+    top: 12px;
+    right: 25px;
+    display:block;
+    width:40px;
+    @include vendor(transform, translate3d(0,0,0));
+
+    &:before,
+    &:after,
+    .menu-icon-text {
+      background: #fff;
+      content:'';
+      display:block;
+      height:4px;
+      margin:6px 0;
+      @include vendor(transition, all .2s ease-out);
+      width:100%;
+    }
+
+    .menu-icon-text {
+      text-indent:-9999px;
+    }
+
+    &.active {
+      &:before {
+        @include vendor(transform, rotate(45deg) translate3d(5px,10px,0));
+      }
+
+      .menu-icon-text {
+        opacity: 0;
+      }
+
+      &:after {
+        @include vendor(transform, rotate(-45deg) translate3d(5px,-10px,0));
+      }
+    }
+  }
+
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4.2em;
+  transition: all .5s ease-in-out;
+  text-align: center;
+  h1 {
+    margin-top: 0.3em;
+    transition: all .5s ease-in-out;
+  }
+  h2 { margin-top: 0; }
+  hr {
+    border-top: 1px dashed #8c8b8b;
+    width: 25vw;
+  }
+  .nav-row {
+    font-size: 1.6em;
+    line-height: 1.5em;
+  }
+  .nav-content {
+    visibility: hidden;
+    opacity: 0;
+    transition: all .5s ease-in-out;
+  }
+  &.active {
+    h1 { margin-top: 25vh;}
+    height: 100%;
+    .nav-content {
+      visibility: visible;
+      opacity: 1;
+      transition-delay: 0.3s;
+      a {
+        border-bottom: 1px solid $gray;
+      }
+    }
+  }
+}
+
+main {
+  margin-top: 2em;
+  font-size: 1.6em;
+  line-height: 1.6em;
+}

@@ -8,7 +8,7 @@ gulp.task('watch', function() {
   /* Restart application server */
   gulp.watch([
     'templates/**/*.tmpl',
-    'assets/css/*.scss'
+    'app/assets/css/*.scss'
   ], ['sass','spawn']);
 
   /* Rebuild and restart application server */
