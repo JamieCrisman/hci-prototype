@@ -2,10 +2,10 @@
 
 require('jquery');
 require('angular');
+require('moment');
 
 var app = require('./module');
 var home = require('./home');
-
 
 app.addModules([
   'ui.router'
@@ -22,6 +22,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
   $urlRouterProvider.otherwise('/');
 
+});
+
+app.controller('NavigationController', function($scope) {
+  $scope.now = moment();
 });
 
 module.exports = app;

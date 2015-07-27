@@ -13,7 +13,7 @@ $blue: #00F;
           #{$property}:$value;
 }
 
-html, body {
+html{
   height: 100%;
   overflow-y: scroll;
 }
@@ -47,9 +47,13 @@ body {
       color: darken($light-gray, 15%);
     }
   }
+  .license {
+    margin-top: 25px;
+    font-size: 1.0em;
+  }
 
   .menu-icon {
-    position: fixed;
+    position: absolute;
     top: 12px;
     right: 25px;
     display:block;
@@ -88,11 +92,11 @@ body {
   }
 
   z-index: 1000;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 4.2em;
+  height: 64px;
   transition: all .5s ease-in-out;
   text-align: center;
   h1 {
@@ -128,7 +132,71 @@ body {
 }
 
 main {
-  margin-top: 2em;
+  ::selection {
+    background: $light-gray;
+  }
+  margin-top: 64px;
   font-size: 1.6em;
   line-height: 1.6em;
+  overflow: hidden;
+  height: 100%;
+  visibility: visible;
+  opacity: 1;
+  transition: all .2s ease-in-out;
+  &.crushed {
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+.svg-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.the-koi {
+  margin-top: 42px;
+  margin-bottom: 1.6em;
+  width: 20vw;
+}
+.page-title {
+  text-transform: capitalize;
+  font-variant: small-caps;
+}
+
+.list-header {
+  margin-bottom: 0;
+  border-bottom: 1px solid $gray;
+}
+.list-body {
+  padding-left: 0;
+  list-style: none;
+  time {
+    font-size: 0.7em;
+    color: $gray;
+  }
+  a {
+    color: $black;
+    border-bottom: 1px dashed $gray;
+    &:hover {
+      color: lighten($black, 20%);
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .navigation {
+    text-align: left;
+    padding-left: 20px;
+    padding-right: 20px;
+    hr {
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+  .the-koi {
+    width: 80vw;
+  }
 }

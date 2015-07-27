@@ -3,6 +3,7 @@
 // jquery
 require('jquery');
 require('bootstrap');
+require('moment');
 
 // utils
 require('lodash');

@@ -17,9 +17,9 @@
 
   </head>
   <body data-ng-app="app" class="body">
-    <div class="navigation" ng-class="{'active': activeNav}">
+    <div class="navigation" ng-class="{'active': activeNav}" ng-controller="NavigationController">
       <div>
-        <h1><a ui-sref="home">Longest Voyage</a></h1>
+        <h1 class="page-title"><a ui-sref="home">Longest Voyage</a></h1>
         <a href="#" class="menu-icon" ng-class="{'active': activeNav}" ng-click="activeNav = !activeNav">
           <span class="menu-icon-text">Show Menu</span>
         </a>
@@ -41,10 +41,13 @@
         <div class="nav-row">
           <a href="https://github.com/jamiecrisman">Github</a>
         </div>
+        <div class="license">
+          James Crisman © {{now.format('YYYY')}} <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">BY-NC-SA 4.0</a>
+        </div>
       </div>
     </div>
 
-    <main data-ui-view></main>
+    <main data-ui-view ng-class="{'crushed': activeNav}"></main>
 
     {% for (var chunk in o.htmlWebpackPlugin.files.chunks) { %}
       <script src="{%=o.htmlWebpackPlugin.files.chunks[chunk].entry %}"></script>
