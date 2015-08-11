@@ -12,6 +12,7 @@ import (
 	"strings"
   "encoding/json"
   "io/ioutil"
+  "strconv"
 	//"gopkg.in/mgo.v2"
 	//"gopkg.in/mgo.v2/bson"
 )
@@ -46,53 +47,34 @@ func CartographerSetup(){
     })
 }
 
-func HomeHandler(w http.ResponseWriter, req *http.Request){
-	result := GetAllEntries()
-  Renderer.r.HTML(w, http.StatusOK, "home", map[string]interface{}{"title": "Longest Voyage: Home", "content": "Hello!", "entries": result})
-}
+func APIGetEntry(w http.ResponseWriter, r *http.Request){
+  params := SomeItem{}
+  options := GetOptions{}
+  params.Slug = cleanCheck(r.URL.Query().Get("entry"))
+  params.CommitID = cleanCheck(r.URL.Query().Get("commit"))
+  activeParam := cleanCheck(r.URL.Query().Get("active"))
+  pageParam := cleanCheck(r.URL.Query().Get("page"))
+  if(!authorized(w, r)) { //force override if not authorized
+    params.Active = true;
+  } else if (authorized(w, r) && activeParam == "false") {
+    params.Active = false;
+  }//else we don't care what active is
+  if(len(pageParam) == 0 || pageParam == "1") {
+    options.Page = 1
+  } else {
+    options.Page, _ = strconv.Atoi(pageParam)
+  }
 
-func PageHandler(w http.ResponseWriter, req *http.Request){
-    fmt.Fprint(w, "Something")
-}
-
-func EntryHandler(w http.ResponseWriter, r *http.Request) {
-	//db = GetDB(
-
-	entry := cleanCheck(mux.Vars(r)["entry"])
-	aux1 := cleanCheck(mux.Vars(r)["aux1"])
-	aux2 := cleanCheck(mux.Vars(r)["aux2"])
-
-	var result *[]PageCommit
-  var err error
-	//db.find(bson.M{"Slug": entry})
-	log.Println("about to get entry")
-	if(aux1 != "all"){
-		result, err = GetCommit(entry, aux1)
-	}else{
-		result = GetAllCommits(entry)
-	}
-
+  ent, err := GetCommit(params, options)
   if(err != nil) {
-    Renderer.r.HTML(w, http.StatusBadRequest, "simpleEntry", map[string]interface{}{})
+    Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": "Fail"})
     return
   }
-	
-	if result == nil {
-		//todo make this goto a 404 page
-		log.Println("Redirecting!")
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	}
-  if(aux2 == ""){
-    aux2 = "TODO"
-  }
-	log.Println("Ready to show page")
-	for key := range *result{
-		(*result)[key].CompiledContent = CompileContent((*result)[key].Content)
-	}
 
-	Renderer.r.HTML(w, http.StatusOK, "simpleEntry", map[string]interface{}{"title": (*result)[0].Name, "commits": result})
-	//w.Write([]byte(fmt.Sprintf("Hello %s! aux1: %s aux2: %s", result.Name, aux1, aux2)))
+  for key := range *ent{
+    (*ent)[key].CompiledContent = CompileContent((*ent)[key].Content)
+  }
+  Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "OK", "commit": ent})
 }
 
 func AdminHandler(w http.ResponseWriter, r *http.Request){
@@ -239,21 +221,6 @@ func AdminNewCommit(w http.ResponseWriter, r *http.Request){
   Renderer.r.HTML(w, http.StatusOK, "newCommit", map[string]interface{}{"title": "New Entry", "name": ent.Name})
 }
 
-func APIGetEntry(w http.ResponseWriter, r *http.Request){
-  entryName := cleanCheck(r.URL.Query().Get("entry"))
-  commitName := cleanCheck(r.URL.Query().Get("commit"))
-  ent, err := GetCommit(entryName, commitName)
-  if(err != nil) {
-    Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": "Fail"})
-    return
-  }
-
-  for key := range *ent{
-    (*ent)[key].CompiledContent = CompileContent((*ent)[key].Content)
-  }
-  Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "OK", "commit": ent})
-}
-
 func AdminAPIGetEntry(w http.ResponseWriter, r *http.Request){
   checkAuth(w, r)
   entryName := cleanCheck(mux.Vars(r)["entry"])
@@ -322,9 +289,14 @@ func cleanCheck(s string) string {
 }
 
 func checkAuth(w http.ResponseWriter, r *http.Request){
-	if err := auth.Authorize(w, r, true); err != nil {
-		fmt.Println(err)
+	if authorized(w, r) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
+}
+
+func authorized(w http.ResponseWriter, r *http.Request) bool{
+  err := auth.Authorize(w, r, true)
+  fmt.Println(err)
+  return err != nil
 }

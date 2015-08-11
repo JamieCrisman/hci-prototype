@@ -8,6 +8,7 @@ import(
     "time"
     "errors"
     "crypto/md5"
+    "strconv"
     "encoding/hex"
     "github.com/apexskier/httpauth"
     "golang.org/x/crypto/bcrypt"
@@ -186,46 +187,31 @@ func CreateCommit(e *EntryInput) error{
 }
 
 
-func GetCommit(entry string, commit string) (*[]PageCommit, error) {
-	log.Println("Getting entry " + entry + " : " + commit)
-    
-    var query bson.M
+func GetCommit(item SomeItem, options GetOptions) (*[]PageCommit, error) {
+	log.Println("Getting entry " + item.Slug + " : " + item.CommitID)
+    log.Println("Page: " + strconv.Itoa(options.Page))
+    //var query bson.M
     var multiple []PageCommit
-    if(commit == "all") {
-        query = bson.M{"slug": entry, "active": true}
-        err := DB.entries.Find(query).Sort("-createdate").All(&multiple)
+
+    if(item.CommitID == "all") {
+        item.CommitID = "" //because we don't actually want to find commitID "all"
+        err := DB.entries.Find(item).Sort("-createdate").Skip((options.Page-1) * 10).Limit(10).All(&multiple)
         if(err != nil) {
             return nil, err
         }
-    }else if(commit != ""){
-        var single PageCommit
-        query = bson.M{"slug": entry, "commitid": commit, "active": true}
-        err := DB.entries.Find(query).Sort("-createdate").One(&single)
-        if(err != nil) {
-            return nil, err
-        }
-        multiple = append(multiple, single)
     }else {
         var single PageCommit
-        query = bson.M{"slug": entry, "active": true}
-        err := DB.entries.Find(query).Sort("-createdate").One(&single)
+        err := DB.entries.Find(item).Sort("-createdate").One(&single)
         if(err != nil) {
             return nil, err
         }
-        //multiple[] = single
         multiple = append(multiple, single)
     }
-
-    // hack
-    // if(result.Name == ""){
-    //     return &[]PageCommit{}
-    // }
 	
     return &multiple, nil
-
-
-
 }
+
+
 func GetCommitAdmin(entry string, commit string) *[]PageCommit{
     log.Println("Getting entry " + entry)
     var result PageCommit

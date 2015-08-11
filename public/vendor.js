@@ -101,7 +101,7 @@
   \********************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! vendor */18);
+	module.exports = __webpack_require__(/*! vendor */17);
 
 
 /***/ },
@@ -53355,8 +53355,7 @@
 /* 14 */,
 /* 15 */,
 /* 16 */,
-/* 17 */,
-/* 18 */
+/* 17 */
 /*!*******************!*\
   !*** ./vendor.js ***!
   \*******************/
@@ -53366,7 +53365,7 @@
 	
 	// jquery
 	__webpack_require__(/*! jquery */ 1);
-	__webpack_require__(/*! bootstrap */ 21);
+	__webpack_require__(/*! bootstrap */ 20);
 	__webpack_require__(/*! moment */ 8);
 	
 	// utils
@@ -53374,25 +53373,25 @@
 	
 	// angular
 	__webpack_require__(/*! angular */ 5);
-	__webpack_require__(/*! angular-ui-router */ 19);
+	__webpack_require__(/*! angular-ui-router */ 18);
 	
-	__webpack_require__(/*! webcomponentsjs */ 23);
-	__webpack_require__(/*! time-elements */ 25);
+	__webpack_require__(/*! webcomponentsjs */ 22);
+	__webpack_require__(/*! time-elements */ 24);
 	
-	__webpack_require__(/*! angular/angular-csp.css */ 27);
-	__webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ 28);
+	__webpack_require__(/*! angular/angular-csp.css */ 26);
+	__webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ 27);
 
 /***/ },
-/* 19 */
+/* 18 */
 /*!*******************************************!*\
   !*** angular-ui-router (bower component) ***!
   \*******************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! ././release/angular-ui-router.js */ 20);
+	module.exports = __webpack_require__(/*! ././release/angular-ui-router.js */ 19);
 
 /***/ },
-/* 20 */
+/* 19 */
 /*!**************************************************************************!*\
   !*** ../bower_components/angular-ui-router/release/angular-ui-router.js ***!
   \**************************************************************************/
@@ -57770,16 +57769,16 @@
 	})(window, window.angular);
 
 /***/ },
-/* 21 */
+/* 20 */
 /*!***********************************!*\
   !*** bootstrap (bower component) ***!
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! ./dist/js/bootstrap.js */ 22);
+	module.exports = __webpack_require__(/*! ./dist/js/bootstrap.js */ 21);
 
 /***/ },
-/* 22 */
+/* 21 */
 /*!**********************************************************!*\
   !*** ../bower_components/bootstrap/dist/js/bootstrap.js ***!
   \**********************************************************/
@@ -60152,16 +60151,16 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! jquery */ 1)))
 
 /***/ },
-/* 23 */
+/* 22 */
 /*!*****************************************!*\
   !*** webcomponentsjs (bower component) ***!
   \*****************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! ./webcomponents.js */ 24);
+	module.exports = __webpack_require__(/*! ./webcomponents.js */ 23);
 
 /***/ },
-/* 24 */
+/* 23 */
 /*!************************************************************!*\
   !*** ../bower_components/webcomponentsjs/webcomponents.js ***!
   \************************************************************/
@@ -67300,16 +67299,16 @@
 	})(window.WebComponents);
 
 /***/ },
-/* 25 */
+/* 24 */
 /*!***************************************!*\
   !*** time-elements (bower component) ***!
   \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! ./time-elements.js */ 26);
+	module.exports = __webpack_require__(/*! ./time-elements.js */ 25);
 
 /***/ },
-/* 26 */
+/* 25 */
 /*!**********************************************************!*\
   !*** ../bower_components/time-elements/time-elements.js ***!
   \**********************************************************/
@@ -67843,7 +67842,7 @@
 
 
 /***/ },
-/* 27 */
+/* 26 */
 /*!***************************************************!*\
   !*** ../bower_components/angular/angular-csp.css ***!
   \***************************************************/
@@ -67852,7 +67851,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 28 */
+/* 27 */
 /*!************************************************************!*\
   !*** ../bower_components/bootstrap/dist/css/bootstrap.css ***!
   \************************************************************/

@@ -35,3 +35,14 @@ type PageCommit struct {
     Active bool
     CommitID string
 }
+
+type SomeItem struct {
+  Active bool `json:"active,omitempty" bson:",omitempty"`
+  Category string `json:"category,omitempty" bson:",omitempty"`
+  Slug string `json:"slug,omitempty" bson:",omitempty"`
+  CommitID string `json:"commitId,omitempty" bson:",omitempty"`
+}
+
+type GetOptions struct {
+  Page int `json:"offset,omitempty" bson:",omitempty"`
+}

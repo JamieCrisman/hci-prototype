@@ -29,7 +29,6 @@ func main() {
     defer ciel.ScribeShutdown()
 
     mx := mux.NewRouter()
-    mx.HandleFunc("/", ciel.HomeHandler)
     mx.HandleFunc("/admin", ciel.AdminHandler)
     
     mx.HandleFunc("/api/entry", ciel.APIGetEntry).Methods("GET")
@@ -52,9 +51,6 @@ func main() {
     mx.HandleFunc("/login", ciel.LoginHandler).Methods("GET")
     mx.HandleFunc("/login", ciel.PostLoginHandler).Methods("POST")
     mx.HandleFunc("/logout", ciel.LogoutHandler)
-    //mx.HandleFunc("/{entry}", route.EntryHandler)
-    //mx.HandleFunc("/{entry}/{aux1}", route.EntryHandler)
-    //mx.HandleFunc("/{entry}/{aux1}/{aux2}", route.EntryHandler)
 
     secureMiddleware := secure.New(secure.Options{
         FrameDeny: true,
