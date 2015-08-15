@@ -54,6 +54,12 @@ func APIGetEntry(w http.ResponseWriter, r *http.Request){
   params.CommitID = cleanCheck(r.URL.Query().Get("commit"))
   activeParam := cleanCheck(r.URL.Query().Get("active"))
   pageParam := cleanCheck(r.URL.Query().Get("page"))
+  getAll := cleanCheck(r.URL.Query().Get("all"))
+  if(getAll != "true") { //double negative vs having more common if as first branch
+    options.All = false
+  }else {
+    options.All = true
+  }
   if(!authorized(w, r)) { //force override if not authorized
     params.Active = true;
   } else if (authorized(w, r) && activeParam == "false") {
@@ -76,6 +82,33 @@ func APIGetEntry(w http.ResponseWriter, r *http.Request){
   }
   Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "OK", "commit": ent})
 }
+
+func APIGetIndex(w http.ResponseWriter, r *http.Request){
+  params := SomeItem{}
+  options := GetOptions{}
+  params.Slug = cleanCheck(r.URL.Query().Get("entry"))
+  params.CommitID = cleanCheck(r.URL.Query().Get("commit"))
+  activeParam := cleanCheck(r.URL.Query().Get("active"))
+  getAll := cleanCheck(r.URL.Query().Get("all"))
+  if(getAll != "false") { //double negative vs having more common if as first branch
+    options.All = true
+  }else {
+    options.All = false
+  }
+  if(!authorized(w, r)) { //force override if not authorized
+    params.Active = true;
+  } else if (authorized(w, r) && activeParam == "false") {
+    params.Active = false;
+  }//else we don't care what active is
+  ind, err := GetIndex(params, options)
+  if(err != nil) {
+    Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": "Fail"})
+    return
+  }
+
+  Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg":"OK", "entry": ind})
+}
+
 
 func AdminHandler(w http.ResponseWriter, r *http.Request){
 	checkAuth(w,r)

@@ -49,24 +49,24 @@ func ScribeSetup(){
     DB.s = session
 
    	index := mgo.Index{
-		Key:        []string{"name", "slug"},
+		Key:        []string{"Slug"},
 		Unique:     true,
 		DropDups:   true,
 		Background: true,
 		Sparse:     true,
 	}
     index2 := mgo.Index{
-        Key:        []string{"commitid"},
+        Key:        []string{"CommitID"},
         Unique:     true,
         DropDups:   true,
         Background: true,
         Sparse:     true,
     }
-    err = DB.entries.EnsureIndex(index)
+    err = DB.entries.EnsureIndex(index2)
     if err != nil {
         panic(err)
     }
-	err = DB.indices.EnsureIndex(index2)
+	err = DB.indices.EnsureIndex(index)
 	if err != nil {
 		panic(err)
 	}
@@ -193,13 +193,13 @@ func GetCommit(item SomeItem, options GetOptions) (*[]PageCommit, error) {
     //var query bson.M
     var multiple []PageCommit
 
-    if(item.CommitID == "all") {
+    if(options.All == true) {
         item.CommitID = "" //because we don't actually want to find commitID "all"
         err := DB.entries.Find(item).Sort("-createdate").Skip((options.Page-1) * 10).Limit(10).All(&multiple)
         if(err != nil) {
             return nil, err
         }
-    }else {
+    } else {
         var single PageCommit
         err := DB.entries.Find(item).Sort("-createdate").One(&single)
         if(err != nil) {
@@ -208,6 +208,26 @@ func GetCommit(item SomeItem, options GetOptions) (*[]PageCommit, error) {
         multiple = append(multiple, single)
     }
 	
+    return &multiple, nil
+}
+
+func GetIndex(item SomeItem, options GetOptions) (*[]PageIndex, error) {
+    log.Println("Getting index " + item.Slug + " : " + item.CommitID)
+    var multiple []PageIndex
+    if(options.All == true) {
+        err := DB.indices.Find(item).Sort("-createdate").All(&multiple)
+        if(err != nil) {
+            return nil, err
+        }
+    } else {
+        var single PageIndex
+        err := DB.indices.Find(item).Sort("-createdate").One(&single)
+        if(err != nil) {
+            return nil, err
+        }
+        multiple = append(multiple, single)
+    }
+
     return &multiple, nil
 }
 

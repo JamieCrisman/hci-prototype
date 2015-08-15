@@ -32,6 +32,7 @@ func main() {
     mx.HandleFunc("/admin", ciel.AdminHandler)
     
     mx.HandleFunc("/api/entry", ciel.APIGetEntry).Methods("GET")
+    mx.HandleFunc("/api/index", ciel.APIGetIndex).Methods("GET")
     mx.HandleFunc("/api/entry/{entry}", ciel.AdminAPIGetEntry).Methods("GET")
     mx.HandleFunc("/api/entry/{entry}/{commit}", ciel.AdminAPIGetCommit).Methods("GET")
 

@@ -45,4 +45,5 @@ type SomeItem struct {
 
 type GetOptions struct {
   Page int `json:"offset,omitempty" bson:",omitempty"`
+  All bool `json:"offset,omitempty" bson:",omitempty"`
 }

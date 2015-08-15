@@ -14,22 +14,10 @@
           <h3 class="list-header">
             Recent Activity:
           </h3>
-          <ul class="list-body">
+          <ul class="list-body" ng-repeat="entry in recentPosts">
             <li class="clearfix">
-              <a href="">Japanese</a>
-              <time class="pull-right" is="relative-time" datetime="{{createDate.toString()}}">April 1, 2014</time>
-            </li>
-            <li class="clearfix">
-              <a href="">Kouen</a>
-              <time class="pull-right" is="relative-time" datetime="{{createDate.toString()}}">April 1, 2014</time>
-            </li>
-            <li class="clearfix">
-              <a href="">Introduction</a>
-              <time class="pull-right" is="relative-time" datetime="{{createDate.toString()}}">April 1, 2014</time>
-            </li>
-            <li class="clearfix">
-              <a href="">Ciellian</a>
-              <time class="pull-right" is="relative-time" datetime="{{createDate.toString()}}">April 1, 2014</time>
+              <a href="">{{entry.Name}}</a>
+              <time class="pull-right" is="relative-time" datetime="{{entry.LastUpdated.toString()}}">April 1, 2014</time>
             </li>
           </ul>
         </div>
@@ -37,21 +25,9 @@
           <h3 class="list-header">
             Journal:
           </h3>
-          <ul class="list-body">
+          <ul class="list-body" ng-repeat="journal in journalPosts">
             <li class="clearfix">
-              <a href="">To Differ</a>
-              <time class="pull-right" is="relative-time" datetime="{{createDate.toString()}}">April 1, 2014</time>
-            </li>
-            <li class="clearfix">
-              <a href="">Flying</a>
-              <time class="pull-right" is="relative-time" datetime="{{createDate.toString()}}">April 1, 2014</time>
-            </li>
-            <li class="clearfix">
-              <a href="">Language Learning</a>
-              <time class="pull-right" is="relative-time" datetime="{{createDate.toString()}}">April 1, 2014</time>
-            </li>
-            <li class="clearfix">
-              <a href="">Lexicon</a>
+              <a href="">{{journal.Title}}</a>
               <time class="pull-right" is="relative-time" datetime="{{createDate.toString()}}">April 1, 2014</time>
             </li>
           </ul>

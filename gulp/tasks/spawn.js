@@ -10,7 +10,7 @@ gulp.task('spawn', function() {
     server.kill();
 
   /* Spawn application server */
-  server = child('/home/awkwardhero/go/bin/kouen');
+  server = child('../../bin/kouen');
 
   /* Trigger reload upon server start */
   server.stdout.once('data', function() {

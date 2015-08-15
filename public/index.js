@@ -97,8 +97,38 @@ webpackJsonp([0],[
 	
 	var app = __webpack_require__(/*! ../module */ 12);
 	
-	app.controller('HomeController', function($scope) {
-	  $scope.createDate = moment().subtract(10,'days');
+	app.controller('HomeController', function($scope, $http) {
+	  $scope.recentPosts = [];
+	  $scope.journalPosts = [];
+	
+	  var requestRecents = {
+	  	method: 'GET',
+	  	url: '/api/index',
+	  	cache: true
+	  };
+	  var requestJournal = {
+	  	method: 'GET',
+	  	params: {
+			entry: "apa",
+	  		all: "true"
+	  	},
+	  	url: '/api/entry',
+	  	cache: true
+	  };
+	
+	  $http(requestRecents).then(function(response) {
+	  	if(response.status === 200) {
+	  		$scope.recentPosts = response.data.entry;
+	  	}
+	  });
+	
+	  $http(requestJournal).then(function(response) {
+	  	console.log(response);
+	  	if(response.status === 200) {
+	  		$scope.journalPosts = response.data.commit;
+	  	}
+	  });
+	
 	});
 	
 	app.TEMPLATES = {
@@ -114,7 +144,7 @@ webpackJsonp([0],[
   \****************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-3 col-md-6\">\n      <img class=\"svg-center the-koi\" src=\"" + __webpack_require__(/*! ./koi.svg */ 16) + "\">\n      <div class=\"row\">\n        <div class=\"col-md-12\">\n          <p>\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a vestibulum mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris tempor, lacus sed mollis vulputate, ipsum sem ultricies lectus, sit amet luctus nunc odio ac dui. Nulla et massa placerat, posuere felis in, fermentum ipsum. Pellentesque pretium fringilla elementum.\n          </p>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-md-6\">\n          <h3 class=\"list-header\">\n            Recent Activity:\n          </h3>\n          <ul class=\"list-body\">\n            <li class=\"clearfix\">\n              <a href=\"\">Japanese</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{createDate.toString()}}\">April 1, 2014</time>\n            </li>\n            <li class=\"clearfix\">\n              <a href=\"\">Kouen</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{createDate.toString()}}\">April 1, 2014</time>\n            </li>\n            <li class=\"clearfix\">\n              <a href=\"\">Introduction</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{createDate.toString()}}\">April 1, 2014</time>\n            </li>\n            <li class=\"clearfix\">\n              <a href=\"\">Ciellian</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{createDate.toString()}}\">April 1, 2014</time>\n            </li>\n          </ul>\n        </div>\n        <div class=\"col-md-6\">\n          <h3 class=\"list-header\">\n            Journal:\n          </h3>\n          <ul class=\"list-body\">\n            <li class=\"clearfix\">\n              <a href=\"\">To Differ</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{createDate.toString()}}\">April 1, 2014</time>\n            </li>\n            <li class=\"clearfix\">\n              <a href=\"\">Flying</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{createDate.toString()}}\">April 1, 2014</time>\n            </li>\n            <li class=\"clearfix\">\n              <a href=\"\">Language Learning</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{createDate.toString()}}\">April 1, 2014</time>\n            </li>\n            <li class=\"clearfix\">\n              <a href=\"\">Lexicon</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{createDate.toString()}}\">April 1, 2014</time>\n            </li>\n          </ul>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
+	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-3 col-md-6\">\n      <img class=\"svg-center the-koi\" src=\"" + __webpack_require__(/*! ./koi.svg */ 16) + "\">\n      <div class=\"row\">\n        <div class=\"col-md-12\">\n          <p>\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a vestibulum mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris tempor, lacus sed mollis vulputate, ipsum sem ultricies lectus, sit amet luctus nunc odio ac dui. Nulla et massa placerat, posuere felis in, fermentum ipsum. Pellentesque pretium fringilla elementum.\n          </p>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-md-6\">\n          <h3 class=\"list-header\">\n            Recent Activity:\n          </h3>\n          <ul class=\"list-body\" ng-repeat=\"entry in recentPosts\">\n            <li class=\"clearfix\">\n              <a href=\"\">{{entry.Name}}</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{entry.LastUpdated.toString()}}\">April 1, 2014</time>\n            </li>\n          </ul>\n        </div>\n        <div class=\"col-md-6\">\n          <h3 class=\"list-header\">\n            Journal:\n          </h3>\n          <ul class=\"list-body\" ng-repeat=\"journal in journalPosts\">\n            <li class=\"clearfix\">\n              <a href=\"\">{{journal.Title}}</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{createDate.toString()}}\">April 1, 2014</time>\n            </li>\n          </ul>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
 
 /***/ },
 /* 16 */
