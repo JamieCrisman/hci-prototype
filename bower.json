@@ -27,6 +27,10 @@
     "time-elements": "~0.4.0",
     "bootstrap": "~3.3.5",
     "angular-ui-router": "~0.2.15",
-    "moment": "~2.10.5"
+    "moment": "~2.10.5",
+    "angular-sanitize": "~1.4.4"
+  },
+  "resolutions": {
+    "angular": "1.4.4"
   }
 }

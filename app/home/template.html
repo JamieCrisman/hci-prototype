@@ -16,7 +16,7 @@
           </h3>
           <ul class="list-body" ng-repeat="entry in recentPosts">
             <li class="clearfix">
-              <a href="">{{entry.Name}}</a>
+              <a href="/#/{{entry.Slug}}">{{entry.Name}}</a>
               <time class="pull-right" is="relative-time" datetime="{{entry.LastUpdated.toString()}}">April 1, 2014</time>
             </li>
           </ul>
@@ -27,8 +27,8 @@
           </h3>
           <ul class="list-body" ng-repeat="journal in journalPosts">
             <li class="clearfix">
-              <a href="">{{journal.Title}}</a>
-              <time class="pull-right" is="relative-time" datetime="{{createDate.toString()}}">April 1, 2014</time>
+              <a href="/#/{{journal.Slug}}/{{journal.CommitID}}">{{journal.Title}}</a>
+              <time class="pull-right" is="relative-time" datetime="{{journal.CreateDate.toString()}}">April 1, 2014</time>
             </li>
           </ul>
         </div>

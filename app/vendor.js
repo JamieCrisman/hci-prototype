@@ -11,6 +11,7 @@ require('lodash');
 // angular
 require('angular');
 require('angular-ui-router');
+require('angular-sanitize');
 
 require('webcomponentsjs');
 require('time-elements');

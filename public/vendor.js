@@ -101,7 +101,7 @@
   \********************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! vendor */17);
+	module.exports = __webpack_require__(/*! vendor */19);
 
 
 /***/ },
@@ -9379,7 +9379,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_provided_window_dot_jQuery) {/**
-	 * @license AngularJS v1.4.3
+	 * @license AngularJS v1.4.4
 	 * (c) 2010-2015 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
@@ -9437,7 +9437,7 @@
 	      return match;
 	    });
 	
-	    message += '\nhttp://errors.angularjs.org/1.4.3/' +
+	    message += '\nhttp://errors.angularjs.org/1.4.4/' +
 	      (module ? module + '/' : '') + code;
 	
 	    for (i = SKIP_INDEXES, paramPrefix = '?'; i < templateArgs.length; i++, paramPrefix = '&') {
@@ -9803,6 +9803,8 @@
 	      if (deep && isObject(src)) {
 	        if (isDate(src)) {
 	          dst[key] = new Date(src.valueOf());
+	        } else if (isRegExp(src)) {
+	          dst[key] = new RegExp(src);
 	        } else {
 	          if (!isObject(dst[key])) dst[key] = isArray(src) ? [] : {};
 	          baseExtend(dst[key], [src], true);
@@ -10433,22 +10435,39 @@
 	}
 	
 	var csp = function() {
-	  if (isDefined(csp.isActive_)) return csp.isActive_;
+	  if (!isDefined(csp.rules)) {
 	
-	  var active = !!(document.querySelector('[ng-csp]') ||
-	                  document.querySelector('[data-ng-csp]'));
 	
-	  if (!active) {
+	    var ngCspElement = (document.querySelector('[ng-csp]') ||
+	                    document.querySelector('[data-ng-csp]'));
+	
+	    if (ngCspElement) {
+	      var ngCspAttribute = ngCspElement.getAttribute('ng-csp') ||
+	                    ngCspElement.getAttribute('data-ng-csp');
+	      csp.rules = {
+	        noUnsafeEval: !ngCspAttribute || (ngCspAttribute.indexOf('no-unsafe-eval') !== -1),
+	        noInlineStyle: !ngCspAttribute || (ngCspAttribute.indexOf('no-inline-style') !== -1)
+	      };
+	    } else {
+	      csp.rules = {
+	        noUnsafeEval: noUnsafeEval(),
+	        noInlineStyle: false
+	      };
+	    }
+	  }
+	
+	  return csp.rules;
+	
+	  function noUnsafeEval() {
 	    try {
 	      /* jshint -W031, -W054 */
 	      new Function('');
 	      /* jshint +W031, +W054 */
+	      return false;
 	    } catch (e) {
-	      active = true;
+	      return true;
 	    }
 	  }
-	
-	  return (csp.isActive_ = active);
 	};
 	
 	/**
@@ -10680,13 +10699,19 @@
 	 * @returns {Object.<string,boolean|Array>}
 	 */
 	function parseKeyValue(/**string*/keyValue) {
-	  var obj = {}, key_value, key;
+	  var obj = {};
 	  forEach((keyValue || "").split('&'), function(keyValue) {
+	    var splitPoint, key, val;
 	    if (keyValue) {
-	      key_value = keyValue.replace(/\+/g,'%20').split('=');
-	      key = tryDecodeURIComponent(key_value[0]);
+	      key = keyValue = keyValue.replace(/\+/g,'%20');
+	      splitPoint = keyValue.indexOf('=');
+	      if (splitPoint !== -1) {
+	        key = keyValue.substring(0, splitPoint);
+	        val = keyValue.substring(splitPoint + 1);
+	      }
+	      key = tryDecodeURIComponent(key);
 	      if (isDefined(key)) {
-	        var val = isDefined(key_value[1]) ? tryDecodeURIComponent(key_value[1]) : true;
+	        val = isDefined(val) ? tryDecodeURIComponent(val) : true;
 	        if (!hasOwnProperty.call(obj, key)) {
 	          obj[key] = val;
 	        } else if (isArray(obj[key])) {
@@ -11282,8 +11307,8 @@
 	     * All modules (angular core or 3rd party) that should be available to an application must be
 	     * registered using this mechanism.
 	     *
-	     * When passed two or more arguments, a new module is created.  If passed only one argument, an
-	     * existing module (the name passed as the first argument to `module`) is retrieved.
+	     * Passing one argument retrieves an existing {@link angular.Module},
+	     * whereas passing more than one argument creates a new {@link angular.Module}
 	     *
 	     *
 	     * # Module
@@ -11624,7 +11649,6 @@
 	/* global angularModule: true,
 	  version: true,
 	
-	  $LocaleProvider,
 	  $CompileProvider,
 	
 	  htmlAnchorDirective,
@@ -11641,7 +11665,6 @@
 	  ngClassDirective,
 	  ngClassEvenDirective,
 	  ngClassOddDirective,
-	  ngCspDirective,
 	  ngCloakDirective,
 	  ngControllerDirective,
 	  ngFormDirective,
@@ -11678,6 +11701,7 @@
 	
 	  $AnchorScrollProvider,
 	  $AnimateProvider,
+	  $CoreAnimateCssProvider,
 	  $$CoreAnimateQueueProvider,
 	  $$CoreAnimateRunnerProvider,
 	  $BrowserProvider,
@@ -11686,6 +11710,7 @@
 	  $DocumentProvider,
 	  $ExceptionHandlerProvider,
 	  $FilterProvider,
+	  $$ForceReflowProvider,
 	  $InterpolateProvider,
 	  $IntervalProvider,
 	  $$HashMapProvider,
@@ -11729,11 +11754,11 @@
 	 * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
 	 */
 	var version = {
-	  full: '1.4.3',    // all of these placeholder strings will be replaced by grunt's
+	  full: '1.4.4',    // all of these placeholder strings will be replaced by grunt's
 	  major: 1,    // package task
 	  minor: 4,
-	  dot: 3,
-	  codeName: 'foam-acceleration'
+	  dot: 4,
+	  codeName: 'pylon-requirement'
 	};
 	
 	
@@ -11772,11 +11797,6 @@
 	  });
 	
 	  angularModule = setupModuleLoader(window);
-	  try {
-	    angularModule('ngLocale');
-	  } catch (e) {
-	    angularModule('ngLocale', []).provider('$locale', $LocaleProvider);
-	  }
 	
 	  angularModule('ng', ['ngLocale'], ['$provide',
 	    function ngModule($provide) {
@@ -11839,6 +11859,7 @@
 	      $provide.provider({
 	        $anchorScroll: $AnchorScrollProvider,
 	        $animate: $AnimateProvider,
+	        $animateCss: $CoreAnimateCssProvider,
 	        $$animateQueue: $$CoreAnimateQueueProvider,
 	        $$AnimateRunner: $$CoreAnimateRunnerProvider,
 	        $browser: $BrowserProvider,
@@ -11847,6 +11868,7 @@
 	        $document: $DocumentProvider,
 	        $exceptionHandler: $ExceptionHandlerProvider,
 	        $filter: $FilterProvider,
+	        $$forceReflow: $$ForceReflowProvider,
 	        $interpolate: $InterpolateProvider,
 	        $interval: $IntervalProvider,
 	        $http: $HttpProvider,
@@ -13066,7 +13088,7 @@
 	 * Implicit module which gets automatically added to each {@link auto.$injector $injector}.
 	 */
 	
-	var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
+	var FN_ARGS = /^[^\(]*\(\s*([^\)]*)\)/m;
 	var FN_ARG_SPLIT = /,/;
 	var FN_ARG = /^\s*(_?)(\S+?)\1\s*$/;
 	var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -13722,6 +13744,7 @@
 	  // Module Loading
 	  ////////////////////////////////////
 	  function loadModules(modulesToLoad) {
+	    assertArg(isUndefined(modulesToLoad) || isArray(modulesToLoad), 'modulesToLoad', 'not an array');
 	    var runBlocks = [], moduleFn;
 	    forEach(modulesToLoad, function(module) {
 	      if (loadedModules.get(module)) return;
@@ -14231,31 +14254,31 @@
 	    };
 	
 	    function addRemoveClassesPostDigest(element, add, remove) {
-	      var data = postDigestQueue.get(element);
-	      var classVal;
+	      var classVal, data = postDigestQueue.get(element);
 	
 	      if (!data) {
 	        postDigestQueue.put(element, data = {});
 	        postDigestElements.push(element);
 	      }
 	
-	      if (add) {
-	        forEach(add.split(' '), function(className) {
-	          if (className) {
-	            data[className] = true;
-	          }
-	        });
-	      }
+	      var updateData = function(classes, value) {
+	        var changed = false;
+	        if (classes) {
+	          classes = isString(classes) ? classes.split(' ') :
+	                    isArray(classes) ? classes : [];
+	          forEach(classes, function(className) {
+	            if (className) {
+	              changed = true;
+	              data[className] = value;
+	            }
+	          });
+	        }
+	        return changed;
+	      };
 	
-	      if (remove) {
-	        forEach(remove.split(' '), function(className) {
-	          if (className) {
-	            data[className] = false;
-	          }
-	        });
-	      }
-	
-	      if (postDigestElements.length > 1) return;
+	      var classesAdded = updateData(add, true);
+	      var classesRemoved = updateData(remove, false);
+	      if ((!classesAdded && !classesRemoved) || postDigestElements.length > 1) return;
 	
 	      $rootScope.$$postDigest(function() {
 	        forEach(postDigestElements, function(element) {
@@ -14714,15 +14737,88 @@
 	  }];
 	}];
 	
-	function $$AsyncCallbackProvider() {
-	  this.$get = ['$$rAF', '$timeout', function($$rAF, $timeout) {
-	    return $$rAF.supported
-	      ? function(fn) { return $$rAF(fn); }
-	      : function(fn) {
-	        return $timeout(fn, 0, false);
+	/**
+	 * @ngdoc service
+	 * @name $animateCss
+	 * @kind object
+	 *
+	 * @description
+	 * This is the core version of `$animateCss`. By default, only when the `ngAnimate` is included,
+	 * then the `$animateCss` service will actually perform animations.
+	 *
+	 * Click here {@link ngAnimate.$animateCss to read the documentation for $animateCss}.
+	 */
+	var $CoreAnimateCssProvider = function() {
+	  this.$get = ['$$rAF', '$q', function($$rAF, $q) {
+	
+	    var RAFPromise = function() {};
+	    RAFPromise.prototype = {
+	      done: function(cancel) {
+	        this.defer && this.defer[cancel === true ? 'reject' : 'resolve']();
+	      },
+	      end: function() {
+	        this.done();
+	      },
+	      cancel: function() {
+	        this.done(true);
+	      },
+	      getPromise: function() {
+	        if (!this.defer) {
+	          this.defer = $q.defer();
+	        }
+	        return this.defer.promise;
+	      },
+	      then: function(f1,f2) {
+	        return this.getPromise().then(f1,f2);
+	      },
+	      'catch': function(f1) {
+	        return this.getPromise().catch(f1);
+	      },
+	      'finally': function(f1) {
+	        return this.getPromise().finally(f1);
+	      }
+	    };
+	
+	    return function(element, options) {
+	      if (options.from) {
+	        element.css(options.from);
+	        options.from = null;
+	      }
+	
+	      var closed, runner = new RAFPromise();
+	      return {
+	        start: run,
+	        end: run
 	      };
+	
+	      function run() {
+	        $$rAF(function() {
+	          close();
+	          if (!closed) {
+	            runner.done();
+	          }
+	          closed = true;
+	        });
+	        return runner;
+	      }
+	
+	      function close() {
+	        if (options.addClass) {
+	          element.addClass(options.addClass);
+	          options.addClass = null;
+	        }
+	        if (options.removeClass) {
+	          element.removeClass(options.removeClass);
+	          options.removeClass = null;
+	        }
+	        if (options.to) {
+	          element.css(options.to);
+	          options.to = null;
+	        }
+	      }
+	    };
 	  }];
-	}
+	};
 	
 	/* global stripHash: true */
 	
@@ -15886,7 +15982,7 @@
 	 *     otherwise the {@link error:$compile:ctreq Missing Required Controller} error is thrown.
 	 *
 	 *     Note that you can also require the directive's own controller - it will be made available like
-	 *     like any other controller.
+	 *     any other controller.
 	 *
 	 *   * `transcludeFn` - A transclude linking function pre-bound to the correct transclusion scope.
 	 *     This is the same as the `$transclude`
@@ -15912,7 +16008,7 @@
 	 *
 	 * ### Transclusion
 	 *
-	 * Transclusion is the process of extracting a collection of DOM element from one part of the DOM and
+	 * Transclusion is the process of extracting a collection of DOM elements from one part of the DOM and
 	 * copying them to another part of the DOM, while maintaining their connection to the original AngularJS
 	 * scope from where they were taken.
 	 *
@@ -16667,7 +16763,7 @@
 	
 	        listeners.push(fn);
 	        $rootScope.$evalAsync(function() {
-	          if (!listeners.$$inter && attrs.hasOwnProperty(key)) {
+	          if (!listeners.$$inter && attrs.hasOwnProperty(key) && !isUndefined(attrs[key])) {
 	            // no one registered attribute interpolation function, so lets call it manually
 	            fn(attrs[key]);
 	          }
@@ -18046,24 +18142,19 @@
 	        lastValue,
 	        parentGet, parentSet, compare;
 	
-	        if (!hasOwnProperty.call(attrs, attrName)) {
-	          // In the case of user defined a binding with the same name as a method in Object.prototype but didn't set
-	          // the corresponding attribute. We need to make sure subsequent code won't access to the prototype function
-	          attrs[attrName] = undefined;
-	        }
-	
 	        switch (mode) {
 	
 	          case '@':
-	            if (!attrs[attrName] && !optional) {
-	              destination[scopeName] = undefined;
+	            if (!optional && !hasOwnProperty.call(attrs, attrName)) {
+	              destination[scopeName] = attrs[attrName] = void 0;
 	            }
-	
 	            attrs.$observe(attrName, function(value) {
-	              destination[scopeName] = value;
+	              if (isString(value)) {
+	                destination[scopeName] = value;
+	              }
 	            });
 	            attrs.$$observers[attrName].$$scope = scope;
-	            if (attrs[attrName]) {
+	            if (isString(attrs[attrName])) {
 	              // If the attribute has been provided then we trigger an interpolation to ensure
 	              // the value is there for use in the link fn
 	              destination[scopeName] = $interpolate(attrs[attrName])(scope);
@@ -18071,11 +18162,13 @@
 	            break;
 	
 	          case '=':
-	            if (optional && !attrs[attrName]) {
-	              return;
+	            if (!hasOwnProperty.call(attrs, attrName)) {
+	              if (optional) break;
+	              attrs[attrName] = void 0;
 	            }
-	            parentGet = $parse(attrs[attrName]);
+	            if (optional && !attrs[attrName]) break;
 	
+	            parentGet = $parse(attrs[attrName]);
 	            if (parentGet.literal) {
 	              compare = equals;
 	            } else {
@@ -18114,7 +18207,8 @@
 	            break;
 	
 	          case '&':
-	            parentGet = $parse(attrs[attrName]);
+	            // Don't assign Object.prototype method to scope
+	            parentGet = attrs.hasOwnProperty(attrName) ? $parse(attrs[attrName]) : noop;
 	
 	            // Don't assign noop to destination if expression is not valid
 	            if (parentGet === noop && optional) break;
@@ -18491,6 +18585,29 @@
 	  }];
 	}
 	
+	var $$ForceReflowProvider = function() {
+	  this.$get = ['$document', function($document) {
+	    return function(domNode) {
+	      //the line below will force the browser to perform a repaint so
+	      //that all the animated elements within the animation frame will
+	      //be properly updated and drawn on screen. This is required to
+	      //ensure that the preparation animation is properly flushed so that
+	      //the active state picks up from there. DO NOT REMOVE THIS LINE.
+	      //DO NOT OPTIMIZE THIS LINE. THE MINIFIER WILL REMOVE IT OTHERWISE WHICH
+	      //WILL RESULT IN AN UNPREDICTABLE BUG THAT IS VERY HARD TO TRACK DOWN AND
+	      //WILL TAKE YEARS AWAY FROM YOUR LIFE.
+	      if (domNode) {
+	        if (!domNode.nodeType && domNode instanceof jqLite) {
+	          domNode = domNode[0];
+	        }
+	      } else {
+	        domNode = $document[0].body;
+	      }
+	      return domNode.offsetWidth + 1;
+	    };
+	  }];
+	};
+	
 	var APPLICATION_JSON = 'application/json';
 	var CONTENT_TYPE_APPLICATION_JSON = {'Content-Type': APPLICATION_JSON + ';charset=utf-8'};
 	var JSON_START = /^\[|^\{(?!\{)/;
@@ -18499,6 +18616,12 @@
 	  '{': /}$/
 	};
 	var JSON_PROTECTION_PREFIX = /^\)\]\}',?\n/;
+	var $httpMinErr = minErr('$http');
+	var $httpMinErrLegacyFn = function(method) {
+	  return function() {
+	    throw $httpMinErr('legacy', 'The method `{0}` on the promise returned from `$http` has been disabled.', method);
+	  };
+	};
 	
 	function serializeValue(v) {
 	  if (isObject(v)) {
@@ -18599,8 +18722,8 @@
 	      function serialize(toSerialize, prefix, topLevel) {
 	        if (toSerialize === null || isUndefined(toSerialize)) return;
 	        if (isArray(toSerialize)) {
-	          forEach(toSerialize, function(value) {
-	            serialize(value, prefix + '[]');
+	          forEach(toSerialize, function(value, index) {
+	            serialize(value, prefix + '[' + (isObject(value) ? index : '') + ']');
 	          });
 	        } else if (isObject(toSerialize) && !isDate(toSerialize)) {
 	          forEachSorted(toSerialize, function(value, key) {
@@ -18821,6 +18944,30 @@
 	    return useApplyAsync;
 	  };
 	
+	  var useLegacyPromise = true;
+	  /**
+	   * @ngdoc method
+	   * @name $httpProvider#useLegacyPromiseExtensions
+	   * @description
+	   *
+	   * Configure `$http` service to return promises without the shorthand methods `success` and `error`.
+	   * This should be used to make sure that applications work without these methods.
+	   *
+	   * Defaults to false. If no value is specified, returns the current configured value.
+	   *
+	   * @param {boolean=} value If true, `$http` will return a normal promise without the `success` and `error` methods.
+	   *
+	   * @returns {boolean|Object} If a value is specified, returns the $httpProvider for chaining.
+	   *    otherwise, returns the current configured value.
+	   **/
+	  this.useLegacyPromiseExtensions = function(value) {
+	    if (isDefined(value)) {
+	      useLegacyPromise = !!value;
+	      return this;
+	    }
+	    return useLegacyPromise;
+	  };
+	
 	  /**
 	   * @ngdoc property
 	   * @name $httpProvider#interceptors
@@ -18887,17 +19034,15 @@
 	     *
 	     * ## General usage
 	     * The `$http` service is a function which takes a single argument — a configuration object —
-	     * that is used to generate an HTTP request and returns  a {@link ng.$q promise}
-	     * with two $http specific methods: `success` and `error`.
+	     * that is used to generate an HTTP request and returns  a {@link ng.$q promise}.
 	     *
 	     * ```js
 	     *   // Simple GET request example :
 	     *   $http.get('/someUrl').
-	     *     success(function(data, status, headers, config) {
+	     *     then(function(response) {
 	     *       // this callback will be called asynchronously
 	     *       // when the response is available
-	     *     }).
-	     *     error(function(data, status, headers, config) {
+	     *     }, function(response) {
 	     *       // called asynchronously if an error occurs
 	     *       // or server returns response with an error status.
 	     *     });
@@ -18906,21 +19051,23 @@
 	     * ```js
 	     *   // Simple POST request example (passing data) :
 	     *   $http.post('/someUrl', {msg:'hello word!'}).
-	     *     success(function(data, status, headers, config) {
+	     *     then(function(response) {
 	     *       // this callback will be called asynchronously
 	     *       // when the response is available
-	     *     }).
-	     *     error(function(data, status, headers, config) {
+	     *     }, function(response) {
 	     *       // called asynchronously if an error occurs
 	     *       // or server returns response with an error status.
 	     *     });
 	     * ```
 	     *
+	     * The response object has these properties:
 	     *
-	     * Since the returned value of calling the $http function is a `promise`, you can also use
-	     * the `then` method to register callbacks, and these callbacks will receive a single argument –
-	     * an object representing the response. See the API signature and type info below for more
-	     * details.
+	     *   - **data** – `{string|Object}` – The response body transformed with the transform
+	     *     functions.
+	     *   - **status** – `{number}` – HTTP status code of the response.
+	     *   - **headers** – `{function([headerName])}` – Header getter function.
+	     *   - **config** – `{Object}` – The configuration object that was used to generate the request.
+	     *   - **statusText** – `{string}` – HTTP status text of the response.
 	     *
 	     * A response status code between 200 and 299 is considered a success status and
 	     * will result in the success callback being called. Note that if the response is a redirect,
@@ -18944,8 +19091,8 @@
 	     * request data must be passed in for POST/PUT requests.
 	     *
 	     * ```js
-	     *   $http.get('/someUrl').success(successCallback);
-	     *   $http.post('/someUrl', data).success(successCallback);
+	     *   $http.get('/someUrl').then(successCallback);
+	     *   $http.post('/someUrl', data).then(successCallback);
 	     * ```
 	     *
 	     * Complete list of shortcut methods:
@@ -18958,6 +19105,14 @@
 	     * - {@link ng.$http#jsonp $http.jsonp}
 	     * - {@link ng.$http#patch $http.patch}
 	     *
+	     *
+	     * ## Deprecation Notice
+	     * <div class="alert alert-danger">
+	     *   The `$http` legacy promise methods `success` and `error` have been deprecated.
+	     *   Use the standard `then` method instead.
+	     *   If {@link $httpProvider#useLegacyPromiseExtensions `$httpProvider.useLegacyPromiseExtensions`} is set to
+	     *   `false` then these methods will throw {@link $http:legacy `$http/legacy`} error.
+	     * </div>
 	     *
 	     * ## Setting HTTP Headers
 	     *
@@ -19002,7 +19157,7 @@
 	     *  data: { test: 'test' }
 	     * }
 	     *
-	     * $http(req).success(function(){...}).error(function(){...});
+	     * $http(req).then(function(){...}, function(){...});
 	     * ```
 	     *
 	     * ## Transforming Requests and Responses
@@ -19234,7 +19389,6 @@
 	     * In order to prevent collisions in environments where multiple Angular apps share the
 	     * same domain or subdomain, we recommend that each application uses unique cookie name.
 	     *
-	     *
 	     * @param {object} config Object describing the request to be made and how it should be
 	     *    processed. The object has following properties:
 	     *
@@ -19279,20 +19433,9 @@
 	     *    - **responseType** - `{string}` - see
 	     *      [XMLHttpRequest.responseType](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest#xmlhttprequest-responsetype).
 	     *
-	     * @returns {HttpPromise} Returns a {@link ng.$q promise} object with the
-	     *   standard `then` method and two http specific methods: `success` and `error`. The `then`
-	     *   method takes two arguments a success and an error callback which will be called with a
-	     *   response object. The `success` and `error` methods take a single argument - a function that
-	     *   will be called when the request succeeds or fails respectively. The arguments passed into
-	     *   these functions are destructured representation of the response object passed into the
-	     *   `then` method. The response object has these properties:
+	     * @returns {HttpPromise} Returns a {@link ng.$q `Promise}` that will be resolved to a response object
+	     *                        when the request succeeds or fails.
 	     *
-	     *   - **data** – `{string|Object}` – The response body transformed with the transform
-	     *     functions.
-	     *   - **status** – `{number}` – HTTP status code of the response.
-	     *   - **headers** – `{function([headerName])}` – Header getter function.
-	     *   - **config** – `{Object}` – The configuration object that was used to generate the request.
-	     *   - **statusText** – `{string}` – HTTP status text of the response.
 	     *
 	     * @property {Array.<Object>} pendingRequests Array of config objects for currently pending
 	     *   requests. This is primarily meant to be used for debugging purposes.
@@ -19334,13 +19477,12 @@
 	          $scope.response = null;
 	
 	          $http({method: $scope.method, url: $scope.url, cache: $templateCache}).
-	            success(function(data, status) {
-	              $scope.status = status;
-	              $scope.data = data;
-	            }).
-	            error(function(data, status) {
-	              $scope.data = data || "Request failed";
-	              $scope.status = status;
+	            then(function(response) {
+	              $scope.status = response.status;
+	              $scope.data = response.data;
+	            }, function(response) {
+	              $scope.data = response.data || "Request failed";
+	              $scope.status = response.status;
 	          });
 	        };
 	
@@ -19445,23 +19587,28 @@
 	        promise = promise.then(thenFn, rejectFn);
 	      }
 	
-	      promise.success = function(fn) {
-	        assertArgFn(fn, 'fn');
+	      if (useLegacyPromise) {
+	        promise.success = function(fn) {
+	          assertArgFn(fn, 'fn');
 	
-	        promise.then(function(response) {
-	          fn(response.data, response.status, response.headers, config);
-	        });
-	        return promise;
-	      };
+	          promise.then(function(response) {
+	            fn(response.data, response.status, response.headers, config);
+	          });
+	          return promise;
+	        };
 	
-	      promise.error = function(fn) {
-	        assertArgFn(fn, 'fn');
+	        promise.error = function(fn) {
+	          assertArgFn(fn, 'fn');
 	
-	        promise.then(null, function(response) {
-	          fn(response.data, response.status, response.headers, config);
-	        });
-	        return promise;
-	      };
+	          promise.then(null, function(response) {
+	            fn(response.data, response.status, response.headers, config);
+	          });
+	          return promise;
+	        };
+	      } else {
+	        promise.success = $httpMinErrLegacyFn('success');
+	        promise.error = $httpMinErrLegacyFn('error');
+	      }
 	
 	      return promise;
 	
@@ -19840,7 +19987,7 @@
 	      xhr.onload = function requestLoaded() {
 	        var statusText = xhr.statusText || '';
 	
-	        // responseText is the old-school way of retrieving response (supported by IE8 & 9)
+	        // responseText is the old-school way of retrieving response (supported by IE9)
 	        // response/responseType properties were introduced in XHR Level2 spec (supported by IE10)
 	        var response = ('response' in xhr) ? xhr.response : xhr.responseText;
 	
@@ -20478,7 +20625,7 @@
 	      * @description
 	      * Cancels a task associated with the `promise`.
 	      *
-	      * @param {promise} promise returned by the `$interval` function.
+	      * @param {Promise=} promise returned by the `$interval` function.
 	      * @returns {boolean} Returns `true` if the task was successfully canceled.
 	      */
 	    interval.cancel = function(promise) {
@@ -20505,75 +20652,6 @@
 	 *
 	 * * `id` – `{string}` – locale id formatted as `languageId-countryId` (e.g. `en-us`)
 	 */
-	function $LocaleProvider() {
-	  this.$get = function() {
-	    return {
-	      id: 'en-us',
-	
-	      NUMBER_FORMATS: {
-	        DECIMAL_SEP: '.',
-	        GROUP_SEP: ',',
-	        PATTERNS: [
-	          { // Decimal Pattern
-	            minInt: 1,
-	            minFrac: 0,
-	            maxFrac: 3,
-	            posPre: '',
-	            posSuf: '',
-	            negPre: '-',
-	            negSuf: '',
-	            gSize: 3,
-	            lgSize: 3
-	          },{ //Currency Pattern
-	            minInt: 1,
-	            minFrac: 2,
-	            maxFrac: 2,
-	            posPre: '\u00A4',
-	            posSuf: '',
-	            negPre: '(\u00A4',
-	            negSuf: ')',
-	            gSize: 3,
-	            lgSize: 3
-	          }
-	        ],
-	        CURRENCY_SYM: '$'
-	      },
-	
-	      DATETIME_FORMATS: {
-	        MONTH:
-	            'January,February,March,April,May,June,July,August,September,October,November,December'
-	            .split(','),
-	        SHORTMONTH:  'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec'.split(','),
-	        DAY: 'Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday'.split(','),
-	        SHORTDAY: 'Sun,Mon,Tue,Wed,Thu,Fri,Sat'.split(','),
-	        AMPMS: ['AM','PM'],
-	        medium: 'MMM d, y h:mm:ss a',
-	        'short': 'M/d/yy h:mm a',
-	        fullDate: 'EEEE, MMMM d, y',
-	        longDate: 'MMMM d, y',
-	        mediumDate: 'MMM d, y',
-	        shortDate: 'M/d/yy',
-	        mediumTime: 'h:mm:ss a',
-	        shortTime: 'h:mm a',
-	        ERANAMES: [
-	          "Before Christ",
-	          "Anno Domini"
-	        ],
-	        ERAS: [
-	          "BC",
-	          "AD"
-	        ]
-	      },
-	
-	      pluralCat: function(num) {
-	        if (num === 1) {
-	          return 'one';
-	        }
-	        return 'other';
-	      }
-	    };
-	  };
-	}
 	
 	var PATH_MATCH = /^([^\?#]*)(\?([^#]*))?(#(.*))?$/,
 	    DEFAULT_PORTS = {'http': 80, 'https': 443, 'ftp': 21};
@@ -20664,12 +20742,12 @@
 	 *
 	 * @constructor
 	 * @param {string} appBase application base URL
+	 * @param {string} appBaseNoFile application base URL stripped of any filename
 	 * @param {string} basePrefix url path prefix
 	 */
-	function LocationHtml5Url(appBase, basePrefix) {
+	function LocationHtml5Url(appBase, appBaseNoFile, basePrefix) {
 	  this.$$html5 = true;
 	  basePrefix = basePrefix || '';
-	  var appBaseNoFile = stripFile(appBase);
 	  parseAbsoluteUrl(appBase, this);
 	
 	
@@ -20743,10 +20821,10 @@
 	 *
 	 * @constructor
 	 * @param {string} appBase application base URL
+	 * @param {string} appBaseNoFile application base URL stripped of any filename
 	 * @param {string} hashPrefix hashbang prefix
 	 */
-	function LocationHashbangUrl(appBase, hashPrefix) {
-	  var appBaseNoFile = stripFile(appBase);
+	function LocationHashbangUrl(appBase, appBaseNoFile, hashPrefix) {
 	
 	  parseAbsoluteUrl(appBase, this);
 	
@@ -20855,13 +20933,12 @@
 	 *
 	 * @constructor
 	 * @param {string} appBase application base URL
+	 * @param {string} appBaseNoFile application base URL stripped of any filename
 	 * @param {string} hashPrefix hashbang prefix
 	 */
-	function LocationHashbangInHtml5Url(appBase, hashPrefix) {
+	function LocationHashbangInHtml5Url(appBase, appBaseNoFile, hashPrefix) {
 	  this.$$html5 = true;
 	  LocationHashbangUrl.apply(this, arguments);
-	
-	  var appBaseNoFile = stripFile(appBase);
 	
 	  this.$$parseLinkUrl = function(url, relHref) {
 	    if (relHref && relHref[0] === '#') {
@@ -20892,7 +20969,7 @@
 	        hash = this.$$hash ? '#' + encodeUriSegment(this.$$hash) : '';
 	
 	    this.$$url = encodePath(this.$$path) + (search ? '?' + search : '') + hash;
-	    // include hashPrefix in $$absUrl when $$url is empty so IE8 & 9 do not reload page because of removal of '#'
+	    // include hashPrefix in $$absUrl when $$url is empty so IE9 does not reload page because of removal of '#'
 	    this.$$absUrl = appBase + hashPrefix + this.$$url;
 	  };
 	
@@ -21401,7 +21478,9 @@
 	      appBase = stripHash(initialUrl);
 	      LocationMode = LocationHashbangUrl;
 	    }
-	    $location = new LocationMode(appBase, '#' + hashPrefix);
+	    var appBaseNoFile = stripFile(appBase);
+	
+	    $location = new LocationMode(appBase, appBaseNoFile, '#' + hashPrefix);
 	    $location.$$parseLinkUrl(initialUrl, initialUrl);
 	
 	    $location.$$state = $browser.state();
@@ -21481,6 +21560,13 @@
 	
 	    // update $location when $browser url changes
 	    $browser.onUrlChange(function(newUrl, newState) {
+	
+	      if (isUndefined(beginsWith(appBaseNoFile, newUrl))) {
+	        // If we are navigating outside of the app then force a reload
+	        $window.location.href = newUrl;
+	        return;
+	      }
+	
 	      $rootScope.$evalAsync(function() {
 	        var oldUrl = $location.absUrl();
 	        var oldState = $location.$$state;
@@ -23330,29 +23416,6 @@
 	  }
 	};
 	
-	//////////////////////////////////////////////////
-	// Parser helper functions
-	//////////////////////////////////////////////////
-	
-	function setter(obj, path, setValue, fullExp) {
-	  ensureSafeObject(obj, fullExp);
-	
-	  var element = path.split('.'), key;
-	  for (var i = 0; element.length > 1; i++) {
-	    key = ensureSafeMemberName(element.shift(), fullExp);
-	    var propertyObj = ensureSafeObject(obj[key], fullExp);
-	    if (!propertyObj) {
-	      propertyObj = {};
-	      obj[key] = propertyObj;
-	    }
-	    obj = propertyObj;
-	  }
-	  key = ensureSafeMemberName(element.shift(), fullExp);
-	  ensureSafeObject(obj[key], fullExp);
-	  obj[key] = setValue;
-	  return setValue;
-	}
-	
 	var getterFnCacheDefault = createMap();
 	var getterFnCacheExpensive = createMap();
 	
@@ -23421,13 +23484,14 @@
 	  var cacheDefault = createMap();
 	  var cacheExpensive = createMap();
 	
-	  this.$get = ['$filter', '$sniffer', function($filter, $sniffer) {
+	  this.$get = ['$filter', function($filter) {
+	    var noUnsafeEval = csp().noUnsafeEval;
 	    var $parseOptions = {
-	          csp: $sniffer.csp,
+	          csp: noUnsafeEval,
 	          expensiveChecks: false
 	        },
 	        $parseOptionsExpensive = {
-	          csp: $sniffer.csp,
+	          csp: noUnsafeEval,
 	          expensiveChecks: true
 	        };
 	
@@ -23902,8 +23966,11 @@
 	    this.$$state = { status: 0 };
 	  }
 	
-	  Promise.prototype = {
+	  extend(Promise.prototype, {
 	    then: function(onFulfilled, onRejected, progressBack) {
+	      if (isUndefined(onFulfilled) && isUndefined(onRejected) && isUndefined(progressBack)) {
+	        return this;
+	      }
 	      var result = new Deferred();
 	
 	      this.$$state.pending = this.$$state.pending || [];
@@ -23924,7 +23991,7 @@
 	        return handleCallback(error, false, callback);
 	      }, progressBack);
 	    }
-	  };
+	  });
 	
 	  //Faster, more basic than angular.bind http://jsperf.com/angular-bind-vs-custom-vs-native
 	  function simpleBind(context, fn) {
@@ -23971,7 +24038,7 @@
 	    this.notify = simpleBind(this, this.notify);
 	  }
 	
-	  Deferred.prototype = {
+	  extend(Deferred.prototype, {
 	    resolve: function(val) {
 	      if (this.promise.$$state.status) return;
 	      if (val === this.promise) {
@@ -24034,7 +24101,7 @@
 	        });
 	      }
 	    }
-	  };
+	  });
 	
 	  /**
 	   * @ngdoc method
@@ -24117,6 +24184,9 @@
 	   * the promise comes from a source that can't be trusted.
 	   *
 	   * @param {*} value Value or a promise
+	   * @param {Function=} successCallback
+	   * @param {Function=} errorCallback
+	   * @param {Function=} progressCallback
 	   * @returns {Promise} Returns a promise of the passed value or promise
 	   */
 	
@@ -24136,6 +24206,9 @@
 	   * Alias of {@link ng.$q#when when} to maintain naming consistency with ES6.
 	   *
 	   * @param {*} value Value or a promise
+	   * @param {Function=} successCallback
+	   * @param {Function=} errorCallback
+	   * @param {Function=} progressCallback
 	   * @returns {Promise} Returns a promise of the passed value or promise
 	   */
 	  var resolve = when;
@@ -24391,12 +24464,9 @@
 	     * A root scope can be retrieved using the {@link ng.$rootScope $rootScope} key from the
 	     * {@link auto.$injector $injector}. Child scopes are created using the
 	     * {@link ng.$rootScope.Scope#$new $new()} method. (Most scopes are created automatically when
-	     * compiled HTML template is executed.)
+	     * compiled HTML template is executed.) See also the {@link guide/scope Scopes guide} for
+	     * an in-depth introduction and usage examples.
 	     *
-	     * Here is a simple scope snippet to show how you can interact with the scope.
-	     * ```html
-	     * <file src="./test/ng/rootScopeSpec.js" tag="docs1" />
-	     * ```
 	     *
 	     * # Inheritance
 	     * A scope can inherit from a parent scope, as in this example:
@@ -24558,9 +24628,9 @@
 	       *
 	       *
 	       * If you want to be notified whenever {@link ng.$rootScope.Scope#$digest $digest} is called,
-	       * you can register a `watchExpression` function with no `listener`. (Since `watchExpression`
-	       * can execute multiple times per {@link ng.$rootScope.Scope#$digest $digest} cycle when a
-	       * change is detected, be prepared for multiple calls to your listener.)
+	       * you can register a `watchExpression` function with no `listener`. (Be prepared for
+	       * multiple calls to your `watchExpression` because it will execute multiple times in a
+	       * single {@link ng.$rootScope.Scope#$digest $digest} cycle if a change is detected.)
 	       *
 	       * After a watcher is registered with the scope, the `listener` fn is called asynchronously
 	       * (via {@link ng.$rootScope.Scope#$evalAsync $evalAsync}) to initialize the
@@ -25322,11 +25392,14 @@
 	      $apply: function(expr) {
 	        try {
 	          beginPhase('$apply');
-	          return this.$eval(expr);
+	          try {
+	            return this.$eval(expr);
+	          } finally {
+	            clearPhase();
+	          }
 	        } catch (e) {
 	          $exceptionHandler(e);
 	        } finally {
-	          clearPhase();
 	          try {
 	            $rootScope.$digest();
 	          } catch (e) {
@@ -26242,10 +26315,10 @@
 	 *    - There are exactly **two wildcard sequences** - `*` and `**`.  All other characters
 	 *      match themselves.
 	 *    - `*`: matches zero or more occurrences of any character other than one of the following 6
-	 *      characters: '`:`', '`/`', '`.`', '`?`', '`&`' and ';'.  It's a useful wildcard for use
+	 *      characters: '`:`', '`/`', '`.`', '`?`', '`&`' and '`;`'.  It's a useful wildcard for use
 	 *      in a whitelist.
 	 *    - `**`: matches zero or more occurrences of *any* character.  As such, it's not
-	 *      not appropriate to use in for a scheme, domain, etc. as it would match too much.  (e.g.
+	 *      appropriate for use in a scheme, domain, etc. as it would match too much.  (e.g.
 	 *      http://**.example.com/ would match http://evil.com/?ignore=.example.com/ and that might
 	 *      not have been the intention.)  Its usage at the very end of the path is ok.  (e.g.
 	 *      http://foo.example.com/templates/**).
@@ -26253,11 +26326,11 @@
 	 *    - *Caveat*:  While regular expressions are powerful and offer great flexibility,  their syntax
 	 *      (and all the inevitable escaping) makes them *harder to maintain*.  It's easy to
 	 *      accidentally introduce a bug when one updates a complex expression (imho, all regexes should
-	 *      have good test coverage.).  For instance, the use of `.` in the regex is correct only in a
+	 *      have good test coverage).  For instance, the use of `.` in the regex is correct only in a
 	 *      small number of cases.  A `.` character in the regex used when matching the scheme or a
 	 *      subdomain could be matched against a `:` or literal `.` that was likely not intended.   It
 	 *      is highly recommended to use the string patterns and only fall back to regular expressions
-	 *      if they as a last resort.
+	 *      as a last resort.
 	 *    - The regular expression must be an instance of RegExp (i.e. not a string.)  It is
 	 *      matched against the **entire** *normalized / absolute URL* of the resource being tested
 	 *      (even when the RegExp did not have the `^` and `$` codes.)  In addition, any flags
@@ -26267,7 +26340,7 @@
 	 *      remember to escape your regular expression (and be aware that you might need more than
 	 *      one level of escaping depending on your templating engine and the way you interpolated
 	 *      the value.)  Do make use of your platform's escaping mechanism as it might be good
-	 *      enough before coding your own.  e.g. Ruby has
+	 *      enough before coding your own.  E.g. Ruby has
 	 *      [Regexp.escape(str)](http://www.ruby-doc.org/core-2.0.0/Regexp.html#method-c-escape)
 	 *      and Python has [re.escape](http://docs.python.org/library/re.html#re.escape).
 	 *      Javascript lacks a similar built in function for escaping.  Take a look at Google
@@ -27155,19 +27228,12 @@
 	 *
 	 * Implementation Notes for IE
 	 * ---------------------------
-	 * IE >= 8 and <= 10 normalizes the URL when assigned to the anchor node similar to the other
+	 * IE <= 10 normalizes the URL when assigned to the anchor node similar to the other
 	 * browsers.  However, the parsed components will not be set if the URL assigned did not specify
 	 * them.  (e.g. if you assign a.href = "foo", then a.protocol, a.host, etc. will be empty.)  We
 	 * work around that by performing the parsing in a 2nd step by taking a previously normalized
 	 * URL (e.g. by assigning to a.href) and assigning it a.href again.  This correctly populates the
 	 * properties such as protocol, hostname, port, etc.
-	 *
-	 * IE7 does not normalize the URL when assigned to an anchor node.  (Apparently, it does, if one
-	 * uses the inner HTML approach to assign the URL as part of an HTML snippet -
-	 * http://stackoverflow.com/a/472729)  However, setting img[src] does normalize the URL.
-	 * Unfortunately, setting img[src] to something like "javascript:foo" on IE throws an exception.
-	 * Since the primary usage for normalizing URLs is to sanitize such URLs, we can't use that
-	 * method and IE < 8 is unsupported.
 	 *
 	 * References:
 	 *   http://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement
@@ -27448,6 +27514,7 @@
 	   *    your filters, then you can use capitalization (`myappSubsectionFilterx`) or underscores
 	   *    (`myapp_subsection_filterx`).
 	   *    </div>
+	    * @param {Function} factory If the first argument was a string, a factory function for the filter to be registered.
 	   * @returns {Object} Registered filter instance, or if a map of filters was provided then a map
 	   *    of the registered filter instances.
 	   */
@@ -27795,9 +27862,9 @@
 	         }
 	         element(by.model('amount')).clear();
 	         element(by.model('amount')).sendKeys('-1234');
-	         expect(element(by.id('currency-default')).getText()).toBe('($1,234.00)');
-	         expect(element(by.id('currency-custom')).getText()).toBe('(USD$1,234.00)');
-	         expect(element(by.id('currency-no-fractions')).getText()).toBe('(USD$1,234)');
+	         expect(element(by.id('currency-default')).getText()).toBe('-$1,234.00');
+	         expect(element(by.id('currency-custom')).getText()).toBe('-USD$1,234.00');
+	         expect(element(by.id('currency-no-fractions')).getText()).toBe('-USD$1,234');
 	       });
 	     </file>
 	   </example>
@@ -28637,6 +28704,10 @@
 	    if (sortPredicate.length === 0) { sortPredicate = ['+']; }
 	
 	    var predicates = processPredicates(sortPredicate, reverseOrder);
+	    // Add a predicate at the end that evaluates to the element index. This makes the
+	    // sort stable as it works as a tie-breaker when all the input predicates cannot
+	    // distinguish between two elements.
+	    predicates.push({ get: function() { return {}; }, descending: reverseOrder ? -1 : 1});
 	
 	    // The next three lines are a version of a Swartzian Transform idiom from Perl
 	    // (sometimes called the Decorate-Sort-Undecorate idiom)
@@ -29682,7 +29753,7 @@
 	 *                       related scope, under this name.
 	 */
 	var formDirectiveFactory = function(isNgForm) {
-	  return ['$timeout', function($timeout) {
+	  return ['$timeout', '$parse', function($timeout, $parse) {
 	    var formDirective = {
 	      name: 'form',
 	      restrict: isNgForm ? 'EAC' : 'E',
@@ -29724,21 +29795,21 @@
 	            }
 	
 	            var parentFormCtrl = controller.$$parentForm;
+	            var setter = nameAttr ? getSetter(controller.$name) : noop;
 	
 	            if (nameAttr) {
-	              setter(scope, controller.$name, controller, controller.$name);
+	              setter(scope, controller);
 	              attr.$observe(nameAttr, function(newValue) {
 	                if (controller.$name === newValue) return;
-	                setter(scope, controller.$name, undefined, controller.$name);
+	                setter(scope, undefined);
 	                parentFormCtrl.$$renameControl(controller, newValue);
-	                setter(scope, controller.$name, controller, controller.$name);
+	                setter = getSetter(controller.$name);
+	                setter(scope, controller);
 	              });
 	            }
 	            formElement.on('$destroy', function() {
 	              parentFormCtrl.$removeControl(controller);
-	              if (nameAttr) {
-	                setter(scope, attr[nameAttr], undefined, controller.$name);
-	              }
+	              setter(scope, undefined);
 	              extend(controller, nullFormCtrl); //stop propagating child destruction handlers upwards
 	            });
 	          }
@@ -29747,6 +29818,14 @@
 	    };
 	
 	    return formDirective;
+	
+	    function getSetter(expression) {
+	      if (expression === '') {
+	        //create an assignable expression, so forms with an empty name can be renamed later
+	        return $parse('this[""]').assign;
+	      }
+	      return $parse(expression).assign || noop;
+	    }
 	  }];
 	};
 	
@@ -29759,7 +29838,7 @@
 	  DIRTY_CLASS: false,
 	  UNTOUCHED_CLASS: false,
 	  TOUCHED_CLASS: false,
-	  $ngModelMinErr: false,
+	  ngModelMinErr: false,
 	*/
 	
 	// Regex code is obtained from SO: https://stackoverflow.com/questions/3143070/javascript-regex-iso-datetime#answer-3143231
@@ -30881,7 +30960,11 @@
 	  element.on('change', listener);
 	
 	  ctrl.$render = function() {
-	    element.val(ctrl.$isEmpty(ctrl.$viewValue) ? '' : ctrl.$viewValue);
+	    // Workaround for Firefox validation #12102.
+	    var value = ctrl.$isEmpty(ctrl.$viewValue) ? '' : ctrl.$viewValue;
+	    if (element.val() !== value) {
+	      element.val(value);
+	    }
 	  };
 	}
 	
@@ -30992,7 +31075,7 @@
 	
 	    ctrl.$formatters.push(function(value) {
 	      if (value && !isDate(value)) {
-	        throw $ngModelMinErr('datefmt', 'Expected `{0}` to be a date', value);
+	        throw ngModelMinErr('datefmt', 'Expected `{0}` to be a date', value);
 	      }
 	      if (isValidDate(value)) {
 	        previousDate = value;
@@ -31068,7 +31151,7 @@
 	  ctrl.$formatters.push(function(value) {
 	    if (!ctrl.$isEmpty(value)) {
 	      if (!isNumber(value)) {
-	        throw $ngModelMinErr('numfmt', 'Expected `{0}` to be a number', value);
+	        throw ngModelMinErr('numfmt', 'Expected `{0}` to be a number', value);
 	      }
 	      value = value.toString();
 	    }
@@ -31161,7 +31244,7 @@
 	  if (isDefined(expression)) {
 	    parseFn = $parse(expression);
 	    if (!parseFn.constant) {
-	      throw minErr('ngModel')('constexpr', 'Expected constant expression for `{0}`, but saw ' +
+	      throw ngModelMinErr('constexpr', 'Expected constant expression for `{0}`, but saw ' +
 	                                   '`{1}`.', name, expression);
 	    }
 	    return parseFn(context);
@@ -32447,27 +32530,29 @@
 	 *
 	 * @element html
 	 * @description
-	 * Enables [CSP (Content Security Policy)](https://developer.mozilla.org/en/Security/CSP) support.
+	 *
+	 * Angular has some features that can break certain
+	 * [CSP (Content Security Policy)](https://developer.mozilla.org/en/Security/CSP) rules.
+	 *
+	 * If you intend to implement these rules then you must tell Angular not to use these features.
 	 *
 	 * This is necessary when developing things like Google Chrome Extensions or Universal Windows Apps.
 	 *
-	 * CSP forbids apps to use `eval` or `Function(string)` generated functions (among other things).
-	 * For Angular to be CSP compatible there are only two things that we need to do differently:
 	 *
-	 * - don't use `Function` constructor to generate optimized value getters
-	 * - don't inject custom stylesheet into the document
+	 * The following rules affect Angular:
 	 *
-	 * AngularJS uses `Function(string)` generated functions as a speed optimization. Applying the `ngCsp`
-	 * directive will cause Angular to use CSP compatibility mode. When this mode is on AngularJS will
-	 * evaluate all expressions up to 30% slower than in non-CSP mode, but no security violations will
-	 * be raised.
+	 * * `unsafe-eval`: this rule forbids apps to use `eval` or `Function(string)` generated functions
+	 * (among other things). Angular makes use of this in the {@link $parse} service to provide a 30%
+	 * increase in the speed of evaluating Angular expressions.
 	 *
-	 * CSP forbids JavaScript to inline stylesheet rules. In non CSP mode Angular automatically
-	 * includes some CSS rules (e.g. {@link ng.directive:ngCloak ngCloak}).
-	 * To make those directives work in CSP mode, include the `angular-csp.css` manually.
+	 * * `unsafe-inline`: this rule forbids apps from inject custom styles into the document. Angular
+	 * makes use of this to include some CSS rules (e.g. {@link ngCloak} and {@link ngHide}).
+	 * To make these directives work when a CSP rule is blocking inline styles, you must link to the
+	 * `angular-csp.css` in your HTML manually.
 	 *
-	 * Angular tries to autodetect if CSP is active and automatically turn on the CSP-safe mode. This
-	 * autodetection however triggers a CSP error to be logged in the console:
+	 * If you do not provide `ngCsp` then Angular tries to autodetect if CSP is blocking unsafe-eval
+	 * and automatically deactivates this feature in the {@link $parse} service. This autodetection,
+	 * however, triggers a CSP error to be logged in the console:
 	 *
 	 * ```
 	 * Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of
@@ -32476,10 +32561,38 @@
 	 * ```
 	 *
 	 * This error is harmless but annoying. To prevent the error from showing up, put the `ngCsp`
-	 * directive on the root element of the application or on the `angular.js` script tag, whichever
-	 * appears first in the html document.
+	 * directive on an element of the HTML document that appears before the `<script>` tag that loads
+	 * the `angular.js` file.
 	 *
 	 * *Note: This directive is only available in the `ng-csp` and `data-ng-csp` attribute form.*
+	 *
+	 * You can specify which of the CSP related Angular features should be deactivated by providing
+	 * a value for the `ng-csp` attribute. The options are as follows:
+	 *
+	 * * no-inline-style: this stops Angular from injecting CSS styles into the DOM
+	 *
+	 * * no-unsafe-eval: this stops Angular from optimising $parse with unsafe eval of strings
+	 *
+	 * You can use these values in the following combinations:
+	 *
+	 *
+	 * * No declaration means that Angular will assume that you can do inline styles, but it will do
+	 * a runtime check for unsafe-eval. E.g. `<body>`. This is backwardly compatible with previous versions
+	 * of Angular.
+	 *
+	 * * A simple `ng-csp` (or `data-ng-csp`) attribute will tell Angular to deactivate both inline
+	 * styles and unsafe eval. E.g. `<body ng-csp>`. This is backwardly compatible with previous versions
+	 * of Angular.
+	 *
+	 * * Specifying only `no-unsafe-eval` tells Angular that we must not use eval, but that we can inject
+	 * inline styles. E.g. `<body ng-csp="no-unsafe-eval">`.
+	 *
+	 * * Specifying only `no-inline-style` tells Angular that we must not inject styles, but that we can
+	 * run eval - no automcatic check for unsafe eval will occur. E.g. `<body ng-csp="no-inline-style">`
+	 *
+	 * * Specifying both `no-unsafe-eval` and `no-inline-style` tells Angular that we must not inject
+	 * styles nor use eval, which is the same as an empty: ng-csp.
+	 * E.g.`<body ng-csp="no-inline-style;no-unsafe-eval">`
 	 *
 	 * @example
 	 * This example shows how to apply the `ngCsp` directive to the `html` tag.
@@ -32612,7 +32725,7 @@
 	
 	// ngCsp is not implemented as a proper directive any more, because we need it be processed while we
 	// bootstrap the system (before $parse is instantiated), for this reason we just have
-	// the csp.isActive() fn that looks for ng-csp attribute anywhere in the current doc
+	// the csp() fn that looks for the `ng-csp` attribute anywhere in the current doc
 	
 	/**
 	 * @ngdoc directive
@@ -33728,8 +33841,7 @@
 	    TOUCHED_CLASS = 'ng-touched',
 	    PENDING_CLASS = 'ng-pending';
 	
-	
-	var $ngModelMinErr = new minErr('ngModel');
+	var ngModelMinErr = minErr('ngModel');
 	
 	/**
 	 * @ngdoc type
@@ -33980,7 +34092,7 @@
 	        }
 	      };
 	    } else if (!parsedNgModel.assign) {
-	      throw $ngModelMinErr('nonassign', "Expression '{0}' is non-assignable. Element: {1}",
+	      throw ngModelMinErr('nonassign', "Expression '{0}' is non-assignable. Element: {1}",
 	          $attr.ngModel, startingTag($element));
 	    }
 	  };
@@ -34311,7 +34423,7 @@
 	      forEach(ctrl.$asyncValidators, function(validator, name) {
 	        var promise = validator(modelValue, viewValue);
 	        if (!isPromiseLike(promise)) {
-	          throw $ngModelMinErr("$asyncValidators",
+	          throw ngModelMinErr("$asyncValidators",
 	            "Expected asynchronous validator to return a promise but got '{0}' instead.", promise);
 	        }
 	        setValidity(name, undefined);
@@ -35165,7 +35277,7 @@
 	 * Consider the following example:
 	 *
 	 * ```html
-	 * <select ng-options="item.subItem as item.label for item in values track by item.id" ng-model="selected">
+	 * <select ng-options="item.subItem as item.label for item in values track by item.id" ng-model="selected"></select>
 	 * ```
 	 *
 	 * ```js
@@ -35627,7 +35739,7 @@
 	
 	          forEach(selectedValues, function(value) {
 	            var option = options.selectValueMap[value];
-	            if (!option.disabled) selections.push(options.getViewValueFromOption(option));
+	            if (option && !option.disabled) selections.push(options.getViewValueFromOption(option));
 	          });
 	
 	          return selections;
@@ -37723,17 +37835,145 @@
 	  };
 	};
 	
-	  if (window.angular.bootstrap) {
-	    //AngularJS is already loaded, so we can return here...
-	    console.log('WARNING: Tried to load angular more than once.');
-	    return;
+	if (window.angular.bootstrap) {
+	  //AngularJS is already loaded, so we can return here...
+	  console.log('WARNING: Tried to load angular more than once.');
+	  return;
+	}
+	
+	//try to bind to jquery now so that one can write jqLite(document).ready()
+	//but we will rebind on bootstrap again.
+	bindJQuery();
+	
+	publishExternalAPI(angular);
+	
+	angular.module("ngLocale", [], ["$provide", function($provide) {
+	var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
+	function getDecimals(n) {
+	  n = n + '';
+	  var i = n.indexOf('.');
+	  return (i == -1) ? 0 : n.length - i - 1;
+	}
+	
+	function getVF(n, opt_precision) {
+	  var v = opt_precision;
+	
+	  if (undefined === v) {
+	    v = Math.min(getDecimals(n), 3);
 	  }
 	
-	  //try to bind to jquery now so that one can write jqLite(document).ready()
-	  //but we will rebind on bootstrap again.
-	  bindJQuery();
+	  var base = Math.pow(10, v);
+	  var f = ((n * base) | 0) % base;
+	  return {v: v, f: f};
+	}
 	
-	  publishExternalAPI(angular);
+	$provide.value("$locale", {
+	  "DATETIME_FORMATS": {
+	    "AMPMS": [
+	      "AM",
+	      "PM"
+	    ],
+	    "DAY": [
+	      "Sunday",
+	      "Monday",
+	      "Tuesday",
+	      "Wednesday",
+	      "Thursday",
+	      "Friday",
+	      "Saturday"
+	    ],
+	    "ERANAMES": [
+	      "Before Christ",
+	      "Anno Domini"
+	    ],
+	    "ERAS": [
+	      "BC",
+	      "AD"
+	    ],
+	    "FIRSTDAYOFWEEK": 6,
+	    "MONTH": [
+	      "January",
+	      "February",
+	      "March",
+	      "April",
+	      "May",
+	      "June",
+	      "July",
+	      "August",
+	      "September",
+	      "October",
+	      "November",
+	      "December"
+	    ],
+	    "SHORTDAY": [
+	      "Sun",
+	      "Mon",
+	      "Tue",
+	      "Wed",
+	      "Thu",
+	      "Fri",
+	      "Sat"
+	    ],
+	    "SHORTMONTH": [
+	      "Jan",
+	      "Feb",
+	      "Mar",
+	      "Apr",
+	      "May",
+	      "Jun",
+	      "Jul",
+	      "Aug",
+	      "Sep",
+	      "Oct",
+	      "Nov",
+	      "Dec"
+	    ],
+	    "WEEKENDRANGE": [
+	      5,
+	      6
+	    ],
+	    "fullDate": "EEEE, MMMM d, y",
+	    "longDate": "MMMM d, y",
+	    "medium": "MMM d, y h:mm:ss a",
+	    "mediumDate": "MMM d, y",
+	    "mediumTime": "h:mm:ss a",
+	    "short": "M/d/yy h:mm a",
+	    "shortDate": "M/d/yy",
+	    "shortTime": "h:mm a"
+	  },
+	  "NUMBER_FORMATS": {
+	    "CURRENCY_SYM": "$",
+	    "DECIMAL_SEP": ".",
+	    "GROUP_SEP": ",",
+	    "PATTERNS": [
+	      {
+	        "gSize": 3,
+	        "lgSize": 3,
+	        "maxFrac": 3,
+	        "minFrac": 0,
+	        "minInt": 1,
+	        "negPre": "-",
+	        "negSuf": "",
+	        "posPre": "",
+	        "posSuf": ""
+	      },
+	      {
+	        "gSize": 3,
+	        "lgSize": 3,
+	        "maxFrac": 2,
+	        "minFrac": 2,
+	        "minInt": 1,
+	        "negPre": "-\u00a4",
+	        "negSuf": "",
+	        "posPre": "\u00a4",
+	        "posSuf": ""
+	      }
+	    ]
+	  },
+	  "id": "en-us",
+	  "pluralCat": function(n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
+	});
+	}]);
 	
 	  jqLite(document).ready(function() {
 	    angularInit(document, bootstrap);
@@ -37741,7 +37981,7 @@
 	
 	})(window, document);
 	
-	!window.angular.$$csp() && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
+	!window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 	
 	/*** EXPORTS FROM exports-loader ***/
 	module.exports = angular
@@ -53355,7 +53595,9 @@
 /* 14 */,
 /* 15 */,
 /* 16 */,
-/* 17 */
+/* 17 */,
+/* 18 */,
+/* 19 */
 /*!*******************!*\
   !*** ./vendor.js ***!
   \*******************/
@@ -53365,7 +53607,7 @@
 	
 	// jquery
 	__webpack_require__(/*! jquery */ 1);
-	__webpack_require__(/*! bootstrap */ 18);
+	__webpack_require__(/*! bootstrap */ 20);
 	__webpack_require__(/*! moment */ 8);
 	
 	// utils
@@ -53373,25 +53615,26 @@
 	
 	// angular
 	__webpack_require__(/*! angular */ 5);
-	__webpack_require__(/*! angular-ui-router */ 20);
+	__webpack_require__(/*! angular-ui-router */ 22);
+	__webpack_require__(/*! angular-sanitize */ 30);
 	
-	__webpack_require__(/*! webcomponentsjs */ 22);
-	__webpack_require__(/*! time-elements */ 24);
+	__webpack_require__(/*! webcomponentsjs */ 24);
+	__webpack_require__(/*! time-elements */ 26);
 	
-	__webpack_require__(/*! angular/angular-csp.css */ 26);
-	__webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ 27);
+	__webpack_require__(/*! angular/angular-csp.css */ 28);
+	__webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ 29);
 
 /***/ },
-/* 18 */
+/* 20 */
 /*!***********************************!*\
   !*** bootstrap (bower component) ***!
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! ./dist/js/bootstrap.js */ 19);
+	module.exports = __webpack_require__(/*! ./dist/js/bootstrap.js */ 21);
 
 /***/ },
-/* 19 */
+/* 21 */
 /*!**********************************************************!*\
   !*** ../bower_components/bootstrap/dist/js/bootstrap.js ***!
   \**********************************************************/
@@ -55764,16 +56007,16 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! jquery */ 1)))
 
 /***/ },
-/* 20 */
+/* 22 */
 /*!*******************************************!*\
   !*** angular-ui-router (bower component) ***!
   \*******************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! ././release/angular-ui-router.js */ 21);
+	module.exports = __webpack_require__(/*! ././release/angular-ui-router.js */ 23);
 
 /***/ },
-/* 21 */
+/* 23 */
 /*!**************************************************************************!*\
   !*** ../bower_components/angular-ui-router/release/angular-ui-router.js ***!
   \**************************************************************************/
@@ -60151,16 +60394,16 @@
 	})(window, window.angular);
 
 /***/ },
-/* 22 */
+/* 24 */
 /*!*****************************************!*\
   !*** webcomponentsjs (bower component) ***!
   \*****************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! ./webcomponents.js */ 23);
+	module.exports = __webpack_require__(/*! ./webcomponents.js */ 25);
 
 /***/ },
-/* 23 */
+/* 25 */
 /*!************************************************************!*\
   !*** ../bower_components/webcomponentsjs/webcomponents.js ***!
   \************************************************************/
@@ -67277,16 +67520,16 @@
 	})(window.WebComponents);
 
 /***/ },
-/* 24 */
+/* 26 */
 /*!***************************************!*\
   !*** time-elements (bower component) ***!
   \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! ./time-elements.js */ 25);
+	module.exports = __webpack_require__(/*! ./time-elements.js */ 27);
 
 /***/ },
-/* 25 */
+/* 27 */
 /*!**********************************************************!*\
   !*** ../bower_components/time-elements/time-elements.js ***!
   \**********************************************************/
@@ -67820,7 +68063,7 @@
 
 
 /***/ },
-/* 26 */
+/* 28 */
 /*!***************************************************!*\
   !*** ../bower_components/angular/angular-csp.css ***!
   \***************************************************/
@@ -67829,13 +68072,714 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 27 */
+/* 29 */
 /*!************************************************************!*\
   !*** ../bower_components/bootstrap/dist/css/bootstrap.css ***!
   \************************************************************/
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 30 */
+/*!******************************************!*\
+  !*** angular-sanitize (bower component) ***!
+  \******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(/*! ././angular-sanitize.js */ 31);
+
+/***/ },
+/* 31 */
+/*!****************************************************************!*\
+  !*** ../bower_components/angular-sanitize/angular-sanitize.js ***!
+  \****************************************************************/
+/***/ function(module, exports) {
+
+	/**
+	 * @license AngularJS v1.4.4
+	 * (c) 2010-2015 Google, Inc. http://angularjs.org
+	 * License: MIT
+	 */
+	(function(window, angular, undefined) {'use strict';
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *     Any commits to this file should be reviewed with security in mind.  *
+	 *   Changes to this file can potentially create security vulnerabilities. *
+	 *          An approval from 2 Core members with history of modifying      *
+	 *                         this file is required.                          *
+	 *                                                                         *
+	 *  Does the change somehow allow for arbitrary javascript to be executed? *
+	 *    Or allows for someone to change the prototype of built-in objects?   *
+	 *     Or gives undesired access to variables likes document or window?    *
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	var $sanitizeMinErr = angular.$$minErr('$sanitize');
+	
+	/**
+	 * @ngdoc module
+	 * @name ngSanitize
+	 * @description
+	 *
+	 * # ngSanitize
+	 *
+	 * The `ngSanitize` module provides functionality to sanitize HTML.
+	 *
+	 *
+	 * <div doc-module-components="ngSanitize"></div>
+	 *
+	 * See {@link ngSanitize.$sanitize `$sanitize`} for usage.
+	 */
+	
+	/*
+	 * HTML Parser By Misko Hevery (misko@hevery.com)
+	 * based on:  HTML Parser By John Resig (ejohn.org)
+	 * Original code by Erik Arvidsson, Mozilla Public License
+	 * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
+	 *
+	 * // Use like so:
+	 * htmlParser(htmlString, {
+	 *     start: function(tag, attrs, unary) {},
+	 *     end: function(tag) {},
+	 *     chars: function(text) {},
+	 *     comment: function(text) {}
+	 * });
+	 *
+	 */
+	
+	
+	/**
+	 * @ngdoc service
+	 * @name $sanitize
+	 * @kind function
+	 *
+	 * @description
+	 *   The input is sanitized by parsing the HTML into tokens. All safe tokens (from a whitelist) are
+	 *   then serialized back to properly escaped html string. This means that no unsafe input can make
+	 *   it into the returned string, however, since our parser is more strict than a typical browser
+	 *   parser, it's possible that some obscure input, which would be recognized as valid HTML by a
+	 *   browser, won't make it through the sanitizer. The input may also contain SVG markup.
+	 *   The whitelist is configured using the functions `aHrefSanitizationWhitelist` and
+	 *   `imgSrcSanitizationWhitelist` of {@link ng.$compileProvider `$compileProvider`}.
+	 *
+	 * @param {string} html HTML input.
+	 * @returns {string} Sanitized HTML.
+	 *
+	 * @example
+	   <example module="sanitizeExample" deps="angular-sanitize.js">
+	   <file name="index.html">
+	     <script>
+	         angular.module('sanitizeExample', ['ngSanitize'])
+	           .controller('ExampleController', ['$scope', '$sce', function($scope, $sce) {
+	             $scope.snippet =
+	               '<p style="color:blue">an html\n' +
+	               '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
+	               'snippet</p>';
+	             $scope.deliberatelyTrustDangerousSnippet = function() {
+	               return $sce.trustAsHtml($scope.snippet);
+	             };
+	           }]);
+	     </script>
+	     <div ng-controller="ExampleController">
+	        Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+	       <table>
+	         <tr>
+	           <td>Directive</td>
+	           <td>How</td>
+	           <td>Source</td>
+	           <td>Rendered</td>
+	         </tr>
+	         <tr id="bind-html-with-sanitize">
+	           <td>ng-bind-html</td>
+	           <td>Automatically uses $sanitize</td>
+	           <td><pre>&lt;div ng-bind-html="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+	           <td><div ng-bind-html="snippet"></div></td>
+	         </tr>
+	         <tr id="bind-html-with-trust">
+	           <td>ng-bind-html</td>
+	           <td>Bypass $sanitize by explicitly trusting the dangerous value</td>
+	           <td>
+	           <pre>&lt;div ng-bind-html="deliberatelyTrustDangerousSnippet()"&gt;
+	&lt;/div&gt;</pre>
+	           </td>
+	           <td><div ng-bind-html="deliberatelyTrustDangerousSnippet()"></div></td>
+	         </tr>
+	         <tr id="bind-default">
+	           <td>ng-bind</td>
+	           <td>Automatically escapes</td>
+	           <td><pre>&lt;div ng-bind="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+	           <td><div ng-bind="snippet"></div></td>
+	         </tr>
+	       </table>
+	       </div>
+	   </file>
+	   <file name="protractor.js" type="protractor">
+	     it('should sanitize the html snippet by default', function() {
+	       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
+	         toBe('<p>an html\n<em>click here</em>\nsnippet</p>');
+	     });
+	
+	     it('should inline raw snippet if bound to a trusted value', function() {
+	       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).
+	         toBe("<p style=\"color:blue\">an html\n" +
+	              "<em onmouseover=\"this.textContent='PWN3D!'\">click here</em>\n" +
+	              "snippet</p>");
+	     });
+	
+	     it('should escape snippet without any filter', function() {
+	       expect(element(by.css('#bind-default div')).getInnerHtml()).
+	         toBe("&lt;p style=\"color:blue\"&gt;an html\n" +
+	              "&lt;em onmouseover=\"this.textContent='PWN3D!'\"&gt;click here&lt;/em&gt;\n" +
+	              "snippet&lt;/p&gt;");
+	     });
+	
+	     it('should update', function() {
+	       element(by.model('snippet')).clear();
+	       element(by.model('snippet')).sendKeys('new <b onclick="alert(1)">text</b>');
+	       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
+	         toBe('new <b>text</b>');
+	       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).toBe(
+	         'new <b onclick="alert(1)">text</b>');
+	       expect(element(by.css('#bind-default div')).getInnerHtml()).toBe(
+	         "new &lt;b onclick=\"alert(1)\"&gt;text&lt;/b&gt;");
+	     });
+	   </file>
+	   </example>
+	 */
+	function $SanitizeProvider() {
+	  this.$get = ['$$sanitizeUri', function($$sanitizeUri) {
+	    return function(html) {
+	      var buf = [];
+	      htmlParser(html, htmlSanitizeWriter(buf, function(uri, isImage) {
+	        return !/^unsafe/.test($$sanitizeUri(uri, isImage));
+	      }));
+	      return buf.join('');
+	    };
+	  }];
+	}
+	
+	function sanitizeText(chars) {
+	  var buf = [];
+	  var writer = htmlSanitizeWriter(buf, angular.noop);
+	  writer.chars(chars);
+	  return buf.join('');
+	}
+	
+	
+	// Regular Expressions for parsing tags and attributes
+	var START_TAG_REGEXP =
+	       /^<((?:[a-zA-Z])[\w:-]*)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*(>?)/,
+	  END_TAG_REGEXP = /^<\/\s*([\w:-]+)[^>]*>/,
+	  ATTR_REGEXP = /([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,
+	  BEGIN_TAG_REGEXP = /^</,
+	  BEGING_END_TAGE_REGEXP = /^<\//,
+	  COMMENT_REGEXP = /<!--(.*?)-->/g,
+	  DOCTYPE_REGEXP = /<!DOCTYPE([^>]*?)>/i,
+	  CDATA_REGEXP = /<!\[CDATA\[(.*?)]]>/g,
+	  SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
+	  // Match everything outside of normal chars and " (quote character)
+	  NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g;
+	
+	
+	// Good source of info about elements and attributes
+	// http://dev.w3.org/html5/spec/Overview.html#semantics
+	// http://simon.html5.org/html-elements
+	
+	// Safe Void Elements - HTML5
+	// http://dev.w3.org/html5/spec/Overview.html#void-elements
+	var voidElements = makeMap("area,br,col,hr,img,wbr");
+	
+	// Elements that you can, intentionally, leave open (and which close themselves)
+	// http://dev.w3.org/html5/spec/Overview.html#optional-tags
+	var optionalEndTagBlockElements = makeMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
+	    optionalEndTagInlineElements = makeMap("rp,rt"),
+	    optionalEndTagElements = angular.extend({},
+	                                            optionalEndTagInlineElements,
+	                                            optionalEndTagBlockElements);
+	
+	// Safe Block Elements - HTML5
+	var blockElements = angular.extend({}, optionalEndTagBlockElements, makeMap("address,article," +
+	        "aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5," +
+	        "h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul"));
+	
+	// Inline Elements - HTML5
+	var inlineElements = angular.extend({}, optionalEndTagInlineElements, makeMap("a,abbr,acronym,b," +
+	        "bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s," +
+	        "samp,small,span,strike,strong,sub,sup,time,tt,u,var"));
+	
+	// SVG Elements
+	// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Elements
+	// Note: the elements animate,animateColor,animateMotion,animateTransform,set are intentionally omitted.
+	// They can potentially allow for arbitrary javascript to be executed. See #11290
+	var svgElements = makeMap("circle,defs,desc,ellipse,font-face,font-face-name,font-face-src,g,glyph," +
+	        "hkern,image,linearGradient,line,marker,metadata,missing-glyph,mpath,path,polygon,polyline," +
+	        "radialGradient,rect,stop,svg,switch,text,title,tspan,use");
+	
+	// Special Elements (can contain anything)
+	var specialElements = makeMap("script,style");
+	
+	var validElements = angular.extend({},
+	                                   voidElements,
+	                                   blockElements,
+	                                   inlineElements,
+	                                   optionalEndTagElements,
+	                                   svgElements);
+	
+	//Attributes that have href and hence need to be sanitized
+	var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap,xlink:href");
+	
+	var htmlAttrs = makeMap('abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,' +
+	    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,' +
+	    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,' +
+	    'scope,scrolling,shape,size,span,start,summary,tabindex,target,title,type,' +
+	    'valign,value,vspace,width');
+	
+	// SVG attributes (without "id" and "name" attributes)
+	// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Attributes
+	var svgAttrs = makeMap('accent-height,accumulate,additive,alphabetic,arabic-form,ascent,' +
+	    'baseProfile,bbox,begin,by,calcMode,cap-height,class,color,color-rendering,content,' +
+	    'cx,cy,d,dx,dy,descent,display,dur,end,fill,fill-rule,font-family,font-size,font-stretch,' +
+	    'font-style,font-variant,font-weight,from,fx,fy,g1,g2,glyph-name,gradientUnits,hanging,' +
+	    'height,horiz-adv-x,horiz-origin-x,ideographic,k,keyPoints,keySplines,keyTimes,lang,' +
+	    'marker-end,marker-mid,marker-start,markerHeight,markerUnits,markerWidth,mathematical,' +
+	    'max,min,offset,opacity,orient,origin,overline-position,overline-thickness,panose-1,' +
+	    'path,pathLength,points,preserveAspectRatio,r,refX,refY,repeatCount,repeatDur,' +
+	    'requiredExtensions,requiredFeatures,restart,rotate,rx,ry,slope,stemh,stemv,stop-color,' +
+	    'stop-opacity,strikethrough-position,strikethrough-thickness,stroke,stroke-dasharray,' +
+	    'stroke-dashoffset,stroke-linecap,stroke-linejoin,stroke-miterlimit,stroke-opacity,' +
+	    'stroke-width,systemLanguage,target,text-anchor,to,transform,type,u1,u2,underline-position,' +
+	    'underline-thickness,unicode,unicode-range,units-per-em,values,version,viewBox,visibility,' +
+	    'width,widths,x,x-height,x1,x2,xlink:actuate,xlink:arcrole,xlink:role,xlink:show,xlink:title,' +
+	    'xlink:type,xml:base,xml:lang,xml:space,xmlns,xmlns:xlink,y,y1,y2,zoomAndPan', true);
+	
+	var validAttrs = angular.extend({},
+	                                uriAttrs,
+	                                svgAttrs,
+	                                htmlAttrs);
+	
+	function makeMap(str, lowercaseKeys) {
+	  var obj = {}, items = str.split(','), i;
+	  for (i = 0; i < items.length; i++) {
+	    obj[lowercaseKeys ? angular.lowercase(items[i]) : items[i]] = true;
+	  }
+	  return obj;
+	}
+	
+	
+	/**
+	 * @example
+	 * htmlParser(htmlString, {
+	 *     start: function(tag, attrs, unary) {},
+	 *     end: function(tag) {},
+	 *     chars: function(text) {},
+	 *     comment: function(text) {}
+	 * });
+	 *
+	 * @param {string} html string
+	 * @param {object} handler
+	 */
+	function htmlParser(html, handler) {
+	  if (typeof html !== 'string') {
+	    if (html === null || typeof html === 'undefined') {
+	      html = '';
+	    } else {
+	      html = '' + html;
+	    }
+	  }
+	  var index, chars, match, stack = [], last = html, text;
+	  stack.last = function() { return stack[stack.length - 1]; };
+	
+	  while (html) {
+	    text = '';
+	    chars = true;
+	
+	    // Make sure we're not in a script or style element
+	    if (!stack.last() || !specialElements[stack.last()]) {
+	
+	      // Comment
+	      if (html.indexOf("<!--") === 0) {
+	        // comments containing -- are not allowed unless they terminate the comment
+	        index = html.indexOf("--", 4);
+	
+	        if (index >= 0 && html.lastIndexOf("-->", index) === index) {
+	          if (handler.comment) handler.comment(html.substring(4, index));
+	          html = html.substring(index + 3);
+	          chars = false;
+	        }
+	      // DOCTYPE
+	      } else if (DOCTYPE_REGEXP.test(html)) {
+	        match = html.match(DOCTYPE_REGEXP);
+	
+	        if (match) {
+	          html = html.replace(match[0], '');
+	          chars = false;
+	        }
+	      // end tag
+	      } else if (BEGING_END_TAGE_REGEXP.test(html)) {
+	        match = html.match(END_TAG_REGEXP);
+	
+	        if (match) {
+	          html = html.substring(match[0].length);
+	          match[0].replace(END_TAG_REGEXP, parseEndTag);
+	          chars = false;
+	        }
+	
+	      // start tag
+	      } else if (BEGIN_TAG_REGEXP.test(html)) {
+	        match = html.match(START_TAG_REGEXP);
+	
+	        if (match) {
+	          // We only have a valid start-tag if there is a '>'.
+	          if (match[4]) {
+	            html = html.substring(match[0].length);
+	            match[0].replace(START_TAG_REGEXP, parseStartTag);
+	          }
+	          chars = false;
+	        } else {
+	          // no ending tag found --- this piece should be encoded as an entity.
+	          text += '<';
+	          html = html.substring(1);
+	        }
+	      }
+	
+	      if (chars) {
+	        index = html.indexOf("<");
+	
+	        text += index < 0 ? html : html.substring(0, index);
+	        html = index < 0 ? "" : html.substring(index);
+	
+	        if (handler.chars) handler.chars(decodeEntities(text));
+	      }
+	
+	    } else {
+	      // IE versions 9 and 10 do not understand the regex '[^]', so using a workaround with [\W\w].
+	      html = html.replace(new RegExp("([\\W\\w]*)<\\s*\\/\\s*" + stack.last() + "[^>]*>", 'i'),
+	        function(all, text) {
+	          text = text.replace(COMMENT_REGEXP, "$1").replace(CDATA_REGEXP, "$1");
+	
+	          if (handler.chars) handler.chars(decodeEntities(text));
+	
+	          return "";
+	      });
+	
+	      parseEndTag("", stack.last());
+	    }
+	
+	    if (html == last) {
+	      throw $sanitizeMinErr('badparse', "The sanitizer was unable to parse the following block " +
+	                                        "of html: {0}", html);
+	    }
+	    last = html;
+	  }
+	
+	  // Clean up any remaining tags
+	  parseEndTag();
+	
+	  function parseStartTag(tag, tagName, rest, unary) {
+	    tagName = angular.lowercase(tagName);
+	    if (blockElements[tagName]) {
+	      while (stack.last() && inlineElements[stack.last()]) {
+	        parseEndTag("", stack.last());
+	      }
+	    }
+	
+	    if (optionalEndTagElements[tagName] && stack.last() == tagName) {
+	      parseEndTag("", tagName);
+	    }
+	
+	    unary = voidElements[tagName] || !!unary;
+	
+	    if (!unary) {
+	      stack.push(tagName);
+	    }
+	
+	    var attrs = {};
+	
+	    rest.replace(ATTR_REGEXP,
+	      function(match, name, doubleQuotedValue, singleQuotedValue, unquotedValue) {
+	        var value = doubleQuotedValue
+	          || singleQuotedValue
+	          || unquotedValue
+	          || '';
+	
+	        attrs[name] = decodeEntities(value);
+	    });
+	    if (handler.start) handler.start(tagName, attrs, unary);
+	  }
+	
+	  function parseEndTag(tag, tagName) {
+	    var pos = 0, i;
+	    tagName = angular.lowercase(tagName);
+	    if (tagName) {
+	      // Find the closest opened tag of the same type
+	      for (pos = stack.length - 1; pos >= 0; pos--) {
+	        if (stack[pos] == tagName) break;
+	      }
+	    }
+	
+	    if (pos >= 0) {
+	      // Close all the open elements, up the stack
+	      for (i = stack.length - 1; i >= pos; i--)
+	        if (handler.end) handler.end(stack[i]);
+	
+	      // Remove the open elements from the stack
+	      stack.length = pos;
+	    }
+	  }
+	}
+	
+	var hiddenPre=document.createElement("pre");
+	/**
+	 * decodes all entities into regular string
+	 * @param value
+	 * @returns {string} A string with decoded entities.
+	 */
+	function decodeEntities(value) {
+	  if (!value) { return ''; }
+	
+	  hiddenPre.innerHTML = value.replace(/</g,"&lt;");
+	  // innerText depends on styling as it doesn't display hidden elements.
+	  // Therefore, it's better to use textContent not to cause unnecessary reflows.
+	  return hiddenPre.textContent;
+	}
+	
+	/**
+	 * Escapes all potentially dangerous characters, so that the
+	 * resulting string can be safely inserted into attribute or
+	 * element text.
+	 * @param value
+	 * @returns {string} escaped text
+	 */
+	function encodeEntities(value) {
+	  return value.
+	    replace(/&/g, '&amp;').
+	    replace(SURROGATE_PAIR_REGEXP, function(value) {
+	      var hi = value.charCodeAt(0);
+	      var low = value.charCodeAt(1);
+	      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
+	    }).
+	    replace(NON_ALPHANUMERIC_REGEXP, function(value) {
+	      return '&#' + value.charCodeAt(0) + ';';
+	    }).
+	    replace(/</g, '&lt;').
+	    replace(/>/g, '&gt;');
+	}
+	
+	/**
+	 * create an HTML/XML writer which writes to buffer
+	 * @param {Array} buf use buf.jain('') to get out sanitized html string
+	 * @returns {object} in the form of {
+	 *     start: function(tag, attrs, unary) {},
+	 *     end: function(tag) {},
+	 *     chars: function(text) {},
+	 *     comment: function(text) {}
+	 * }
+	 */
+	function htmlSanitizeWriter(buf, uriValidator) {
+	  var ignore = false;
+	  var out = angular.bind(buf, buf.push);
+	  return {
+	    start: function(tag, attrs, unary) {
+	      tag = angular.lowercase(tag);
+	      if (!ignore && specialElements[tag]) {
+	        ignore = tag;
+	      }
+	      if (!ignore && validElements[tag] === true) {
+	        out('<');
+	        out(tag);
+	        angular.forEach(attrs, function(value, key) {
+	          var lkey=angular.lowercase(key);
+	          var isImage = (tag === 'img' && lkey === 'src') || (lkey === 'background');
+	          if (validAttrs[lkey] === true &&
+	            (uriAttrs[lkey] !== true || uriValidator(value, isImage))) {
+	            out(' ');
+	            out(key);
+	            out('="');
+	            out(encodeEntities(value));
+	            out('"');
+	          }
+	        });
+	        out(unary ? '/>' : '>');
+	      }
+	    },
+	    end: function(tag) {
+	        tag = angular.lowercase(tag);
+	        if (!ignore && validElements[tag] === true) {
+	          out('</');
+	          out(tag);
+	          out('>');
+	        }
+	        if (tag == ignore) {
+	          ignore = false;
+	        }
+	      },
+	    chars: function(chars) {
+	        if (!ignore) {
+	          out(encodeEntities(chars));
+	        }
+	      }
+	  };
+	}
+	
+	
+	// define ngSanitize module and register $sanitize service
+	angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
+	
+	/* global sanitizeText: false */
+	
+	/**
+	 * @ngdoc filter
+	 * @name linky
+	 * @kind function
+	 *
+	 * @description
+	 * Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and
+	 * plain email address links.
+	 *
+	 * Requires the {@link ngSanitize `ngSanitize`} module to be installed.
+	 *
+	 * @param {string} text Input text.
+	 * @param {string} target Window (_blank|_self|_parent|_top) or named frame to open links in.
+	 * @returns {string} Html-linkified text.
+	 *
+	 * @usage
+	   <span ng-bind-html="linky_expression | linky"></span>
+	 *
+	 * @example
+	   <example module="linkyExample" deps="angular-sanitize.js">
+	     <file name="index.html">
+	       <script>
+	         angular.module('linkyExample', ['ngSanitize'])
+	           .controller('ExampleController', ['$scope', function($scope) {
+	             $scope.snippet =
+	               'Pretty text with some links:\n'+
+	               'http://angularjs.org/,\n'+
+	               'mailto:us@somewhere.org,\n'+
+	               'another@somewhere.org,\n'+
+	               'and one more: ftp://127.0.0.1/.';
+	             $scope.snippetWithTarget = 'http://angularjs.org/';
+	           }]);
+	       </script>
+	       <div ng-controller="ExampleController">
+	       Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+	       <table>
+	         <tr>
+	           <td>Filter</td>
+	           <td>Source</td>
+	           <td>Rendered</td>
+	         </tr>
+	         <tr id="linky-filter">
+	           <td>linky filter</td>
+	           <td>
+	             <pre>&lt;div ng-bind-html="snippet | linky"&gt;<br>&lt;/div&gt;</pre>
+	           </td>
+	           <td>
+	             <div ng-bind-html="snippet | linky"></div>
+	           </td>
+	         </tr>
+	         <tr id="linky-target">
+	          <td>linky target</td>
+	          <td>
+	            <pre>&lt;div ng-bind-html="snippetWithTarget | linky:'_blank'"&gt;<br>&lt;/div&gt;</pre>
+	          </td>
+	          <td>
+	            <div ng-bind-html="snippetWithTarget | linky:'_blank'"></div>
+	          </td>
+	         </tr>
+	         <tr id="escaped-html">
+	           <td>no filter</td>
+	           <td><pre>&lt;div ng-bind="snippet"&gt;<br>&lt;/div&gt;</pre></td>
+	           <td><div ng-bind="snippet"></div></td>
+	         </tr>
+	       </table>
+	     </file>
+	     <file name="protractor.js" type="protractor">
+	       it('should linkify the snippet with urls', function() {
+	         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+	             toBe('Pretty text with some links: http://angularjs.org/, us@somewhere.org, ' +
+	                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+	         expect(element.all(by.css('#linky-filter a')).count()).toEqual(4);
+	       });
+	
+	       it('should not linkify snippet without the linky filter', function() {
+	         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText()).
+	             toBe('Pretty text with some links: http://angularjs.org/, mailto:us@somewhere.org, ' +
+	                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+	         expect(element.all(by.css('#escaped-html a')).count()).toEqual(0);
+	       });
+	
+	       it('should update', function() {
+	         element(by.model('snippet')).clear();
+	         element(by.model('snippet')).sendKeys('new http://link.');
+	         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+	             toBe('new http://link.');
+	         expect(element.all(by.css('#linky-filter a')).count()).toEqual(1);
+	         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText())
+	             .toBe('new http://link.');
+	       });
+	
+	       it('should work with the target property', function() {
+	        expect(element(by.id('linky-target')).
+	            element(by.binding("snippetWithTarget | linky:'_blank'")).getText()).
+	            toBe('http://angularjs.org/');
+	        expect(element(by.css('#linky-target a')).getAttribute('target')).toEqual('_blank');
+	       });
+	     </file>
+	   </example>
+	 */
+	angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
+	  var LINKY_URL_REGEXP =
+	        /((ftp|https?):\/\/|(www\.)|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s.;,(){}<>"\u201d\u2019]/i,
+	      MAILTO_REGEXP = /^mailto:/i;
+	
+	  return function(text, target) {
+	    if (!text) return text;
+	    var match;
+	    var raw = text;
+	    var html = [];
+	    var url;
+	    var i;
+	    while ((match = raw.match(LINKY_URL_REGEXP))) {
+	      // We can not end in these as they are sometimes found at the end of the sentence
+	      url = match[0];
+	      // if we did not match ftp/http/www/mailto then assume mailto
+	      if (!match[2] && !match[4]) {
+	        url = (match[3] ? 'http://' : 'mailto:') + url;
+	      }
+	      i = match.index;
+	      addText(raw.substr(0, i));
+	      addLink(url, match[0].replace(MAILTO_REGEXP, ''));
+	      raw = raw.substring(i + match[0].length);
+	    }
+	    addText(raw);
+	    return $sanitize(html.join(''));
+	
+	    function addText(text) {
+	      if (!text) {
+	        return;
+	      }
+	      html.push(sanitizeText(text));
+	    }
+	
+	    function addLink(url, text) {
+	      html.push('<a ');
+	      if (angular.isDefined(target)) {
+	        html.push('target="',
+	                  target,
+	                  '" ');
+	      }
+	      html.push('href="',
+	                url.replace(/"/g, '&quot;'),
+	                '">');
+	      addText(text);
+	      html.push('</a>');
+	    }
+	  };
+	}]);
+	
+	
+	})(window, window.angular);
+
 
 /***/ }
 /******/ ]);

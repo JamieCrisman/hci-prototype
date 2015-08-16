@@ -1,7 +1,7 @@
 'use strict';
 
 require('jquery');
-require('angular');
+//require('angular');
 require('moment');
 
 var app = require('../module');
@@ -9,6 +9,7 @@ var app = require('../module');
 app.controller('HomeController', function($scope, $http) {
   $scope.recentPosts = [];
   $scope.journalPosts = [];
+  console.log('home controller');
 
   var requestRecents = {
   	method: 'GET',
@@ -18,7 +19,7 @@ app.controller('HomeController', function($scope, $http) {
   var requestJournal = {
   	method: 'GET',
   	params: {
-		entry: "apa",
+		entry: "apa", //TODO change to journal
   		all: "true"
   	},
   	url: '/api/entry',
@@ -39,9 +40,5 @@ app.controller('HomeController', function($scope, $http) {
   });
 
 });
-
-app.TEMPLATES = {
-  HOME: require('./template.html')
-};
 
 module.exports = app;
