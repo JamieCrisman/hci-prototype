@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-offset-3 col-md-6">
+    <div class="col-md-offset-2 col-md-8">
       <img class="svg-center the-koi" src="koi.svg">
       <div class="row">
         <div class="col-md-12">
@@ -16,8 +16,8 @@
           </h3>
           <ul class="list-body" ng-repeat="entry in recentPosts">
             <li class="clearfix">
-              <a href="/#/{{entry.Slug}}">{{entry.Name}}</a>
-              <time class="pull-right" is="relative-time" datetime="{{entry.LastUpdated.toString()}}">April 1, 2014</time>
+              <a href="/#/{{entry.slug}}">{{entry.name}}</a>
+              <time class="pull-right" is="relative-time" datetime="{{entry.lastUpdated.toString()}}">April 1, 2014</time>
             </li>
           </ul>
         </div>
@@ -27,8 +27,8 @@
           </h3>
           <ul class="list-body" ng-repeat="journal in journalPosts">
             <li class="clearfix">
-              <a href="/#/{{journal.Slug}}/{{journal.CommitID}}">{{journal.Title}}</a>
-              <time class="pull-right" is="relative-time" datetime="{{journal.CreateDate.toString()}}">April 1, 2014</time>
+              <a href="/#/{{journal.slug}}/{{journal.commitId}}">{{journal.title}}</a>
+              <time class="pull-right" is="relative-time" datetime="{{journal.createDate.toString()}}">April 1, 2014</time>
             </li>
           </ul>
         </div>

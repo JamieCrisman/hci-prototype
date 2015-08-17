@@ -70,17 +70,19 @@ func APIGetEntry(w http.ResponseWriter, r *http.Request){
   } else {
     options.Page, _ = strconv.Atoi(pageParam)
   }
-
+  if(authorized(w, r) == true) {
+    options.Admin = true
+    log.Println("setting admin to true")
+  } else {
+    options.Admin = false
+  }
   ent, err := GetCommit(params, options)
   if(err != nil) {
     Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": "Fail"})
     return
   }
 
-  for key := range *ent{
-    (*ent)[key].CompiledContent = CompileContent((*ent)[key].Content)
-  }
-  Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "OK", "commit": ent})
+  Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg": "OK", "data": ent})
 }
 
 func APIGetIndex(w http.ResponseWriter, r *http.Request){
@@ -100,13 +102,18 @@ func APIGetIndex(w http.ResponseWriter, r *http.Request){
   } else if (authorized(w, r) && activeParam == "false") {
     params.Active = false;
   }//else we don't care what active is
+  if(authorized(w, r)) {
+    options.Admin = true
+  } else {
+    options.Admin = false
+  }
   ind, err := GetIndex(params, options)
   if(err != nil) {
     Renderer.r.JSON(w, http.StatusBadRequest, map[string]interface{}{"msg": "Fail"})
     return
   }
 
-  Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg":"OK", "entry": ind})
+  Renderer.r.JSON(w, http.StatusOK, map[string]interface{}{"msg":"OK", "data": ind})
 }
 
 
@@ -331,5 +338,5 @@ func checkAuth(w http.ResponseWriter, r *http.Request){
 func authorized(w http.ResponseWriter, r *http.Request) bool{
   err := auth.Authorize(w, r, true)
   fmt.Println(err)
-  return err != nil
+  return err == nil
 }

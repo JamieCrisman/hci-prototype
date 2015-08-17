@@ -13,14 +13,14 @@ webpackJsonp([0],[
 	
 	var app = __webpack_require__(/*! ./module */ 12);
 	var home = __webpack_require__(/*! ./home */ 14);
-	var entry = __webpack_require__(/*! ./entry */ 17);
+	var entry = __webpack_require__(/*! ./entry */ 15);
 	
 	app.addModules([
 	  'ui.router'
 	]);
 	
 	app.TEMPLATES = {
-	  HOME: __webpack_require__(/*! ./home/template.html */ 15),
+	  HOME: __webpack_require__(/*! ./home/template.html */ 16),
 	  ENTRY: __webpack_require__(/*! ./entry/template.html */ 18)
 	};
 	
@@ -135,14 +135,15 @@ webpackJsonp([0],[
 	
 	  $http(requestRecents).then(function(response) {
 	  	if(response.status === 200) {
-	  		$scope.recentPosts = response.data.entry;
+	  		$scope.recentPosts = response.data.data.entries;
 	  	}
 	  });
 	
 	  $http(requestJournal).then(function(response) {
 	  	console.log(response);
 	  	if(response.status === 200) {
-	  		$scope.journalPosts = response.data.commit;
+	  		$scope.journalPosts = response.data.data.commits;
+	      console.log($scope.journalPosts)
 	  	}
 	  });
 	
@@ -152,24 +153,6 @@ webpackJsonp([0],[
 
 /***/ },
 /* 15 */
-/*!****************************!*\
-  !*** ./home/template.html ***!
-  \****************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-3 col-md-6\">\n      <img class=\"svg-center the-koi\" src=\"" + __webpack_require__(/*! ./koi.svg */ 16) + "\">\n      <div class=\"row\">\n        <div class=\"col-md-12\">\n          <p>\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a vestibulum mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris tempor, lacus sed mollis vulputate, ipsum sem ultricies lectus, sit amet luctus nunc odio ac dui. Nulla et massa placerat, posuere felis in, fermentum ipsum. Pellentesque pretium fringilla elementum.\n          </p>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-md-6\">\n          <h3 class=\"list-header\">\n            Recent Activity:\n          </h3>\n          <ul class=\"list-body\" ng-repeat=\"entry in recentPosts\">\n            <li class=\"clearfix\">\n              <a href=\"/#/{{entry.Slug}}\">{{entry.Name}}</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{entry.LastUpdated.toString()}}\">April 1, 2014</time>\n            </li>\n          </ul>\n        </div>\n        <div class=\"col-md-6\">\n          <h3 class=\"list-header\">\n            Journal:\n          </h3>\n          <ul class=\"list-body\" ng-repeat=\"journal in journalPosts\">\n            <li class=\"clearfix\">\n              <a href=\"/#/{{journal.Slug}}/{{journal.CommitID}}\">{{journal.Title}}</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{journal.CreateDate.toString()}}\">April 1, 2014</time>\n            </li>\n          </ul>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
-
-/***/ },
-/* 16 */
-/*!**********************!*\
-  !*** ./home/koi.svg ***!
-  \**********************/
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "fonts/koi.svg"
-
-/***/ },
-/* 17 */
 /*!************************!*\
   !*** ./entry/index.js ***!
   \************************/
@@ -204,7 +187,7 @@ webpackJsonp([0],[
 	  $http(requestEntry).then(function(response) {
 	  	console.log(response);
 	  	if(response.status === 200) {
-	  		$scope.entries = response.data.commit;
+	  		$scope.entries = response.data.data.commits;
 	  	}
 	  });
 	
@@ -213,13 +196,31 @@ webpackJsonp([0],[
 	module.exports = app;
 
 /***/ },
+/* 16 */
+/*!****************************!*\
+  !*** ./home/template.html ***!
+  \****************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-2 col-md-8\">\n      <img class=\"svg-center the-koi\" src=\"" + __webpack_require__(/*! ./koi.svg */ 17) + "\">\n      <div class=\"row\">\n        <div class=\"col-md-12\">\n          <p>\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a vestibulum mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris tempor, lacus sed mollis vulputate, ipsum sem ultricies lectus, sit amet luctus nunc odio ac dui. Nulla et massa placerat, posuere felis in, fermentum ipsum. Pellentesque pretium fringilla elementum.\n          </p>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-md-6\">\n          <h3 class=\"list-header\">\n            Recent Activity:\n          </h3>\n          <ul class=\"list-body\" ng-repeat=\"entry in recentPosts\">\n            <li class=\"clearfix\">\n              <a href=\"/#/{{entry.slug}}\">{{entry.name}}</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{entry.lastUpdated.toString()}}\">April 1, 2014</time>\n            </li>\n          </ul>\n        </div>\n        <div class=\"col-md-6\">\n          <h3 class=\"list-header\">\n            Journal:\n          </h3>\n          <ul class=\"list-body\" ng-repeat=\"journal in journalPosts\">\n            <li class=\"clearfix\">\n              <a href=\"/#/{{journal.slug}}/{{journal.commitId}}\">{{journal.title}}</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{journal.createDate.toString()}}\">April 1, 2014</time>\n            </li>\n          </ul>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
+
+/***/ },
+/* 17 */
+/*!**********************!*\
+  !*** ./home/koi.svg ***!
+  \**********************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "fonts/koi.svg"
+
+/***/ },
 /* 18 */
 /*!*****************************!*\
   !*** ./entry/template.html ***!
   \*****************************/
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-3 col-md-6\">\n    \t\n      <div class=\"row\" ng-repeat=\"entry in entries\">\n        <div class=\"col-md-12\">\n          <h1>{{entry.Title}}</h1>\n          <p ng-bind-html=\"entry.CompiledContent\"></p>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
+	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-2 col-md-8\">\n    \t\n      <div class=\"row\" ng-repeat=\"entry in entries\">\n        <div class=\"col-md-12\">\n          <h1>{{entry.title}}</h1>\n          <p ng-bind-html=\"entry.compiledContent\"></p>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
 
 /***/ }
 ]);

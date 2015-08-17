@@ -186,16 +186,27 @@ func CreateCommit(e *EntryInput) error{
     return err   
 }
 
-
-func GetCommit(item SomeItem, options GetOptions) (*[]PageCommit, error) {
+func GetCommit(item SomeItem, options GetOptions) (*ApiGetResult, error) {
 	log.Println("Getting entry " + item.Slug + " : " + item.CommitID)
     log.Println("Page: " + strconv.Itoa(options.Page))
-    //var query bson.M
+    offset := 0
+    count := 0
+    var result ApiGetResult
     var multiple []PageCommit
+    if(item.Slug == "") {
+        result.Commits = multiple
+        result.Count = offset
+        result.Offset = count
+    }
 
     if(options.All == true) {
         item.CommitID = "" //because we don't actually want to find commitID "all"
         err := DB.entries.Find(item).Sort("-createdate").Skip((options.Page-1) * 10).Limit(10).All(&multiple)
+        if(err != nil) {
+            return nil, err
+        }
+        offset = (options.Page - 1) * 10
+        count, err = DB.entries.Find(item).Count()
         if(err != nil) {
             return nil, err
         }
@@ -206,16 +217,34 @@ func GetCommit(item SomeItem, options GetOptions) (*[]PageCommit, error) {
             return nil, err
         }
         multiple = append(multiple, single)
+        count = 1;
+    }
+    for key := range multiple {
+        if((multiple)[key].Content != "") {
+            (multiple)[key].CompiledContent = CompileContent((multiple)[key].Content)
+            if(!options.Admin) {
+                (multiple)[key].Content = "" //clear out so it'll not show up in front end for users
+            }
+        }
     }
 	
-    return &multiple, nil
+    result.Commits = multiple
+    result.Count = count
+    result.Offset = offset
+    return &result, nil
 }
 
-func GetIndex(item SomeItem, options GetOptions) (*[]PageIndex, error) {
+func GetIndex(item SomeItem, options GetOptions) (*ApiGetResult, error) {
     log.Println("Getting index " + item.Slug + " : " + item.CommitID)
     var multiple []PageIndex
+    count := 0
+    var result ApiGetResult
     if(options.All == true) {
         err := DB.indices.Find(item).Sort("-createdate").All(&multiple)
+        if(err != nil) {
+            return nil, err
+        }
+        count, err = DB.indices.Find(item).Count()
         if(err != nil) {
             return nil, err
         }
@@ -225,10 +254,13 @@ func GetIndex(item SomeItem, options GetOptions) (*[]PageIndex, error) {
         if(err != nil) {
             return nil, err
         }
+        count = 1
         multiple = append(multiple, single)
     }
 
-    return &multiple, nil
+    result.Entries = multiple
+    result.Count = count
+    return &result, nil
 }
 
 

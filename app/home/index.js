@@ -28,14 +28,15 @@ app.controller('HomeController', function($scope, $http) {
 
   $http(requestRecents).then(function(response) {
   	if(response.status === 200) {
-  		$scope.recentPosts = response.data.entry;
+  		$scope.recentPosts = response.data.data.entries;
   	}
   });
 
   $http(requestJournal).then(function(response) {
   	console.log(response);
   	if(response.status === 200) {
-  		$scope.journalPosts = response.data.commit;
+  		$scope.journalPosts = response.data.data.commits;
+      console.log($scope.journalPosts)
   	}
   });
 

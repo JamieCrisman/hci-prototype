@@ -27,7 +27,7 @@ app.controller('EntryController', function($scope, $http, $stateParams) {
   $http(requestEntry).then(function(response) {
   	console.log(response);
   	if(response.status === 200) {
-  		$scope.entries = response.data.commit;
+  		$scope.entries = response.data.data.commits;
   	}
   });
 
