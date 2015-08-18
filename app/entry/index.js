@@ -8,7 +8,7 @@ var app = require('../module');
 
 app.controller('EntryController', function($scope, $http, $stateParams) {
   $scope.entries = [];
-
+  $scope.entryCount = 0;
   var requestEntry = {
   	method: 'GET',
   	params: {
@@ -27,6 +27,7 @@ app.controller('EntryController', function($scope, $http, $stateParams) {
   $http(requestEntry).then(function(response) {
   	console.log(response);
   	if(response.status === 200) {
+      $scope.entryCount = response.data.data.count;
   		$scope.entries = response.data.data.commits;
   	}
   });

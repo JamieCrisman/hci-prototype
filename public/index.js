@@ -168,7 +168,7 @@ webpackJsonp([0],[
 	
 	app.controller('EntryController', function($scope, $http, $stateParams) {
 	  $scope.entries = [];
-	
+	  $scope.entryCount = 0;
 	  var requestEntry = {
 	  	method: 'GET',
 	  	params: {
@@ -187,6 +187,7 @@ webpackJsonp([0],[
 	  $http(requestEntry).then(function(response) {
 	  	console.log(response);
 	  	if(response.status === 200) {
+	      $scope.entryCount = response.data.data.count;
 	  		$scope.entries = response.data.data.commits;
 	  	}
 	  });
@@ -202,7 +203,7 @@ webpackJsonp([0],[
   \****************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-2 col-md-8\">\n      <img class=\"svg-center the-koi\" src=\"" + __webpack_require__(/*! ./koi.svg */ 17) + "\">\n      <div class=\"row\">\n        <div class=\"col-md-12\">\n          <p>\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a vestibulum mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris tempor, lacus sed mollis vulputate, ipsum sem ultricies lectus, sit amet luctus nunc odio ac dui. Nulla et massa placerat, posuere felis in, fermentum ipsum. Pellentesque pretium fringilla elementum.\n          </p>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-md-6\">\n          <h3 class=\"list-header\">\n            Recent Activity:\n          </h3>\n          <ul class=\"list-body\" ng-repeat=\"entry in recentPosts\">\n            <li class=\"clearfix\">\n              <a href=\"/#/{{entry.slug}}\">{{entry.name}}</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{entry.lastUpdated.toString()}}\">April 1, 2014</time>\n            </li>\n          </ul>\n        </div>\n        <div class=\"col-md-6\">\n          <h3 class=\"list-header\">\n            Journal:\n          </h3>\n          <ul class=\"list-body\" ng-repeat=\"journal in journalPosts\">\n            <li class=\"clearfix\">\n              <a href=\"/#/{{journal.slug}}/{{journal.commitId}}\">{{journal.title}}</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{journal.createDate.toString()}}\">April 1, 2014</time>\n            </li>\n          </ul>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
+	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-2 col-md-8\">\n      <img class=\"svg-center the-koi\" src=\"" + __webpack_require__(/*! ./koi.svg */ 17) + "\">\n      <div class=\"row\">\n        <div class=\"col-md-12\">\n          <p>\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a vestibulum mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris tempor, lacus sed mollis vulputate, ipsum sem ultricies lectus, sit amet luctus nunc odio ac dui. Nulla et massa placerat, posuere felis in, fermentum ipsum. Pellentesque pretium fringilla elementum.\n          </p>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-md-6\">\n          <h3 class=\"list-header\">\n            Recent Activity:\n          </h3>\n          <ul class=\"list-body\" ng-repeat=\"entry in recentPosts\">\n            <li class=\"clearfix\">\n              <a href=\"/#/{{entry.slug}}\">{{entry.name}}</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{entry.lastUpdated.toString()}}\">April 1, 2014</time>\n            </li>\n          </ul>\n          <div class=\"\">\n            <a href=\"/#/atlas\">Atlas</a>\n          </div>\n        </div>\n        <div class=\"col-md-6\">\n          <h3 class=\"list-header\">\n            Journal:\n          </h3>\n          <ul class=\"list-body\" ng-repeat=\"journal in journalPosts\">\n            <li class=\"clearfix\">\n              <a href=\"/#/{{journal.slug}}/{{journal.commitId}}\">{{journal.title}}</a>\n              <time class=\"pull-right\" is=\"relative-time\" datetime=\"{{journal.createDate.toString()}}\">April 1, 2014</time>\n            </li>\n          </ul>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
 
 /***/ },
 /* 17 */
@@ -220,7 +221,7 @@ webpackJsonp([0],[
   \*****************************/
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-2 col-md-8\">\n    \t\n      <div class=\"row\" ng-repeat=\"entry in entries\">\n        <div class=\"col-md-12\">\n          <h1>{{entry.title}}</h1>\n          <p ng-bind-html=\"entry.compiledContent\"></p>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
+	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\" ng-repeat=\"entry in entries\">\n    <div class=\"col-md-2\">\n      <div ng-if=\"entries.length > 1\" class=\"commit-text\">\n        <a href=\"/#/{{entry.slug}}/{{entry.commitId}}\">{{entry.commitId}}</a>\n      </div>\n      <div ng-if=\"entries.length == 1 && entryCount > 1\" class=\"commit-text\">\n        <a href=\"/#/{{entry.slug}}/all\">All Commits</a>\n      </div>\n    </div>\n    <div class=\"col-md-8\">\n      <h1>{{entry.title}}</h1>\n      <p ng-bind-html=\"entry.compiledContent\"></p>\n    </div>\n  </div>\n</div>";
 
 /***/ }
 ]);

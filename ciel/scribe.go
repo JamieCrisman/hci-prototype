@@ -216,8 +216,12 @@ func GetCommit(item SomeItem, options GetOptions) (*ApiGetResult, error) {
         if(err != nil) {
             return nil, err
         }
+        item.CommitID = "" //don't count by commitid
+        count, err = DB.entries.Find(item).Count()
+        if(err != nil) {
+            return nil, err
+        }
         multiple = append(multiple, single)
-        count = 1;
     }
     for key := range multiple {
         if((multiple)[key].Content != "") {
@@ -254,7 +258,10 @@ func GetIndex(item SomeItem, options GetOptions) (*ApiGetResult, error) {
         if(err != nil) {
             return nil, err
         }
-        count = 1
+        count, err = DB.indices.Find(item).Count()
+        if(err != nil) {
+            return nil, err
+        }
         multiple = append(multiple, single)
     }
 
