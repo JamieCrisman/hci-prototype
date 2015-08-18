@@ -3,7 +3,7 @@
 var angular = require('angular');
 var _ = require('lodash');
 
-var app = angular.module('app', ['ng', 'ngSanitize']);
+var app = angular.module('app', ['ng', 'ngSanitize', 'angular.filter']);
 
 // Allow services, factories, etc. to add dependencies
 // asynchronously

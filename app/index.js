@@ -1,12 +1,9 @@
 'use strict';
 
-require('jquery');
-require('angular');
-require('moment');
-
 var app = require('./module');
 var home = require('./home');
 var entry = require('./entry');
+var atlas = require('./atlas');
 
 app.addModules([
   'ui.router'
@@ -14,7 +11,8 @@ app.addModules([
 
 app.TEMPLATES = {
   HOME: require('./home/template.html'),
-  ENTRY: require('./entry/template.html')
+  ENTRY: require('./entry/template.html'),
+  ATLAS: require('./atlas/template.html')
 };
 
 app.config(function($stateProvider, $urlRouterProvider) {
@@ -24,6 +22,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
       url: '/',
       template: home.TEMPLATES.HOME,
       controller: 'HomeController'
+    })
+    .state('atlas', {
+      url: '/atlas',
+      template: atlas.TEMPLATES.ATLAS,
+      controller: 'AtlasController'
     })
     .state('entry', {
       url: '/:entry',

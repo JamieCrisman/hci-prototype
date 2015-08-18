@@ -28,7 +28,8 @@
     "bootstrap": "~3.3.5",
     "angular-ui-router": "~0.2.15",
     "moment": "~2.10.5",
-    "angular-sanitize": "~1.4.4"
+    "angular-sanitize": "~1.4.4",
+    "angular-filter": "~0.5.5"
   },
   "resolutions": {
     "angular": "1.4.4"

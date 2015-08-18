@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 clearfix">
           <h3 class="list-header">
             Recent Activity:
           </h3>
@@ -20,11 +20,11 @@
               <time class="pull-right" is="relative-time" datetime="{{entry.lastUpdated.toString()}}">April 1, 2014</time>
             </li>
           </ul>
-          <div class="">
+          <div class="pull-right">
             <a href="/#/atlas">Atlas</a>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 clearfix">
           <h3 class="list-header">
             Journal:
           </h3>
@@ -34,6 +34,9 @@
               <time class="pull-right" is="relative-time" datetime="{{journal.createDate.toString()}}">April 1, 2014</time>
             </li>
           </ul>
+          <div class="pull-right">
+            <a href="/#/journal/all">View More</a>
+          </div>
         </div>
       </div>
 

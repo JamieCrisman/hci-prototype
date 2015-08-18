@@ -20,11 +20,15 @@
     <div class="navigation" ng-class="{'active': activeNav}" ng-controller="NavigationController">
       <div>
         <h1 class="page-title"><a ui-sref="home">Longest Voyage</a></h1>
-        <a href="#" class="menu-icon" ng-class="{'active': activeNav}" ng-click="activeNav = !activeNav">
+        <a class="menu-icon" ng-class="{'active': activeNav}" ng-click="activeNav = !activeNav">
           <span class="menu-icon-text">Show Menu</span>
         </a>
       </div>
       <div class="nav-content">
+        <div class="nav-row">
+          <hr>
+          <a href="/#/atlas" ng-click="activeNav = !activeNav">Atlas</a>
+        </div>
         <div>
           <hr>
           <h2>Contact</h2>

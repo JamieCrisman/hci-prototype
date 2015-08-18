@@ -142,11 +142,22 @@ main {
   height: 100%;
   visibility: visible;
   opacity: 1;
-  transition: all .2s ease-in-out;
+  transition: all .3s ease-in-out;
   &.crushed {
     height: 0;
     visibility: hidden;
     opacity: 0;
+  }
+  a {
+    color: $black;
+    border-bottom: 1px dashed $gray;
+    &:hover {
+      color: lighten($black, 20%);
+    }
+  }
+  .atlas-description {
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 }
 
@@ -175,7 +186,6 @@ main {
     }
   }
 }
-
 .list-header {
   margin-bottom: 0;
   border-bottom: 1px solid $gray;
@@ -186,13 +196,6 @@ main {
   time {
     font-size: 0.7em;
     color: $gray;
-  }
-  a {
-    color: $black;
-    border-bottom: 1px dashed $gray;
-    &:hover {
-      color: lighten($black, 20%);
-    }
   }
 }
 

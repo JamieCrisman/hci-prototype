@@ -12,6 +12,7 @@ require('lodash');
 require('angular');
 require('angular-ui-router');
 require('angular-sanitize');
+require('angular-filter');
 
 require('webcomponentsjs');
 require('time-elements');
