@@ -19,7 +19,7 @@
   <body data-ng-app="app" class="body">
     <div class="navigation" ng-class="{'active': activeNav}" ng-controller="NavigationController">
       <div>
-        <h1 class="page-title"><a ui-sref="home">Longest Voyage</a></h1>
+        <h1 class="page-title"><a ui-sref="home" ng-click="activeNav = false">Longest Voyage</a></h1>
         <a class="menu-icon" ng-class="{'active': activeNav}" ng-click="activeNav = !activeNav">
           <span class="menu-icon-text">Show Menu</span>
         </a>
