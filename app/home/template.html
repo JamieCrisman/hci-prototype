@@ -1,45 +1,19 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-offset-2 col-md-8">
-      <img class="svg-center the-koi" src="koi.svg">
       <div class="row">
-        <div class="col-md-12">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a vestibulum mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris tempor, lacus sed mollis vulputate, ipsum sem ultricies lectus, sit amet luctus nunc odio ac dui. Nulla et massa placerat, posuere felis in, fermentum ipsum. Pellentesque pretium fringilla elementum.
+        <div class="col-md-6 col-md-offset-3">
+          <h2 class="text-center">
+            <a ng-href="#">Order, Eat</a>
+          </h2>
+          <p class="text-center">
+            桃尻
           </p>
+          <ul class="center-list">
+            <li><a ng-href="#/restaurants">Restaurants</a></li>
+          </ul>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-6 clearfix">
-          <h3 class="list-header">
-            Recent Activity:
-          </h3>
-          <ul class="list-body" ng-repeat="entry in recentPosts">
-            <li class="clearfix">
-              <a href="/#/{{entry.slug}}">{{entry.name}}</a>
-              <time class="pull-right" is="relative-time" datetime="{{entry.lastUpdated.toString()}}">April 1, 2014</time>
-            </li>
-          </ul>
-          <div class="pull-right">
-            <a href="/#/atlas">Atlas</a>
-          </div>
-        </div>
-        <div class="col-md-6 clearfix">
-          <h3 class="list-header">
-            Journal:
-          </h3>
-          <ul class="list-body" ng-repeat="journal in journalPosts">
-            <li class="clearfix">
-              <a href="/#/{{journal.slug}}/{{journal.commitId}}">{{journal.title}}</a>
-              <time class="pull-right" is="relative-time" datetime="{{journal.createDate.toString()}}">April 1, 2014</time>
-            </li>
-          </ul>
-          <div class="pull-right">
-            <a href="/#/journal/all">View More</a>
-          </div>
-        </div>
-      </div>
-
     </div>
   </div>
 </div>
