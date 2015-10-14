@@ -1,7 +1,23 @@
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-			Restaurants!
+	<div class="row" ng-repeat="restaurant in restaurants">
+		<div class="col-md-4">
+			{{restaurant.name}}
+		</div>
+		<div class="col-md-1">
+			{{restaurant.rating}} star
+		</div>
+		<div class="col-md-2">
+			{{restaurant.distance | number:1}} miles
+		</div>
+		<div class="col-md-1">
+			~${{restaurant.price}}
+		</div>
+		<div class="col-md-2">
+			{{restaurant.category}}
+		</div>
+		<div class="col-md-2">
+			<span ng-if="restaurant.hasSpecials">specials!</span>
+			<span ng-if="!restaurant.hasSpecials">no specials :C</span>
 		</div>
 	</div>
 </div>

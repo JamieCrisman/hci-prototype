@@ -3,6 +3,7 @@
 var app = require('./module');
 var home = require('./home');
 var entry = require('./test');
+var restaurants = require('./restaurants');
 
 app.addModules([
   'ui.router'
@@ -24,7 +25,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     .state('restaurants', {
       url: '/restaurants',
       template: app.TEMPLATES.RESTAURANTS,
-      controller: 'NavigationController'
+      controller: 'RestaurantsController'
     });
 
   $urlRouterProvider.otherwise('/');
