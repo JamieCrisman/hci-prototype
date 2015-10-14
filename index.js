@@ -10,14 +10,15 @@ webpackJsonp([0],[
 	var app = __webpack_require__(/*! ./module */ 1);
 	var home = __webpack_require__(/*! ./home */ 11);
 	var entry = __webpack_require__(/*! ./test */ 12);
+	var restaurants = __webpack_require__(/*! ./restaurants */ 13);
 	
 	app.addModules([
 	  'ui.router'
 	]);
 	
 	app.TEMPLATES = {
-	  HOME: __webpack_require__(/*! ./home/template.html */ 13),
-	  RESTAURANTS: __webpack_require__(/*! ./restaurants/template.html */ 14)
+	  HOME: __webpack_require__(/*! ./home/template.html */ 14),
+	  RESTAURANTS: __webpack_require__(/*! ./restaurants/template.html */ 15)
 	};
 	
 	app.config(function($stateProvider, $urlRouterProvider) {
@@ -31,7 +32,7 @@ webpackJsonp([0],[
 	    .state('restaurants', {
 	      url: '/restaurants',
 	      template: app.TEMPLATES.RESTAURANTS,
-	      controller: 'NavigationController'
+	      controller: 'RestaurantsController'
 	    });
 	
 	  $urlRouterProvider.otherwise('/');
@@ -126,6 +127,85 @@ webpackJsonp([0],[
 
 /***/ },
 /* 13 */
+/*!******************************!*\
+  !*** ./restaurants/index.js ***!
+  \******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var app = __webpack_require__(/*! ../module */ 1);
+	
+	app.controller('RestaurantsController', function($scope) {
+		var randomNames = [
+			"Bob's",
+			"Greg's Great",
+			"The Best",
+			"Eat",
+			"Lovely",
+			"Tasty",
+			"Korean",
+			"Jon's",
+			"Michael's",
+			"Weird",
+			"Yummy",
+			"Uneaten",
+			"Probably",
+			"Fuzzy",
+			"Delicious",
+			"General Tso's",
+			"Only"
+		];
+	
+		var categories = [
+			'Pizza',
+			'Italian',
+			'Pho',
+			'Ramen',
+			'Sandwiches',
+			'Thai',
+			'Sushi',
+			'Wings',
+			'Chinese',
+			'Dessert',
+			'Seafood',
+			'Fast food',
+			'Burgers',
+			'Mexican',
+			'Japanese',
+			'Steakhouse'
+		];
+	
+		var _nameGenerate = function(categoryIndex) {
+			
+			var s = randomNames[Math.floor(Math.random() * randomNames.length)] + " " + categories[categoryIndex];
+			
+			return s;
+		}
+	
+		var _generateRestaurants = function() {
+			var restaurants = [];
+			for( var i = 0; i < 300; i++ ) {
+				var rest = {
+					"name": _nameGenerate(i % categories.length),
+					"rating": (i % 5) + 1,
+					"distance": ((i * 0.1) % 5 ) + 0.1,
+					"category": categories[i % categories.length],
+					"hasSpecials": (i % 3 == 0),
+					"price": 5 * ((i % 6 )+ 1)
+				}
+				restaurants.push(rest);
+			}
+			return restaurants;
+		}
+	
+		$scope.restaurants = _generateRestaurants();
+	});
+	
+	module.exports = app;
+
+/***/ },
+/* 14 */
 /*!****************************!*\
   !*** ./home/template.html ***!
   \****************************/
@@ -134,13 +214,13 @@ webpackJsonp([0],[
 	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-2 col-md-8\">\n      <div class=\"row\">\n        <div class=\"col-md-6 col-md-offset-3\">\n          <h2 class=\"text-center\">\n            <a ng-href=\"#\">Order, Eat</a>\n          </h2>\n          <p class=\"text-center\">\n            桃尻\n          </p>\n          <ul class=\"center-list\">\n            <li><a ng-href=\"#/restaurants\">Restaurants</a></li>\n          </ul>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
 
 /***/ },
-/* 14 */
+/* 15 */
 /*!***********************************!*\
   !*** ./restaurants/template.html ***!
   \***********************************/
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container-fluid\">\n\t<div class=\"row\">\n\t\t<div class=\"col-md-12\">\n\t\t\tRestaurants!\n\t\t</div>\n\t</div>\n</div>";
+	module.exports = "<div class=\"container-fluid\">\n\t<div class=\"row\" ng-repeat=\"restaurant in restaurants\">\n\t\t<div class=\"col-md-4\">\n\t\t\t{{restaurant.name}}\n\t\t</div>\n\t\t<div class=\"col-md-1\">\n\t\t\t{{restaurant.rating}} star\n\t\t</div>\n\t\t<div class=\"col-md-2\">\n\t\t\t{{restaurant.distance | number:1}} miles\n\t\t</div>\n\t\t<div class=\"col-md-1\">\n\t\t\t~${{restaurant.price}}\n\t\t</div>\n\t\t<div class=\"col-md-2\">\n\t\t\t{{restaurant.category}}\n\t\t</div>\n\t\t<div class=\"col-md-2\">\n\t\t\t<span ng-if=\"restaurant.hasSpecials\">specials!</span>\n\t\t\t<span ng-if=\"!restaurant.hasSpecials\">no specials :C</span>\n\t\t</div>\n\t</div>\n</div>";
 
 /***/ }
 ]);
