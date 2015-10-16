@@ -1,5 +1,80 @@
 <div class="container-fluid">
-	<div class="row" ng-repeat="restaurant in restaurants">
+	<div class="row">
+		<div class="col-md-offset-3 col-md-6">
+			<h2>
+				Restaurants
+			</h2>
+		</div>
+		<div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        
+        <div class="form-group">
+          <label>Order Type</label>
+          <div>
+            <label>
+              <input type="radio" ng-model="filterOrderType" value="delivery" name="orderType" id="option1" autocomplete="off" default> Delivery
+            </label>
+            <label>
+              <input type="radio" ng-model="filterOrderType" value="carryout" name="orderType" id="option2" autocomplete="off"> Carry-out
+            </label>
+            <label>
+              <input type="radio" ng-model="filterOrderType" value="either" name="orderType" id="option3" autocomplete="off"> Either
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Rating</label>
+          <select ng-model="filterRating">
+          	<option value="0">Any</option>
+          	<option value="2">2 Star</option>
+          	<option value="3">3 Star</option>
+          	<option value="4">4 Star</option>
+          	<option value="5">5 Star</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Price</label>
+          <select ng-model="filterPrice">
+          	<option value="0">Any</option>
+          	<option value="5">$</option>
+          	<option value="10">$$</option>
+          	<option value="15">$$$</option>
+          	<option value="20">$$$$</option>
+          	<option value="25">$$$$$</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Distance</label>
+          <select ng-model="filterDistance">
+          	<option value="1000">Any</option>
+          	<option value="0.7">Walking distance</option>
+          	<option value="1">1 mile</option>
+          	<option value="5">5 mile</option>
+          	<option value="10">Driving distance</option>
+          	<option value="15">Road trip</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Cuisine</label>
+          <select ng-model="filterCuisine">
+          	<option value="">Any</option>
+          	<option ng-repeat="option in categories" value="{{option}}">{{option}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Has Discounts
+          	<input type="checkbox" ng-model="filterDiscounts">
+          </label>
+        </div>
+
+      </div>
+    </div>
+	</div>
+
+	<div class="row" ng-repeat="restaurant in restaurants | filter:masterFilter">
 		<div class="col-md-4">
 			{{restaurant.name}}
 		</div>
@@ -12,12 +87,15 @@
 		<div class="col-md-1">
 			~${{restaurant.price}}
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-1">
 			{{restaurant.category}}
 		</div>
+		<div class="col-md-1">
+			{{restaurant.orderType}}
+		</div>
 		<div class="col-md-2">
-			<span ng-if="restaurant.hasSpecials">specials!</span>
-			<span ng-if="!restaurant.hasSpecials">no specials :C</span>
+			<span ng-if="restaurant.hasDiscounts">specials!</span>
+			<span ng-if="!restaurant.hasDiscounts">no specials :C</span>
 		</div>
 	</div>
 </div>

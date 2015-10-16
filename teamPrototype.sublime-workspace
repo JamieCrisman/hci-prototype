@@ -1,0 +1,439 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"category",
+				"categoryIndex"
+			],
+			[
+				"random",
+				"randomNames"
+			],
+			[
+				"Moment",
+				"MomentNoteItem"
+			],
+			[
+				"app",
+				"appComponentParent"
+			],
+			[
+				"repl",
+				"replay30Icon24"
+			],
+			[
+				"pa",
+				"pauseIcon24"
+			],
+			[
+				"A",
+				"AudioPlayer"
+			],
+			[
+				"sta",
+				"stateParams"
+			],
+			[
+				"Statu",
+				"StatusOK"
+			],
+			[
+				"Status",
+				"StatusBadRequest"
+			],
+			[
+				"page",
+				"pageParam"
+			],
+			[
+				"Comm",
+				"CommitID"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "README.md",
+			"settings":
+			{
+				"buffer_size": 104,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/restaurants/template.html",
+			"settings":
+			{
+				"buffer_size": 575,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/restaurants/index.js",
+			"settings":
+			{
+				"buffer_size": 1231,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/home/template.html",
+			"settings":
+			{
+				"buffer_size": 490,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/index.html",
+			"settings":
+			{
+				"buffer_size": 1563,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 101.0,
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 538.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/james/go/src/teamPrototype/app/index.js",
+		"/Users/james/go/src/teamPrototype/kouen.go",
+		"/Users/james/go/src/teamPrototype/app/learningJapanese/template.html",
+		"/Users/james/Programming/HCITeamPrototype/index.html",
+		"/Users/james/Programming/app.exploreapollo.org/src/components/MomentNote/index.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/components/MomentNote/index-test.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/containers/StoryViewer/index.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/components/StoryList/index-test.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/components/StoryList/index.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/containers/index.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/components/index.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/containers/Stories/index.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/containers/Moments/index.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/index.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/containers/App/index.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/containers/App/index-test.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/containers/MomentViewer/index.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/components/MomentPlayer/index.js",
+		"/Users/james/Programming/app.exploreapollo.org/webpack.config.js",
+		"/Users/james/Programming/app.exploreapollo.org/package.json",
+		"/Users/james/Programming/app.exploreapollo.org/src/components/Timeline/index.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/scss/main.scss",
+		"/Users/james/Programming/app.exploreapollo.org/src/components/MomentNotes/index.js",
+		"/Users/james/Programming/app.exploreapollo.org/src/components/MomentNotes/index-test.js",
+		"/Users/james/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/james/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/james/Programming/app.exploreapollo.org/src/components/Timeline/index-test.js",
+		"/Users/james/Programming/app.exploreapollo.org/.gitignore",
+		"/Users/james/Programming/app.exploreapollo.org/src/index.jsx",
+		"/Users/james/Programming/app.exploreapollo.org/src/components/AudioPlayer/AudioPlayer.jsx",
+		"/Users/james/Programming/app.exploreapollo.org/src/components/AudioPlayer/audio-player.jsx",
+		"/Users/james/Programming/app.exploreapollo.org/src/components/Player/Player.jsx",
+		"/Users/james/Programming/reactJunk/app/components/Menu/Menu.jsx",
+		"/Users/james/Programming/reactJunk/index.html",
+		"/Users/james/go/src/kouen/ciel/kouen.sublime-project",
+		"/Users/james/go/src/kouen/app/assets/css/kouen.scss",
+		"/Users/james/go/src/kouen/app/atlas/index.js",
+		"/Users/james/go/src/kouen/app/atlas/template.html",
+		"/Users/james/go/src/kouen/app/entry/template.html",
+		"/Users/james/go/src/kouen/app/vendor.js",
+		"/Users/james/go/src/kouen/app/module.js",
+		"/Users/james/go/src/kouen/app/home/template.html",
+		"/Users/james/go/src/kouen/app/index.js",
+		"/Users/james/go/src/kouen/app/home/index.js",
+		"/Users/james/go/src/kouen/kouen.go",
+		"/Users/james/go/src/kouen/bower.json",
+		"/Users/james/go/src/kouen/ciel/cartographer.go",
+		"/Users/james/go/src/kouen/ciel/architect.go",
+		"/Users/james/go/src/kouen/gulp/tasks/spawn.js"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"Moment",
+			"momentNotes",
+			"app",
+			"'",
+			"\",",
+			"'",
+			"id",
+			"noteitem",
+			"Note",
+			"note",
+			"Note",
+			"node",
+			"timeline",
+			"Timeline",
+			"timeline",
+			"moments",
+			"onClick",
+			"refresh",
+			"styles",
+			"from",
+			"componentDid",
+			"onchange",
+			"predefined",
+			"slug",
+			"hio",
+			"data",
+			"cleancheck(",
+			"cleancheck",
+			"!\")\n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "README.md",
+					"settings":
+					{
+						"buffer_size": 104,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								104,
+								104
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "app/restaurants/template.html",
+					"settings":
+					{
+						"buffer_size": 575,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								109,
+								109
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/AngularJS/AngularJS.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "app/restaurants/index.js",
+					"settings":
+					{
+						"buffer_size": 1231,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								343,
+								343
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "app/home/template.html",
+					"settings":
+					{
+						"buffer_size": 490,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								92,
+								92
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/AngularJS/AngularJS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "app/index.html",
+					"settings":
+					{
+						"buffer_size": 1563,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1252,
+								1252
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/AngularJS/AngularJS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 174.0,
+	"status_bar_visible": true
+}

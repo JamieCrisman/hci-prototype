@@ -3,6 +3,13 @@
 var app = require('../module');
 
 app.controller('RestaurantsController', function($scope) {
+	$scope.filterPrice = "0";
+	$scope.filterRating = "0";
+	$scope.filterDistance = "1000";
+	$scope.filterCuisine = "";
+	$scope.filterOrderType = "delivery";
+	$scope.filterDiscounts = false;
+	
 	var randomNames = [
 		"Bob's",
 		"Greg's Great",
@@ -23,7 +30,7 @@ app.controller('RestaurantsController', function($scope) {
 		"Only"
 	];
 
-	var categories = [
+	$scope.categories = [
 		'Pizza',
 		'Italian',
 		'Pho',
@@ -44,26 +51,50 @@ app.controller('RestaurantsController', function($scope) {
 
 	var _nameGenerate = function(categoryIndex) {
 		
-		var s = randomNames[Math.floor(Math.random() * randomNames.length)] + " " + categories[categoryIndex];
+		var s = randomNames[Math.floor(Math.random() * randomNames.length)] + " " + $scope.categories[categoryIndex];
 		
 		return s;
+	}
+
+	var _orderType = function(index) {
+		if(index % 3 == 0) {
+			return 'either';
+		}
+		if (index % 3 == 1 ) {
+			return 'carryout';
+		}else {
+			return 'delivery';
+		}
+
 	}
 
 	var _generateRestaurants = function() {
 		var restaurants = [];
 		for( var i = 0; i < 300; i++ ) {
 			var rest = {
-				"name": _nameGenerate(i % categories.length),
+				"name": _nameGenerate(i % $scope.categories.length),
 				"rating": (i % 5) + 1,
-				"distance": ((i * 0.1) % 5 ) + 0.1,
-				"category": categories[i % categories.length],
-				"hasSpecials": (i % 3 == 0),
-				"price": 5 * ((i % 6 )+ 1)
+				"distance": ((i * 0.3) % 15 ) + 0.1,
+				"cuisine": $scope.categories[i % $scope.categories.length],
+				"hasDiscounts": (i % 5 == 0),
+				"price": 5 * ((i % 6 )+ 1),
+				"orderType": _orderType(i)
 			}
 			restaurants.push(rest);
 		}
 		return restaurants;
 	}
+
+	$scope.masterFilter = function(option) {
+		var filtered = true;
+		filtered &= (option.price > parseInt($scope.filterPrice));
+		filtered &= (option.rating >= parseInt($scope.filterRating));
+		filtered &= (option.distance <= parseInt($scope.filterDistance));
+		filtered &= (option.orderType == $scope.filterOrderType || $scope.filterOrderType == 'either');
+		filtered &= (option.cuisine == $scope.filterCuisine || $scope.filterCuisine == "");
+		filtered &= (($scope.filterDiscounts == true && option.hasDiscounts == true) || $scope.filterDiscounts == false);
+		return filtered;
+	};
 
 	$scope.restaurants = _generateRestaurants();
 });
