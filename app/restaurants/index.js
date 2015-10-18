@@ -7,7 +7,7 @@ app.controller('RestaurantsController', function($scope) {
 	$scope.filterRating = "0";
 	$scope.filterDistance = "1000";
 	$scope.filterCuisine = "";
-	$scope.filterOrderType = "delivery";
+	$scope.filterOrderType = "either";
 	$scope.filterDiscounts = false;
 	
 	var randomNames = [
@@ -95,6 +95,10 @@ app.controller('RestaurantsController', function($scope) {
 		filtered &= (($scope.filterDiscounts == true && option.hasDiscounts == true) || $scope.filterDiscounts == false);
 		return filtered;
 	};
+
+	$scope.range = function(i) {
+		return _.range(i);
+	}
 
 	$scope.restaurants = _generateRestaurants();
 });

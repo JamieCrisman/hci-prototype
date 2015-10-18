@@ -132,7 +132,7 @@ webpackJsonp([0],[
   \******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
 	
 	var app = __webpack_require__(/*! ../module */ 1);
 	
@@ -141,7 +141,7 @@ webpackJsonp([0],[
 		$scope.filterRating = "0";
 		$scope.filterDistance = "1000";
 		$scope.filterCuisine = "";
-		$scope.filterOrderType = "delivery";
+		$scope.filterOrderType = "either";
 		$scope.filterDiscounts = false;
 		
 		var randomNames = [
@@ -230,10 +230,15 @@ webpackJsonp([0],[
 			return filtered;
 		};
 	
+		$scope.range = function(i) {
+			return _.range(i);
+		}
+	
 		$scope.restaurants = _generateRestaurants();
 	});
 	
 	module.exports = app;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! lodash */ 9)))
 
 /***/ },
 /* 14 */
@@ -242,7 +247,7 @@ webpackJsonp([0],[
   \****************************/
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row home-menu\">\n    <div class=\"col-md-offset-2 col-md-8\">\n      \n      <div class=\"row\">\n        <div class=\"col-md-6 col-md-offset-3\">\n          <div class=\"input-group\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Enter your zipcode\">\n            <span class=\"input-group-btn\">\n              <a href=\"#/restaurants\" class=\"btn btn-primary\" type=\"button\">Submit</a>\n            </span>\n          </div>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
+	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row home-menu\">\n    <div class=\"col-md-offset-2 col-md-8\">\n      \n      <div class=\"row\">\n        <div class=\"col-md-6 col-md-offset-3\">\n          <div class=\"input-group\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Enter Your Address\">\n            <span class=\"input-group-btn\">\n              <a href=\"#/restaurants\" class=\"btn btn-primary\" type=\"button\">Submit</a>\n            </span>\n          </div>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
 
 /***/ },
 /* 15 */
@@ -251,7 +256,7 @@ webpackJsonp([0],[
   \***********************************/
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container-fluid\">\n\t<div class=\"row\">\n\t\t<div class=\"col-md-offset-3 col-md-6\">\n\t\t\t<h2>\n\t\t\t\tRestaurants\n\t\t\t</h2>\n\t\t</div>\n\t\t<div class=\"row\">\n      <div class=\"col-md-6 col-md-offset-3\">\n        \n        <div class=\"form-group\">\n          <label>Order Type</label>\n          <div>\n            <label>\n              <input type=\"radio\" ng-model=\"filterOrderType\" value=\"delivery\" name=\"orderType\" id=\"option1\" autocomplete=\"off\" default> Delivery\n            </label>\n            <label>\n              <input type=\"radio\" ng-model=\"filterOrderType\" value=\"carryout\" name=\"orderType\" id=\"option2\" autocomplete=\"off\"> Carry-out\n            </label>\n            <label>\n              <input type=\"radio\" ng-model=\"filterOrderType\" value=\"either\" name=\"orderType\" id=\"option3\" autocomplete=\"off\"> Either\n            </label>\n          </div>\n        </div>\n\n        <div class=\"form-group\">\n          <label>Rating</label>\n          <select ng-model=\"filterRating\">\n          \t<option value=\"0\">Any</option>\n          \t<option value=\"2\">2 Star</option>\n          \t<option value=\"3\">3 Star</option>\n          \t<option value=\"4\">4 Star</option>\n          \t<option value=\"5\">5 Star</option>\n          </select>\n        </div>\n        <div class=\"form-group\">\n          <label>Price</label>\n          <select ng-model=\"filterPrice\">\n          \t<option value=\"0\">Any</option>\n          \t<option value=\"5\">$</option>\n          \t<option value=\"10\">$$</option>\n          \t<option value=\"15\">$$$</option>\n          \t<option value=\"20\">$$$$</option>\n          \t<option value=\"25\">$$$$$</option>\n          </select>\n        </div>\n        <div class=\"form-group\">\n          <label>Distance</label>\n          <select ng-model=\"filterDistance\">\n          \t<option value=\"1000\">Any</option>\n          \t<option value=\"0.7\">Walking distance</option>\n          \t<option value=\"1\">1 mile</option>\n          \t<option value=\"5\">5 mile</option>\n          \t<option value=\"10\">Driving distance</option>\n          \t<option value=\"15\">Road trip</option>\n          </select>\n        </div>\n\n        <div class=\"form-group\">\n          <label>Cuisine</label>\n          <select ng-model=\"filterCuisine\">\n          \t<option value=\"\">Any</option>\n          \t<option ng-repeat=\"option in categories\" value=\"{{option}}\">{{option}}</option>\n          </select>\n        </div>\n\n        <div class=\"form-group\">\n          <label>Has Discounts\n          \t<input type=\"checkbox\" ng-model=\"filterDiscounts\">\n          </label>\n        </div>\n\n      </div>\n    </div>\n\t</div>\n\n\t<div class=\"row\" ng-repeat=\"restaurant in restaurants | filter:masterFilter\">\n\t\t<div class=\"col-md-4\">\n\t\t\t{{restaurant.name}}\n\t\t</div>\n\t\t<div class=\"col-md-1\">\n\t\t\t{{restaurant.rating}} star\n\t\t</div>\n\t\t<div class=\"col-md-2\">\n\t\t\t{{restaurant.distance | number:1}} miles\n\t\t</div>\n\t\t<div class=\"col-md-1\">\n\t\t\t~${{restaurant.price}}\n\t\t</div>\n\t\t<div class=\"col-md-1\">\n\t\t\t{{restaurant.category}}\n\t\t</div>\n\t\t<div class=\"col-md-1\">\n\t\t\t{{restaurant.orderType}}\n\t\t</div>\n\t\t<div class=\"col-md-2\">\n\t\t\t<span ng-if=\"restaurant.hasDiscounts\">specials!</span>\n\t\t\t<span ng-if=\"!restaurant.hasDiscounts\">no specials :C</span>\n\t\t</div>\n\t</div>\n</div>";
+	module.exports = "<div class=\"container-fluid\">\n\t<div class=\"row\">\n\t\t<div class=\"col-md-offset-3 col-md-6\">\n\t\t\t<h2>\n\t\t\t\tRestaurants\n\t\t\t</h2>\n\t\t</div>\n\t</div>\n  <div class=\"row\">\n    <div class=\"col-md-3\">\n      <div class=\"form-group\">\n        <label>Cuisine</label>\n        <select ng-model=\"filterCuisine\">\n          <option value=\"\">Any</option>\n          <option ng-repeat=\"option in categories\" value=\"{{option}}\">{{option}}</option>\n        </select>\n      </div>\n      <div class=\"form-group\">\n        <label>Order Type</label>\n        <div>\n          <label>\n            <input type=\"radio\" ng-model=\"filterOrderType\" value=\"delivery\" name=\"orderType\" id=\"option1\" autocomplete=\"off\" default> Delivery\n          </label>\n          <label>\n            <input type=\"radio\" ng-model=\"filterOrderType\" value=\"carryout\" name=\"orderType\" id=\"option2\" autocomplete=\"off\"> Carry-out\n          </label>\n          <label>\n            <input type=\"radio\" ng-model=\"filterOrderType\" value=\"either\" name=\"orderType\" id=\"option3\" autocomplete=\"off\"> Either\n          </label>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label>Rating</label>\n        <select ng-model=\"filterRating\">\n          <option value=\"0\">Any</option>\n          <option value=\"2\">2 Star</option>\n          <option value=\"3\">3 Star</option>\n          <option value=\"4\">4 Star</option>\n          <option value=\"5\">5 Star</option>\n        </select>\n      </div>\n      <div class=\"form-group\">\n        <label>Price</label>\n        <select ng-model=\"filterPrice\">\n          <option value=\"0\">Any</option>\n          <option value=\"5\">$</option>\n          <option value=\"10\">$$</option>\n          <option value=\"15\">$$$</option>\n          <option value=\"20\">$$$$</option>\n          <option value=\"25\">$$$$$</option>\n        </select>\n      </div>\n      <div class=\"form-group\">\n        <label>Distance</label>\n        <select ng-model=\"filterDistance\">\n          <option value=\"1000\">Any</option>\n          <option value=\"1\">Walking distance</option>\n          <option value=\"3\">3 miles</option>\n          <option value=\"5\">5 miles</option>\n          <option value=\"10\">Driving distance</option>\n          <option value=\"15\">Road trip</option>\n        </select>\n      </div>\n\n      <div class=\"form-group\">\n        <label>Has Discounts\n          <input type=\"checkbox\" ng-model=\"filterDiscounts\">\n        </label>\n      </div>\n\n    </div>\n  \t<div class=\"col-md-6\">\n      <div class=\"row restaurant-row\" ng-repeat=\"restaurant in restaurants | filter:masterFilter\">\n    \t\t<div class=\"col-md-4\">\n    \t\t\t<div>\n            {{restaurant.name}}\n          </div>\n          <div ng-if=\"filterCuisine == ''\" class=\"restaurantCuisine\">\n            <small>{{restaurant.cuisine}}</small>\n          </div>\n          <div class=\"restaurant-stars\">\n            <span ng-repeat=\"i in range(5)\">\n              <i class=\"glyphicon\"\n                ng-class=\"{'glyphicon-star': $index < restaurant.rating, 'glyphicon-star-empty': $index >= restaurant.rating}\"\n              ></i>\n            </span>\n          </div>\n    \t\t</div>\n    \t\t<div class=\"col-md-2\">\n          {{restaurant.distance | number:1}} mi\n          <div class=\"restaurant-price\">\n            <span ng-repeat=\"i in range((restaurant.price-1)/5)\">\n              $\n            </span>\n          </div>\n    \t\t</div>\n        <div class=\"col-md-4 restaurant-notices\">\n          <div ng-if=\"restaurant.hasDiscounts\">\n            <i class=\"glyphicon glyphicon-tag\"></i> Discounts available\n          </div>\n          <div ng-if=\"filterOrderType == 'either' && restaurant.orderType != 'either'\">\n            <em>{{restaurant.orderType}} only</em>\n          </div>\n        </div>\n        <div class=\"col-md-1\">\n          <a href=\"#/menu\" class=\"btn btn-primary\">Select</a>\n        </div>\n      </div>\n    </div>\n\t</div>\n</div>";
 
 /***/ }
 ]);
