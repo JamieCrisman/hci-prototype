@@ -11,6 +11,10 @@ webpackJsonp([0],[
 	var home = __webpack_require__(/*! ./home */ 11);
 	var entry = __webpack_require__(/*! ./test */ 12);
 	var restaurants = __webpack_require__(/*! ./restaurants */ 13);
+	var menu = __webpack_require__(/*! ./menu */ 37);
+	var cart = __webpack_require__(/*! ./cart */ 38);
+	var checkout = __webpack_require__(/*! ./checkout */ 39);
+	var feedback = __webpack_require__(/*! ./feedback */ 40);
 	
 	app.addModules([
 	  'ui.router'
@@ -18,7 +22,11 @@ webpackJsonp([0],[
 	
 	app.TEMPLATES = {
 	  HOME: __webpack_require__(/*! ./home/template.html */ 14),
-	  RESTAURANTS: __webpack_require__(/*! ./restaurants/template.html */ 15)
+	  RESTAURANTS: __webpack_require__(/*! ./restaurants/template.html */ 15),
+	  MENU: __webpack_require__(/*! ./menu/template.html */ 36),
+	  CHECKOUT: __webpack_require__(/*! ./checkout/template.html */ 41),
+	  CART: __webpack_require__(/*! ./cart/template.html */ 42),
+	  FEEDBACK: __webpack_require__(/*! ./feedback/template.html */ 43)
 	};
 	
 	app.config(function($stateProvider, $urlRouterProvider) {
@@ -33,6 +41,26 @@ webpackJsonp([0],[
 	      url: '/restaurants',
 	      template: app.TEMPLATES.RESTAURANTS,
 	      controller: 'RestaurantsController'
+	    })
+	    .state('menu', {
+	      url: '/menu',
+	      template: app.TEMPLATES.MENU,
+	      controller: 'MenuController'
+	    })
+	    .state('cart', {
+	      url: '/cart',
+	      template: app.TEMPLATES.CART,
+	      controller: 'CartController'
+	    })
+	    .state('checkout', {
+	      url: '/checkout',
+	      template: app.TEMPLATES.CHECKOUT,
+	      controller: 'CheckoutController'
+	    })
+	    .state('feedback', {
+	      url: '/feedback',
+	      template: app.TEMPLATES.FEEDBACK,
+	      controller: 'FeedbackController'
 	    });
 	
 	  $urlRouterProvider.otherwise('/');
@@ -137,7 +165,7 @@ webpackJsonp([0],[
 	var app = __webpack_require__(/*! ../module */ 1);
 	
 	app.controller('RestaurantsController', function($scope) {
-		$scope.filterPrice = "0";
+		$scope.filterPrice = "1000";
 		$scope.filterRating = "0";
 		$scope.filterDistance = "1000";
 		$scope.filterCuisine = "";
@@ -204,14 +232,14 @@ webpackJsonp([0],[
 	
 		var _generateRestaurants = function() {
 			var restaurants = [];
-			for( var i = 0; i < 300; i++ ) {
+			for( var i = 0; i < 100; i++ ) {
 				var rest = {
 					"name": _nameGenerate(i % $scope.categories.length),
 					"rating": (i % 5) + 1,
 					"distance": ((i * 0.3) % 15 ) + 0.1,
 					"cuisine": $scope.categories[i % $scope.categories.length],
 					"hasDiscounts": (i % 5 == 0),
-					"price": 5 * ((i % 6 )+ 1),
+					"price": 5 * ((i % 5 )+ 1),
 					"orderType": _orderType(i)
 				}
 				restaurants.push(rest);
@@ -221,7 +249,7 @@ webpackJsonp([0],[
 	
 		$scope.masterFilter = function(option) {
 			var filtered = true;
-			filtered &= (option.price > parseInt($scope.filterPrice));
+			filtered &= (option.price <= parseInt($scope.filterPrice));
 			filtered &= (option.rating >= parseInt($scope.filterRating));
 			filtered &= (option.distance <= parseInt($scope.filterDistance));
 			filtered &= (option.orderType == $scope.filterOrderType || $scope.filterOrderType == 'either');
@@ -256,7 +284,147 @@ webpackJsonp([0],[
   \***********************************/
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container-fluid\">\n\t<div class=\"row\">\n\t\t<div class=\"col-md-offset-3 col-md-6\">\n\t\t\t<h2>\n\t\t\t\tRestaurants\n\t\t\t</h2>\n\t\t</div>\n\t</div>\n  <div class=\"row\">\n    <div class=\"col-md-3\">\n      <div class=\"form-group\">\n        <label>Cuisine</label>\n        <select ng-model=\"filterCuisine\">\n          <option value=\"\">Any</option>\n          <option ng-repeat=\"option in categories\" value=\"{{option}}\">{{option}}</option>\n        </select>\n      </div>\n      <div class=\"form-group\">\n        <label>Order Type</label>\n        <div>\n          <label>\n            <input type=\"radio\" ng-model=\"filterOrderType\" value=\"delivery\" name=\"orderType\" id=\"option1\" autocomplete=\"off\" default> Delivery\n          </label>\n          <label>\n            <input type=\"radio\" ng-model=\"filterOrderType\" value=\"carryout\" name=\"orderType\" id=\"option2\" autocomplete=\"off\"> Carry-out\n          </label>\n          <label>\n            <input type=\"radio\" ng-model=\"filterOrderType\" value=\"either\" name=\"orderType\" id=\"option3\" autocomplete=\"off\"> Either\n          </label>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label>Rating</label>\n        <select ng-model=\"filterRating\">\n          <option value=\"0\">Any</option>\n          <option value=\"2\">2 Star</option>\n          <option value=\"3\">3 Star</option>\n          <option value=\"4\">4 Star</option>\n          <option value=\"5\">5 Star</option>\n        </select>\n      </div>\n      <div class=\"form-group\">\n        <label>Price</label>\n        <select ng-model=\"filterPrice\">\n          <option value=\"0\">Any</option>\n          <option value=\"5\">$</option>\n          <option value=\"10\">$$</option>\n          <option value=\"15\">$$$</option>\n          <option value=\"20\">$$$$</option>\n          <option value=\"25\">$$$$$</option>\n        </select>\n      </div>\n      <div class=\"form-group\">\n        <label>Distance</label>\n        <select ng-model=\"filterDistance\">\n          <option value=\"1000\">Any</option>\n          <option value=\"1\">Walking distance</option>\n          <option value=\"3\">3 miles</option>\n          <option value=\"5\">5 miles</option>\n          <option value=\"10\">Driving distance</option>\n          <option value=\"15\">Road trip</option>\n        </select>\n      </div>\n\n      <div class=\"form-group\">\n        <label>Has Discounts\n          <input type=\"checkbox\" ng-model=\"filterDiscounts\">\n        </label>\n      </div>\n\n    </div>\n  \t<div class=\"col-md-6\">\n      <div class=\"row restaurant-row\" ng-repeat=\"restaurant in restaurants | filter:masterFilter\">\n    \t\t<div class=\"col-md-4\">\n    \t\t\t<div>\n            {{restaurant.name}}\n          </div>\n          <div ng-if=\"filterCuisine == ''\" class=\"restaurantCuisine\">\n            <small>{{restaurant.cuisine}}</small>\n          </div>\n          <div class=\"restaurant-stars\">\n            <span ng-repeat=\"i in range(5)\">\n              <i class=\"glyphicon\"\n                ng-class=\"{'glyphicon-star': $index < restaurant.rating, 'glyphicon-star-empty': $index >= restaurant.rating}\"\n              ></i>\n            </span>\n          </div>\n    \t\t</div>\n    \t\t<div class=\"col-md-2\">\n          {{restaurant.distance | number:1}} mi\n          <div class=\"restaurant-price\">\n            <span ng-repeat=\"i in range((restaurant.price-1)/5)\">\n              $\n            </span>\n          </div>\n    \t\t</div>\n        <div class=\"col-md-4 restaurant-notices\">\n          <div ng-if=\"restaurant.hasDiscounts\">\n            <i class=\"glyphicon glyphicon-tag\"></i> Discounts available\n          </div>\n          <div ng-if=\"filterOrderType == 'either' && restaurant.orderType != 'either'\">\n            <em>{{restaurant.orderType}} only</em>\n          </div>\n        </div>\n        <div class=\"col-md-1\">\n          <a href=\"#/menu\" class=\"btn btn-primary\">Select</a>\n        </div>\n      </div>\n    </div>\n\t</div>\n</div>";
+	module.exports = "<div class=\"container-fluid\">\n\t<div class=\"row\">\n\t\t<div class=\"col-md-offset-3 col-md-6\">\n\t\t\t<h2>\n\t\t\t\tRestaurants\n\t\t\t</h2>\n\t\t</div>\n\t</div>\n  <div class=\"row\">\n    <div class=\"col-md-3\">\n      <div class=\"form-group\">\n        <label>Cuisine</label>\n        <select ng-model=\"filterCuisine\">\n          <option value=\"\">Any</option>\n          <option ng-repeat=\"option in categories\" value=\"{{option}}\">{{option}}</option>\n        </select>\n      </div>\n      <div class=\"form-group\">\n        <label>Order Type</label>\n        <div>\n          <label>\n            <input type=\"radio\" ng-model=\"filterOrderType\" value=\"delivery\" name=\"orderType\" id=\"option1\" autocomplete=\"off\" default> Delivery\n          </label>\n          <label>\n            <input type=\"radio\" ng-model=\"filterOrderType\" value=\"carryout\" name=\"orderType\" id=\"option2\" autocomplete=\"off\"> Carry-out\n          </label>\n          <label>\n            <input type=\"radio\" ng-model=\"filterOrderType\" value=\"either\" name=\"orderType\" id=\"option3\" autocomplete=\"off\"> Either\n          </label>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label>Rating</label>\n        <select ng-model=\"filterRating\">\n          <option value=\"0\">Any</option>\n          <option value=\"2\">2 Star</option>\n          <option value=\"3\">3 Star</option>\n          <option value=\"4\">4 Star</option>\n          <option value=\"5\">5 Star</option>\n        </select>\n      </div>\n      <div class=\"form-group\">\n        <label>Price</label>\n        <select ng-model=\"filterPrice\">\n          <option value=\"1000\">Any</option>\n          <option value=\"5\">$</option>\n          <option value=\"10\">$$</option>\n          <option value=\"15\">$$$</option>\n          <option value=\"20\">$$$$</option>\n          <option value=\"25\">$$$$$</option>\n        </select>\n      </div>\n      <div class=\"form-group\">\n        <label>Distance</label>\n        <select ng-model=\"filterDistance\">\n          <option value=\"1000\">Any</option>\n          <option value=\"1\">Walking distance</option>\n          <option value=\"3\">3 miles</option>\n          <option value=\"5\">5 miles</option>\n          <option value=\"10\">Driving distance</option>\n          <option value=\"15\">Road trip</option>\n        </select>\n      </div>\n\n      <div class=\"form-group\">\n        <label>Has Discounts\n          <input type=\"checkbox\" ng-model=\"filterDiscounts\">\n        </label>\n      </div>\n\n    </div>\n  \t<div class=\"col-md-6\">\n      <div class=\"row restaurant-row\" ng-repeat=\"restaurant in restaurants | filter:masterFilter\">\n    \t\t<div class=\"col-md-4\">\n    \t\t\t<div>\n            {{restaurant.name}}\n          </div>\n          <div ng-if=\"filterCuisine == ''\" class=\"restaurantCuisine\">\n            <small>{{restaurant.cuisine}}</small>\n          </div>\n          <div class=\"restaurant-stars\">\n            <span ng-repeat=\"i in range(5)\">\n              <i class=\"glyphicon\"\n                ng-class=\"{'glyphicon-star': $index < restaurant.rating, 'glyphicon-star-empty': $index >= restaurant.rating}\"\n              ></i>\n            </span>\n          </div>\n    \t\t</div>\n    \t\t<div class=\"col-md-2\">\n          {{restaurant.distance | number:1}} mi\n          <div class=\"restaurant-price\">\n            <span ng-repeat=\"i in range((restaurant.price-1)/5)\">\n              $\n            </span>\n          </div>\n    \t\t</div>\n        <div class=\"col-md-4 restaurant-notices\">\n          <div ng-if=\"restaurant.hasDiscounts\">\n            <i class=\"glyphicon glyphicon-tag\"></i> Discounts available\n          </div>\n          <div ng-if=\"filterOrderType == 'either' && restaurant.orderType != 'either'\">\n            <em>{{restaurant.orderType}} only</em>\n          </div>\n        </div>\n        <div class=\"col-md-1\">\n          <a href=\"#/menu\" class=\"btn btn-primary\">Select</a>\n        </div>\n      </div>\n    </div>\n\t</div>\n</div>";
+
+/***/ },
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */
+/*!****************************!*\
+  !*** ./menu/template.html ***!
+  \****************************/
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-2 col-md-8\">\n      \n      <div class=\"row\">\n        <div class=\"col-md-6 col-md-offset-3\">\n          <h1>Menu items</h1>\n          <a href=\"#/restaurants\" class=\"btn btn-default\">Restaurants</a>\n          <a href=\"#/cart\" class=\"btn btn-primary\"><i class=\"glyphicon glyphicon-shopping-cart\"></i> Cart</a>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
+
+/***/ },
+/* 37 */
+/*!***********************!*\
+  !*** ./menu/index.js ***!
+  \***********************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	//require('jquery');
+	//require('angular');
+	//require('moment');
+	
+	var app = __webpack_require__(/*! ../module */ 1);
+	
+	app.controller('MenuController', function($scope) {
+	
+	});
+	
+	module.exports = app;
+
+/***/ },
+/* 38 */
+/*!***********************!*\
+  !*** ./cart/index.js ***!
+  \***********************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	//require('jquery');
+	//require('angular');
+	//require('moment');
+	
+	var app = __webpack_require__(/*! ../module */ 1);
+	
+	app.controller('CartController', function($scope) {
+	
+	});
+	
+	module.exports = app;
+
+/***/ },
+/* 39 */
+/*!***************************!*\
+  !*** ./checkout/index.js ***!
+  \***************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	//require('jquery');
+	//require('angular');
+	//require('moment');
+	
+	var app = __webpack_require__(/*! ../module */ 1);
+	
+	app.controller('CheckoutController', function($scope) {
+	
+	});
+	
+	module.exports = app;
+
+/***/ },
+/* 40 */
+/*!***************************!*\
+  !*** ./feedback/index.js ***!
+  \***************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	//require('jquery');
+	//require('angular');
+	//require('moment');
+	
+	var app = __webpack_require__(/*! ../module */ 1);
+	
+	app.controller('FeedbackController', function($scope) {
+	
+	});
+	
+	module.exports = app;
+
+/***/ },
+/* 41 */
+/*!********************************!*\
+  !*** ./checkout/template.html ***!
+  \********************************/
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-2 col-md-8\">\n      \n      <div class=\"row\">\n        <div class=\"col-md-6 col-md-offset-3\">\n          <h1>Checkout</h1>\n          <a href=\"#/cart\" class=\"btn btn-default\">Cart</a>\n          <a href=\"#/feedback\" class=\"btn btn-primary\">Feedback</a>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
+
+/***/ },
+/* 42 */
+/*!****************************!*\
+  !*** ./cart/template.html ***!
+  \****************************/
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-2 col-md-8\">\n      \n      <div class=\"row\">\n        <div class=\"col-md-6 col-md-offset-3\">\n          <h1>Shopping cart</h1>\n          <a href=\"#/menu\" class=\"btn btn-default\">Menu</a>\n          <a href=\"#/checkout\" class=\"btn btn-primary\">Checkout</a>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
+
+/***/ },
+/* 43 */
+/*!********************************!*\
+  !*** ./feedback/template.html ***!
+  \********************************/
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-offset-2 col-md-8\">\n      \n      <div class=\"row\">\n        <div class=\"col-md-6 col-md-offset-3\">\n          <h1>Feedback</h1>\n          <a href=\"#/\" class=\"btn btn-primary\">Home</a>\n        </div>\n      </div>\n\n    </div>\n  </div>\n</div>";
 
 /***/ }
 ]);

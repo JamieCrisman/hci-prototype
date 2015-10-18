@@ -3,7 +3,7 @@
 var app = require('../module');
 
 app.controller('RestaurantsController', function($scope) {
-	$scope.filterPrice = "0";
+	$scope.filterPrice = "1000";
 	$scope.filterRating = "0";
 	$scope.filterDistance = "1000";
 	$scope.filterCuisine = "";
@@ -70,14 +70,14 @@ app.controller('RestaurantsController', function($scope) {
 
 	var _generateRestaurants = function() {
 		var restaurants = [];
-		for( var i = 0; i < 300; i++ ) {
+		for( var i = 0; i < 100; i++ ) {
 			var rest = {
 				"name": _nameGenerate(i % $scope.categories.length),
 				"rating": (i % 5) + 1,
 				"distance": ((i * 0.3) % 15 ) + 0.1,
 				"cuisine": $scope.categories[i % $scope.categories.length],
 				"hasDiscounts": (i % 5 == 0),
-				"price": 5 * ((i % 6 )+ 1),
+				"price": 5 * ((i % 5 )+ 1),
 				"orderType": _orderType(i)
 			}
 			restaurants.push(rest);
@@ -87,7 +87,7 @@ app.controller('RestaurantsController', function($scope) {
 
 	$scope.masterFilter = function(option) {
 		var filtered = true;
-		filtered &= (option.price > parseInt($scope.filterPrice));
+		filtered &= (option.price <= parseInt($scope.filterPrice));
 		filtered &= (option.rating >= parseInt($scope.filterRating));
 		filtered &= (option.distance <= parseInt($scope.filterDistance));
 		filtered &= (option.orderType == $scope.filterOrderType || $scope.filterOrderType == 'either');
