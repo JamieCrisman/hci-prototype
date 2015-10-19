@@ -19,13 +19,40 @@
         <label>Order Type</label>
         <div>
           <label>
+            <input type="radio" ng-model="filterOrderType" value="either" name="orderType" id="option3" autocomplete="off"> Either
+          </label>
+        </div>
+        <div>
+          <label>
             <input type="radio" ng-model="filterOrderType" value="delivery" name="orderType" id="option1" autocomplete="off" default> Delivery
           </label>
+        </div>
+        <div>
           <label>
             <input type="radio" ng-model="filterOrderType" value="carryout" name="orderType" id="option2" autocomplete="off"> Carry-out
           </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Sort By</label>
+        <div>
           <label>
-            <input type="radio" ng-model="filterOrderType" value="either" name="orderType" id="option3" autocomplete="off"> Either
+            <input type="radio" ng-model="sortMode" value="+name" name="sortMode" id="option1" autocomplete="off" default> Name
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="radio" ng-model="sortMode" value="-rating" name="sortMode" id="option2" autocomplete="off"> Rating
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="radio" ng-model="sortMode" value="+distance" name="sortMode" id="option3" autocomplete="off"> Distance
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="radio" ng-model="sortMode" value="+price" name="sortMode" id="option3" autocomplete="off"> Price
           </label>
         </div>
       </div>
@@ -71,7 +98,7 @@
 
     </div>
   	<div class="col-md-6">
-      <div class="row restaurant-row" ng-repeat="restaurant in restaurants | filter:masterFilter">
+      <div class="row restaurant-row" ng-repeat="restaurant in restaurants | filter:masterFilter | orderBy:sortMode">
     		<div class="col-md-4">
     			<div>
             {{restaurant.name}}

@@ -9,7 +9,8 @@ app.controller('RestaurantsController', function($scope) {
 	$scope.filterCuisine = "";
 	$scope.filterOrderType = "either";
 	$scope.filterDiscounts = false;
-	
+	$scope.sortMode = "+name";
+
 	var randomNames = [
 		"Bob's",
 		"Greg's Great",
