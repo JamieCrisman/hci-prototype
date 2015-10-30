@@ -82,11 +82,11 @@
         <label>Distance</label>
         <select ng-model="filterDistance">
           <option value="1000">Any</option>
-          <option value="1">Walking distance</option>
+          <option value="1">Walking distance (1 mile)</option>
           <option value="3">3 miles</option>
           <option value="5">5 miles</option>
-          <option value="10">Driving distance</option>
-          <option value="15">Road trip</option>
+          <option value="10">Driving distance (10 miles)</option>
+          <option value="15">Road trip (15 miles)</option>
         </select>
       </div>
 
@@ -98,7 +98,14 @@
 
     </div>
   	<div class="col-md-6">
-      <div class="row restaurant-row" ng-repeat="restaurant in restaurants | filter:masterFilter | orderBy:sortMode">
+      <div class="row">
+        <div class="col-md-12" ng-show="(restaurants | filter:masterFilter).length == 0">
+          <h3>
+            Sorry, no restaurants fit your criteria
+          </h3>
+        </div>
+      </div>
+      <div class="row restaurant-row" ng-repeat="restaurant in restaurants | filter:masterFilter | limitTo:30 | orderBy:sortMode">
     		<div class="col-md-4">
     			<div>
             {{restaurant.name}}
@@ -131,7 +138,7 @@
           </div>
         </div>
         <div class="col-md-1">
-          <a href="#/menu" class="btn btn-primary">Select</a>
+          <a href="#/menu" ng-click="foodService.selectedRestaurant = restaurant" class="btn btn-primary">Select</a>
         </div>
       </div>
     </div>

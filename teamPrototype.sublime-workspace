@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"dark",
+				"dark-gray"
+			],
+			[
 				"filter",
 				"filterCuisine"
 			],
@@ -60,18 +64,10 @@
 	"buffers":
 	[
 		{
-			"file": "README.md",
+			"file": "app/services/foodService.js",
 			"settings":
 			{
-				"buffer_size": 104,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/restaurants/template.html",
-			"settings":
-			{
-				"buffer_size": 3173,
+				"buffer_size": 1716,
 				"line_ending": "Unix"
 			}
 		},
@@ -79,23 +75,7 @@
 			"file": "app/restaurants/index.js",
 			"settings":
 			{
-				"buffer_size": 2237,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/index.html",
-			"settings":
-			{
-				"buffer_size": 1563,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/home/template.html",
-			"settings":
-			{
-				"buffer_size": 525,
+				"buffer_size": 1165,
 				"line_ending": "Unix"
 			}
 		},
@@ -103,7 +83,15 @@
 			"file": "app/assets/css/kouen.scss",
 			"settings":
 			{
-				"buffer_size": 4535,
+				"buffer_size": 4722,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/restaurants/template.html",
+			"settings":
+			{
+				"buffer_size": 5019,
 				"line_ending": "Unix"
 			}
 		}
@@ -136,9 +124,24 @@
 	},
 	"file_history":
 	[
-		"/Users/james/go/src/teamPrototype/app/assets/css/kouen.scss",
-		"/Users/james/go/src/teamPrototype/app/home/template.html",
 		"/Users/james/go/src/teamPrototype/app/index.js",
+		"/Users/james/go/src/teamPrototype/app/index.html",
+		"/Users/james/go/src/teamPrototype/app/home/template.html",
+		"/Users/james/go/src/teamPrototype/app/home/index.js",
+		"/Users/james/go/src/teamPrototype/app/services/foodService.js",
+		"/Users/james/go/src/teamPrototype/app/restaurants/index.js",
+		"/Users/james/go/src/teamPrototype/app/restaurants/template.html",
+		"/Users/james/go/src/teamPrototype/app/cart/index.js",
+		"/Users/james/go/src/teamPrototype/app/cart/template.html",
+		"/Users/james/go/src/teamPrototype/app/feedback/template.html",
+		"/Users/james/go/src/teamPrototype/app/menu/template.html",
+		"/Users/james/go/src/teamPrototype/app/checkout/template.html",
+		"/Users/james/go/src/teamPrototype/app/checkout/index.js",
+		"/Users/james/go/src/teamPrototype/README.md",
+		"/Users/james/Desktop/Prototype/index.html",
+		"/Users/james/go/src/teamPrototype/app/assets/css/kouen.scss",
+		"/Users/james/go/src/teamPrototype/app/menu/index.js",
+		"/Users/james/go/src/teamPrototype/app/feedback/index.js",
 		"/Users/james/go/src/teamPrototype/kouen.go",
 		"/Users/james/go/src/teamPrototype/app/learningJapanese/template.html",
 		"/Users/james/Programming/HCITeamPrototype/index.html",
@@ -204,6 +207,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"random",
+			"checkout",
+			"cart",
+			"restaurants",
 			"categor",
 			"Moment",
 			"momentNotes",
@@ -251,77 +258,51 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "README.md",
+					"file": "app/services/foodService.js",
 					"settings":
 					{
-						"buffer_size": 104,
+						"buffer_size": 1716,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								104,
-								104
+								157,
+								157
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Markdown/Markdown.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 630.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "app/restaurants/template.html",
-					"settings":
-					{
-						"buffer_size": 3173,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								927,
-								927
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/AngularJS/AngularJS.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 420.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
 					"file": "app/restaurants/index.js",
 					"settings":
 					{
-						"buffer_size": 2237,
+						"buffer_size": 1165,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								478,
-								478
+								13,
+								13
 							]
 						],
 						"settings":
@@ -336,75 +317,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "app/index.html",
-					"settings":
-					{
-						"buffer_size": 1563,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1252,
-								1252
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/AngularJS/AngularJS.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "app/home/template.html",
-					"settings":
-					{
-						"buffer_size": 525,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								116,
-								116
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/AngularJS/AngularJS.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
+					"buffer": 2,
 					"file": "app/assets/css/kouen.scss",
 					"settings":
 					{
-						"buffer_size": 4535,
+						"buffer_size": 4722,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4534,
-								4534
+								996,
+								996
 							]
 						],
 						"settings":
@@ -414,7 +339,35 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3315.0,
+						"translation.y": 661.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "app/restaurants/template.html",
+					"settings":
+					{
+						"buffer_size": 5019,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3490,
+								3490
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/AngularJS/AngularJS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2300.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

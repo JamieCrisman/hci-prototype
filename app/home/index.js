@@ -1,13 +1,10 @@
 'use strict';
 
-//require('jquery');
-//require('angular');
-//require('moment');
-
 var app = require('../module');
+require('../services/foodService');
 
-app.controller('HomeController', function($scope) {
-
+app.controller('HomeController', function($scope, foodService) {
+  $scope.foodService = foodService;
 });
 
 module.exports = app;

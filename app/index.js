@@ -9,6 +9,8 @@ var cart = require('./cart');
 var checkout = require('./checkout');
 var feedback = require('./feedback');
 
+require('./services/foodService');
+
 app.addModules([
   'ui.router'
 ]);
@@ -60,8 +62,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
 });
 
-app.controller('NavigationController', function($scope) {
+app.controller('NavigationController', function($scope, foodService) {
   $scope.now = moment();
+  $scope.foodService = foodService;
 });
 
 module.exports = app;
