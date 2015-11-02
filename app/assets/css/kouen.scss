@@ -52,6 +52,17 @@ body {
     font-size: 1.0em;
   }
 
+  .nav-cart{ 
+    position: absolute;
+    cursor: pointer;
+    top: 12px;
+    right: 130px;
+    font-size: 1.5em;
+    display:block;
+    width:160px;
+    @include vendor(transform, translate3d(0,0,0));
+  }
+
   .menu-icon {
     position: absolute;
     cursor: pointer;
@@ -224,6 +235,9 @@ main {
 .home-menu {
   margin-top: 30vh;
 }
+.header-cart {
+  margin-top: 20px;
+}
 
 .restaurant-row {
   padding-top: 5px;
@@ -235,6 +249,15 @@ main {
   .restaurant-notices {
     font-size: 0.8em;
   }
+}
+
+.edit-address-container {
+  width: 30vw;
+  margin: 0 auto;
+}
+
+.menu-row {
+  margin-bottom: 15px;
 }
 
 // <3 codrops

@@ -2,6 +2,7 @@
 
 require('jquery');
 require('angular');
+require('lodash');
 
 var app = require('../module');
 
@@ -10,6 +11,79 @@ app.service('foodService', function() {
   this.customerAddress = "";
 
   this.selectedRestaurant;
+
+  this.cart = [];
+
+  this.addToCart = function(item) {
+    //ensures there's only one object of that menu item in the cart. if there is, increase its quantity
+    item.restaurant = this.selectedRestaurant;
+    item.restaurantIndex = this.selectedRestaurant.index; //keep track of both just because
+    var temp = angular.copy(_.findWhere(this.cart, {"name": item.name, "restaurantIndex": item.restaurantIndex}));
+    if(!!temp) {
+        _.remove(this.cart, temp);
+        item = angular.copy(temp);
+        item.quantity += 1;
+    } else {
+        item.quantity = 1;
+    }
+    this.cart.push(item);
+  }
+
+  this.removeItem = function(item) {
+    var temp = angular.copy(_.findWhere(this.cart, {"name": item.name, "restaurantIndex": item.restaurantIndex}));
+    if(!!temp) {
+        _.remove(this.cart, temp);
+        if(temp.quantity > 1) {
+            temp.quantity--;
+            this.cart.push(temp);
+        }
+    }
+  }
+
+  this.tip = 0;
+
+  this.getSubTotal = function() {
+    var t = 0;
+    _.each(this.cart, function(item) {
+        t += item.price * item.quantity;
+    });
+    return t;
+  }
+  this.getTax = function() {
+    var t = 0;
+    _.each(this.cart, function(item) {
+        t += item.price * item.quantity * 0.08;
+    });
+    return t;
+  }
+
+  this.getTotal = function() {
+    return this.getTax() + this.getSubTotal() + this.getFees() + Math.abs(this.tip);
+  }
+
+  this.getFees = function() {
+    var self = this;
+    var t = 0;
+    var rest = [];
+    _.each(this.cart, function(item) {
+        if(!_.contains(rest, item.restaurantIndex) && item.restaurant.orderType != "carryout") {
+            rest.push(item.restaurantIndex);
+        }
+    });
+    _.each(rest, function(index) {
+        t += self.restaurants[index].deliveryFee;
+    });
+    return t;
+  }
+
+  this.getItemCount = function() {
+    var t = 0;
+    _.each(this.cart, function(item) {
+        t += item.quantity;
+    });
+    return t;
+  }
+
 
   this.operatingHours = [
     {
@@ -67,20 +141,13 @@ app.service('foodService', function() {
     'Italian',
     'Pho',
     'Ramen',
-    'Sandwiches',
     'Thai',
     'Sushi',
-    'Wings',
     'Chinese',
-    'Dessert',
-    'Seafood',
-    'Fast food',
     'Burgers',
     'Mexican',
-    'Japanese',
-    'Steakhouse'
+    'Japanese'
   ];
-
   this.menus = {
     "Burgers": [
         {
@@ -171,17 +238,85 @@ app.service('foodService', function() {
         {
             "name": "Pad Thai",
             "price": 8.75,
-            "description": "3 tacos with  slow cooked shredded beef, onions, and cilantro."
+            "description": "Stir fried rice noodles with chicken, egg, scallion, bean sprouts, and peanuts in tangy tamarind sauce."
         },
         {
             "name": "Pad See Ew",
             "price": 8.75,
-            "description": "3 tacos with pineapple marinated pork, onions, and cilantro."
+            "description": "Stir fried rice noodles with chicken, egg, broccoli, garlic in a sweet soy sauce."
         },
         {
             "name": "Pineapple Fried Rice",
             "price": 7.75,
-            "description": "A huge quesadilla stuffed with cheese, steak, tomatoes, avocado, and bell peppers. Served with queso, guacamole, and sour cream."
+            "description": "Rice stir fried with chicken, yellow curry, egg, pineapple, tomato, onion, and scallion."
+        }
+    ],
+    "Pizza": [
+        {
+            "name": "Cheese Pizza",
+            "price": 12.75,
+            "description": "The pepperoni pizza but without pepperoni."
+        },
+        {
+            "name": "Pepperoni Pizza",
+            "price": 14.75,
+            "description": "The cheese pizza but with pepperoni."
+        },
+        {
+            "name": "Garlic Breadsticks",
+            "price": 6.25,
+            "description": "It's like pizza crust with garlic butter."
+        }
+    ],
+    "Japanese": [
+        {
+            "name": "Tonkatsu Curry",
+            "price": 10.75,
+            "description": "Fried breaded pork cutlet with curry and rice."
+        },
+        {
+            "name": "Chicken Kaarage",
+            "price": 10.75,
+            "description": "Japanese fried chicken. Served with rice, miso soup, and salad."
+        },
+        {
+            "name": "Grilled Saba",
+            "price": 11.25,
+            "description": "Grilled mackerel. Served with rice, miso soup, and salad."
+        }
+    ],
+    "Pho": [
+        {
+            "name": "Pho Bo Vien",
+            "price": 9.25,
+            "description": "Beef broth, noodles, meatballs."
+        },
+        {
+            "name": "Pho Ga",
+            "price": 9.25,
+            "description": "Chicken broth, noodles, chicken."
+        },
+        {
+            "name": "Pho Tai",
+            "price": 9.25,
+            "description": "Beef broth, noodles, rare cooked beef."
+        }
+    ],
+    "Italian": [
+        {
+            "name": "Chicken Fettuccine Alfredo",
+            "price": 10.75,
+            "description": "Fettuccine tossed in parmesan and butter with chicken."
+        },
+        {
+            "name": "Chicken Parmigiana",
+            "price": 10.75,
+            "description": "Pasta with breaded chicken, red tomato sauce, parmesan cheese."
+        },
+        {
+            "name": "Carbonara",
+            "price": 11.25,
+            "description": "Spaghetti tossed in parmesan, eggs, pancetta, and black pepper."
         }
     ]
   };

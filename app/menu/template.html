@@ -1,22 +1,62 @@
-<a href="#/restaurants" class="btn btn-default">Restaurants</a>
-<a href="#/cart" class="btn btn-primary"><i class="glyphicon glyphicon-shopping-cart"></i> Cart</a>
 <div class="container-fluid">
-      
+  <div class="row">
+    <div class="col-md-12">
+      <a href="#/restaurants" class="btn btn-default">Restaurants</a>
+    </div>
+  </div>
   <div class="row">
     <div class="col-md-3">
-      TODO: images here
+      <h2>Images</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <a href="#" class="thumbnail">
+            <img src="http://placehold.it/120x120">
+          </a>
+        </div>
+        <div class="col-md-6">
+          <a href="#" class="thumbnail">
+            <img src="http://placehold.it/120x120">
+          </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <a href="#" class="thumbnail">
+            <img src="http://placehold.it/120x120">
+          </a>
+        </div>
+        <div class="col-md-6">
+          <a href="#" class="thumbnail">
+            <img src="http://placehold.it/120x120">
+          </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <a href="#" class="thumbnail">
+            <img src="http://placehold.it/120x120">
+          </a>
+        </div>
+        <div class="col-md-6">
+          <a href="#" class="thumbnail">
+            <img src="http://placehold.it/120x120">
+          </a>
+        </div>
+      </div>
     </div>
     <div class="col-md-6">
-      <h1>{{foodService.selectedRestaurant.name}}</h1>
-      <div class="row" ng-repeat="item in foodService.menus.Burgers">
-        <div class="col-md-3">
+      <div class="clearfix">
+        <h1 class="pull-left">{{foodService.selectedRestaurant.name}}</h1>
+      </div>
+      <div class="row menu-row" ng-repeat="item in foodService.menus[foodService.selectedRestaurant.cuisine]">
+        <div class="col-md-4">
           <strong>{{item.name}}</strong>
         </div>
         <div class="col-md-6">
           {{item.description}}
         </div>
-        <div class="col-md-1">
-          <a class="btn btn-primary">+{{item.price | currency}}</a>
+        <div class="col-md-2">
+          <a class="btn btn-primary pull-right" ng-click="foodService.addToCart(item)">+{{item.price | currency}}</a>
         </div>
       </div>
     </div>
@@ -27,10 +67,10 @@
         <dd>{{foodService.selectedRestaurant.cuisine}}</dd>
         <dt>Rating</dt>
         <dd>{{foodService.selectedRestaurant.rating}}/5</dd>
-        <dt>Delivery Fee</dt>
-        <dd>{{foodService.selectedRestaurant.deliveryFee | currency}}</dd>
-        <dt>Delivery Minimum</dt>
-        <dd>{{foodService.selectedRestaurant.deliveryMinimum | currency}}</dd>
+        <dt ng-if="foodService.selectedRestaurant.orderType != 'carryout'">Delivery Fee</dt>
+        <dd ng-if="foodService.selectedRestaurant.orderType != 'carryout'">{{foodService.selectedRestaurant.deliveryFee | currency}}</dd>
+        <dt ng-if="foodService.selectedRestaurant.orderType != 'carryout'">Delivery Minimum</dt>
+        <dd ng-if="foodService.selectedRestaurant.orderType != 'carryout'">{{foodService.selectedRestaurant.deliveryMinimum | currency}}</dd>
         <dt>Distance</dt>
         <dd>{{foodService.selectedRestaurant.distance | number:2}} miles</dd>
       </dl>

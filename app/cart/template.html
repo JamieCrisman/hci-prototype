@@ -1,15 +1,73 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-offset-2 col-md-8">
-      
-      <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-          <h1>Shopping cart</h1>
-          <a href="#/menu" class="btn btn-default">Menu</a>
-          <a href="#/checkout" class="btn btn-primary">Checkout</a>
+    <div class="col-md-12">
+      <a href="#/menu" class="btn btn-default">Menu</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3 clearfix">
+      <h1 class="pull-left">Shopping cart</h1>
+      <a href="#/checkout" class="btn btn-primary pull-right header-cart" ng-hide="foodService.cart < 1">
+        Checkout
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div ng-show="foodService.cart < 1">
+        <h2>There's no items in your cart.</h2>
+        <p>
+          You should add to your cart! <a href="#/restaurants" class="btn btn-primary">View Restaurants</a>
+        </p>
+      </div>
+      <div ng-repeat="(key, value) in foodService.cart | groupBy: 'restaurantIndex'">
+        <h3>{{foodService.restaurants[key].name}} <small><a href="#/menu" ng-click="foodService.selectedRestaurant = foodService.restaurants[key]">View Menu</a></small></h3>
+        <div ng-repeat="item in value | orderBy: '+name'">
+          <div class="row">
+            <div class="col-md-6">
+              {{item.name}}
+            </div>
+            <div class="col-md-2">
+              <strong>{{item.price | currency}}</strong>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group">
+                <a class="btn btn-default" ng-click="foodService.removeItem(item)" type="button">
+                  <i class="glyphicon" ng-class="{'glyphicon-minus': item.quantity > 1, 'glyphicon-trash': item.quantity == 1}"></i>
+                </a>
+                {{item.quantity || 0}}
+                <a class="btn btn-default" ng-click="item.quantity = item.quantity + 1" type="button">
+                  <i class="glyphicon glyphicon-plus"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="row menu-row">
+            <div class="col-md-12">
+              <textarea ng-bind="item.notes" class="col-md-12" placeholder="Notes for {{item.name}}">
+              </textarea>
+            </div>
+          </div>
         </div>
       </div>
-
+    </div>  
+    <div class="col-md-3" ng-show="foodService.cart.length > 0">
+      <h2>Total: {{foodService.getTotal() | currency}}</h2>
+      <dl>
+        <dt>Tax</dt>
+        <dd>{{foodService.getTax() | currency}}</dd>
+        <dt>Delivery Fees</dt>
+        <dd>{{foodService.getFees() | currency}}</dd>
+        <dt>SubTotal</dt>
+        <dd>{{foodService.getSubTotal() | currency}}</dd>
+        <dt>Tip</dt>
+        <dd>
+          <div class="input-group">
+            <span class="input-group-addon">$</span>
+            <input type="number" ng-model="foodService.tip">
+          </div>
+        </dd>
+      </dl>
     </div>
   </div>
 </div>

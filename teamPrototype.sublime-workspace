@@ -67,7 +67,7 @@
 			"file": "app/services/foodService.js",
 			"settings":
 			{
-				"buffer_size": 1716,
+				"buffer_size": 5932,
 				"line_ending": "Unix"
 			}
 		},
@@ -75,23 +75,23 @@
 			"file": "app/restaurants/index.js",
 			"settings":
 			{
-				"buffer_size": 1165,
+				"buffer_size": 1200,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "app/assets/css/kouen.scss",
+			"file": "app/menu/index.js",
 			"settings":
 			{
-				"buffer_size": 4722,
+				"buffer_size": 276,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "app/restaurants/template.html",
+			"file": "app/menu/template.html",
 			"settings":
 			{
-				"buffer_size": 5019,
+				"buffer_size": 1546,
 				"line_ending": "Unix"
 			}
 		}
@@ -124,13 +124,14 @@
 	},
 	"file_history":
 	[
+		"/Users/james/go/src/teamPrototype/app/restaurants/template.html",
+		"/Users/james/go/src/teamPrototype/app/assets/css/kouen.scss",
 		"/Users/james/go/src/teamPrototype/app/index.js",
 		"/Users/james/go/src/teamPrototype/app/index.html",
 		"/Users/james/go/src/teamPrototype/app/home/template.html",
 		"/Users/james/go/src/teamPrototype/app/home/index.js",
 		"/Users/james/go/src/teamPrototype/app/services/foodService.js",
 		"/Users/james/go/src/teamPrototype/app/restaurants/index.js",
-		"/Users/james/go/src/teamPrototype/app/restaurants/template.html",
 		"/Users/james/go/src/teamPrototype/app/cart/index.js",
 		"/Users/james/go/src/teamPrototype/app/cart/template.html",
 		"/Users/james/go/src/teamPrototype/app/feedback/template.html",
@@ -139,7 +140,6 @@
 		"/Users/james/go/src/teamPrototype/app/checkout/index.js",
 		"/Users/james/go/src/teamPrototype/README.md",
 		"/Users/james/Desktop/Prototype/index.html",
-		"/Users/james/go/src/teamPrototype/app/assets/css/kouen.scss",
 		"/Users/james/go/src/teamPrototype/app/menu/index.js",
 		"/Users/james/go/src/teamPrototype/app/feedback/index.js",
 		"/Users/james/go/src/teamPrototype/kouen.go",
@@ -266,15 +266,15 @@
 					"file": "app/services/foodService.js",
 					"settings":
 					{
-						"buffer_size": 1716,
+						"buffer_size": 5932,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								157,
-								157
+								1218,
+								1218
 							]
 						],
 						"settings":
@@ -284,7 +284,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 630.0,
+						"translation.y": 784.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -294,15 +294,15 @@
 					"file": "app/restaurants/index.js",
 					"settings":
 					{
-						"buffer_size": 1165,
+						"buffer_size": 1200,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13,
-								13
+								1173,
+								1173
 							]
 						],
 						"settings":
@@ -318,46 +318,44 @@
 				},
 				{
 					"buffer": 2,
-					"file": "app/assets/css/kouen.scss",
+					"file": "app/menu/index.js",
 					"settings":
 					{
-						"buffer_size": 4722,
+						"buffer_size": 276,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								996,
-								996
+								249,
+								249
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/SCSS/SCSS.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 661.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "app/restaurants/template.html",
+					"file": "app/menu/template.html",
 					"settings":
 					{
-						"buffer_size": 5019,
+						"buffer_size": 1546,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3490,
-								3490
+								691,
+								691
 							]
 						],
 						"settings":
@@ -367,7 +365,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2300.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

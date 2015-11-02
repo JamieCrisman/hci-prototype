@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Order, Eat</title>
-    {% if (o.htmlWebpackPlugin.files.favicon) { %}
-    <link rel="shortcut icon" href="{%=o.htmlWebpackPlugin.files.favicon%}">
-    {% } %}
-    <meta name="description" content="{%=o.htmlWebpackPlugin.options.pkg.description %}">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    
+    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% for (var css in o.htmlWebpackPlugin.files.css) { %}
-    <link href="{%=o.htmlWebpackPlugin.files.css[css] %}" rel="stylesheet">
-    {% } %}
+    
+    <link href="css/vendor.css" rel="stylesheet">
+    
     <link rel="stylesheet" href="css/vendor.css">
     <link rel="stylesheet" href="css/index.css">
 
@@ -58,9 +58,11 @@
       </div>
     </main>
 
-    {% for (var chunk in o.htmlWebpackPlugin.files.chunks) { %}
-      <script src="{%=o.htmlWebpackPlugin.files.chunks[chunk].entry %}"></script>
-    {% } %}
+    
+      <script src="vendor.js"></script>
+    
+      <script src="index.js"></script>
+    
 
   </body>
 </html>
