@@ -17,7 +17,7 @@
       <div ng-show="foodService.cart < 1">
         <h2>There's no items in your cart.</h2>
         <p>
-          You should add to your cart! <a href="#/restaurants" class="btn btn-primary">View Restaurants</a>
+          You should add to your cart! <a href="#/menu" ng-show="foodService.selectedRestaurant" class="btn btn-default">{{foodService.selectedRestaurant.name}} Menu</a> <a href="#/restaurants" class="btn btn-default">View Restaurants</a>
         </p>
       </div>
       <div ng-repeat="(key, value) in foodService.cart | groupBy: 'restaurantIndex'">

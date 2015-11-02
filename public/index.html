@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Order, Eat</title>
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="css/vendor.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/vendor.css">
+    <link rel="stylesheet" href="css/index.css">
+
+  </head>
+  <body data-ng-app="app" class="body">
+    <div class="navigation" ng-class="{'active': activeNav}" ng-controller="NavigationController">
+      <div>
+        <h1 class="page-title"><a ui-sref="home" ng-click="activeNav = false">Order, Eat</a></h1>
+        <div class="nav-cart" ng-show="foodService.cart.length > 0">
+          <a ng-href="#/cart" ng-show="foodService.cart.length > 0" class="btn btn-primary">
+            <i class="glyphicon glyphicon-shopping-cart"></i>
+             Cart {{foodService.getItemCount()}} item<span ng-show="foodService.getItemCount() > 1">s</span></a>
+        </div>
+        <a class="menu-icon" ng-class="{'active': activeNav}" ng-click="activeNav = !activeNav">
+          <span class="menu-icon-text">Show Menu</span>
+        </a>
+      </div>
+      <div class="nav-content">
+        <div class="nav-row">
+          Cart Total: {{foodService.getTotal() | currency}}
+          <a href="#/cart" class="btn btn-primary" ng-show="foodService.cart.length > 0"><i class="glyphicon glyphicon-shopping-cart"></i> Cart</a>
+        </div>
+        <div class="nav-row">
+          <span ng-show="editAddress != true && foodService.customerAddress != ''">
+            Address: {{foodService.customerAddress}}
+          </span>
+          <span ng-show="editAddress == true">
+            <div class="input-group edit-address-container">
+              <input type="text" class="form-control" ng-model="foodService.customerAddress" placeholder="Enter Your Address">
+              <span class="input-group-btn">
+                <a ng-click="editAddress = false" class="btn btn-primary" type="button">Submit</a>
+              </span>
+            </div>
+          </span>
+        </div>
+        <div class="nav-row">
+          <a ng-hide="editAddress == true" ng-click="editAddress = true">edit address</a>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <div data-ui-view class="page">
+      </div>
+    </main>
+
+    
+      <script src="vendor.js"></script>
+    
+      <script src="index.js"></script>
+    
+
+  </body>
+</html>
