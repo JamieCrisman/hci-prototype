@@ -1,10 +1,12 @@
 'use strict';
 
 var app = require('../module');
+var _ = require('lodash');
 require('../services/foodService');
 
 app.controller('RestaurantsController', function($scope, foodService) {
-	$scope.filterPrice = "1000";
+	$scope.filterPriceMin = "";
+	$scope.filterPriceMax = "";
 	$scope.filterRating = "0";
 	$scope.filterDistance = "1000";
 	$scope.filterCuisine = "";
@@ -17,7 +19,9 @@ app.controller('RestaurantsController', function($scope, foodService) {
 
 	$scope.masterFilter = function(option) {
 		var filtered = true;
-		filtered &= (option.price <= parseInt($scope.filterPrice));
+		var max = (!_.isEmpty($scope.filterPriceMax))? parseInt($scope.filterPriceMax) : 1000;
+		var min = (!_.isEmpty($scope.filterPriceMin))? parseInt($scope.filterPriceMin) : 0;
+		filtered &= (option.price <= max && option.price >= min);
 		filtered &= (option.rating >= parseInt($scope.filterRating));
 		filtered &= (option.distance <= parseInt($scope.filterDistance));
 		filtered &= (option.orderType == $scope.filterOrderType || $scope.filterOrderType == 'either' || option.orderType == 'either');
