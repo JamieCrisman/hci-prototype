@@ -6,7 +6,7 @@ require('lodash');
 
 var app = require('../module');
 
-app.service('foodService', function() {
+app.service('foodService', function($filter) {
 
   this.customerAddress = "";
 
@@ -40,7 +40,16 @@ app.service('foodService', function() {
     }
   }
 
-  this.tip = 0;
+  this.tip;
+
+  this.setTipPercent = function(percent) {
+    this.tip = 0;
+    if(percent == 0) {
+        return;
+    }
+    this.tip = Number($filter('number')(this.getTotal() * (percent / 100), 2));
+
+  }
 
   this.getSubTotal = function() {
     var t = 0;
@@ -58,7 +67,8 @@ app.service('foodService', function() {
   }
 
   this.getTotal = function() {
-    return this.getTax() + this.getSubTotal() + this.getFees() + Math.abs(this.tip);
+    var t = (_.isNumber(this.tip))? this.tip : 0;
+    return this.getTax() + this.getSubTotal() + this.getFees() + Math.abs(t);
   }
 
   this.getFees = function() {

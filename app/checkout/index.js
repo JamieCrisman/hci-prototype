@@ -5,9 +5,10 @@
 //require('moment');
 
 var app = require('../module');
+require('../services/foodService');
 
-app.controller('CheckoutController', function($scope) {
-
+app.controller('CheckoutController', function($scope, foodService) {
+  $scope.foodService = foodService;
 });
 
 module.exports = app;
