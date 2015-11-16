@@ -4,94 +4,94 @@
       <a href="#/menu" class="btn btn-default">Menu</a>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3 clearfix">
-      <h1 class="pull-left">Shopping cart</h1>
-      <a href="#/checkout" class="btn btn-primary pull-right header-cart" ng-hide="foodService.cart < 1">
-        Checkout
-      </a>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-      <div ng-show="foodService.cart < 1">
-        <h2>There's no items in your cart.</h2>
-        <p>
-          You should add to your cart! <a href="#/menu" ng-show="foodService.selectedRestaurant" class="btn btn-default">{{foodService.selectedRestaurant.name}} Menu</a> <a href="#/restaurants" class="btn btn-default">View Restaurants</a>
-        </p>
+  <form ng-submit="$state.go('checkout')">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3 clearfix">
+        <h1 class="pull-left">Shopping cart</h1>
+        <input type="submit" value="Checkout" class="btn btn-primary pull-right header-cart" ng-hide="foodService.cart < 1"/>
       </div>
-      <div ng-repeat="(key, value) in foodService.cart | groupBy: 'restaurantIndex'">
-        <h3>{{foodService.restaurants[key].name}} <small><a href="#/menu" ng-click="foodService.selectedRestaurant = foodService.restaurants[key]">View Menu</a></small></h3>
-        <div ng-repeat="item in value | orderBy: '+name'">
-          <div class="row">
-            <div class="col-md-6">
-              {{item.name}}
-            </div>
-            <div class="col-md-2">
-              <strong>{{item.price | currency}}</strong>
-            </div>
-            <div class="col-md-4">
-              <div class="input-group">
-                <a class="btn btn-default" ng-click="foodService.removeItem(item)" type="button">
-                  <i class="glyphicon" ng-class="{'glyphicon-minus': item.quantity > 1, 'glyphicon-trash': item.quantity == 1}"></i>
-                </a>
-                {{item.quantity || 0}}
-                <a class="btn btn-default" ng-click="item.quantity = item.quantity + 1" type="button">
-                  <i class="glyphicon glyphicon-plus"></i>
-                </a>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div ng-show="foodService.cart < 1">
+          <h2>There's no items in your cart.</h2>
+          <p>
+            You should add to your cart! <a href="#/menu" ng-show="foodService.selectedRestaurant" class="btn btn-default">{{foodService.selectedRestaurant.name}} Menu</a> <a href="#/restaurants" class="btn btn-default">View Restaurants</a>
+          </p>
+        </div>
+        <div ng-repeat="(key, value) in foodService.cart | groupBy: 'restaurantIndex'">
+          <h3>{{foodService.restaurants[key].name}} <small><a href="#/menu" ng-click="foodService.selectedRestaurant = foodService.restaurants[key]">View Menu</a></small></h3>
+          <div ng-repeat="item in value | orderBy: '+name'">
+            <div class="row">
+              <div class="col-md-6">
+                {{item.name}}
+              </div>
+              <div class="col-md-2">
+                <strong>{{item.price | currency}}</strong>
+              </div>
+              <div class="col-md-4">
+                <div class="input-group">
+                  <a class="btn btn-default input-group-addon" ng-click="foodService.removeItem(item)" type="button">
+                    <i class="glyphicon" ng-class="{'glyphicon-minus': item.quantity > 1, 'glyphicon-trash': item.quantity == 1 || !item.quantity}"></i>
+                  </a>
+                  <input type="number" class="form-control" ng-model="item.quantity" ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0 } }" min="1" placeholder="quantity" required>
+                  <a class="btn btn-default input-group-addon" ng-click="item.quantity = item.quantity + 1" type="button">
+                    <i class="glyphicon glyphicon-plus"></i>
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row menu-row">
-            <div class="col-md-12">
-              <textarea ng-bind="item.notes" class="col-md-12" placeholder="Notes for {{item.name}}">
-              </textarea>
+            <div class="row menu-row">
+              <div class="col-md-12">
+                <textarea ng-bind="item.notes" class="col-md-12" placeholder="Notes for {{item.name}}">
+                </textarea>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-md-3" ng-show="foodService.cart.length > 0">
-      <h2>Total: {{foodService.getTotal() | currency}}</h2>
-      <dl>
-        <dt>Tax</dt>
-        <dd>{{foodService.getTax() | currency}}</dd>
-        <dt>Delivery Fees</dt>
-        <dd>{{foodService.getFees() | currency}}</dd>
-        <dt>SubTotal</dt>
-        <dd>{{foodService.getSubTotal() | currency}}</dd>
-        <dt>Tip</dt>
-        <dd>
-          <div class="input-group">
-            <label>
-              <input type="checkbox"
-                ng-model="foodService.cashTip"
-                ng-click="foodService.setTipPercent(0)"
-                ng-true-value="true"
-                ng-false-value="false" />
-                Cash Tip
-            </label>
-          </div>
-          <div ng-hide="foodService.cashTip">
+      <div class="col-md-3" ng-show="foodService.cart.length > 0">
+        <h2>Total: {{(foodService.getTotal() | currency) || "???"}}</h2>
+        <dl>
+          <dt>Tax</dt>
+          <dd>{{(foodService.getTax() | currency) || "??"}}</dd>
+          <dt>Delivery Fees</dt>
+          <dd>{{(foodService.getFees() | currency) || "??"}}</dd>
+          <dt>SubTotal</dt>
+          <dd>{{(foodService.getSubTotal() | currency) || "??" }}</dd>
+          <dt>Tip</dt>
+          <dd>
             <div class="input-group">
-              <span class="input-group-addon">$</span>
-              <input type="number" ng-model="foodService.tip" placeholder="Ex. {{foodService.getTotal() * 0.15 | currency}}">
+              <label>
+                <input type="checkbox"
+                  ng-model="foodService.cashTip"
+                  ng-click="foodService.setTipPercent(0)"
+                  ng-true-value="true"
+                  ng-false-value="false" />
+                  Cash Tip
+              </label>
             </div>
-            <div class="form-group">
-              <label>Quick Tip</label>
-              <a class="btn btn-primary" ng-click="foodService.setTipPercent(15)">
-                15%
-              </a>
-              <a class="btn btn-primary" ng-click="foodService.setTipPercent(20)">
-                20%
-              </a>
-              <a class="btn btn-primary" ng-click="foodService.setTipPercent(25)">
-                25%
-              </a>
+            <div ng-if="!foodService.cashTip">
+              <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input type="number" ng-model="foodService.tip" step="any" min="0" placeholder="Ex. {{foodService.getTotal() * 0.15 | currency}}" required>
+              </div>
+              <div class="form-group">
+                <label>Quick Tip</label>
+                <a class="btn btn-primary" ng-click="foodService.setTipPercent(15)">
+                  15%
+                </a>
+                <a class="btn btn-primary" ng-click="foodService.setTipPercent(20)">
+                  20%
+                </a>
+                <a class="btn btn-primary" ng-click="foodService.setTipPercent(25)">
+                  25%
+                </a>
+              </div>
             </div>
-          </div>
-        </dd>
-      </dl>
+          </dd>
+        </dl>
+      </div>
     </div>
-  </div>
+  </form>
 </div>

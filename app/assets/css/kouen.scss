@@ -1,5 +1,6 @@
 //Colors
 $black: #333;
+$green: #53C566;
 $dark-gray: #555;
 $gray: #777;
 $light-gray: #F0F0F0;
@@ -39,12 +40,12 @@ body {
 }
 
 .navigation {
-  background-color: $black;
+  background-color: $green;
   color: $light-gray;
   a {
-    color: $light-gray;
+    color: lighten($green, 45%);
     &:hover {
-      color: darken($light-gray, 15%);
+      color: lighten($green, 95%);
     }
   }
   .license {
