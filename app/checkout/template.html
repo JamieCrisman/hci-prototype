@@ -42,21 +42,27 @@
 
             <div ng-if="usingCard">
               <div class="input-group col-md-6">
+                <input type="text" class="form-control" ng-model="foodService.customerCardName" placeholder="Name On Card" required>
+              </div>
+              <div class="input-group col-md-6">
                 <input type="text" class="form-control" ng-model="foodService.customerCard" placeholder="Credit Card Number" required>
               </div>
-              <div class="col-md-3">
-                <select name="customerCardMonth" ng-model="foodService.customerCardMonth" ng-options="c.month for c in cardMonth" required>
-                  <option value="">--</option>
-                </select>
-                <select name="customerCardYear" ng-model="foodService.customerCardYear" ng-options="c.year for c in cardYear" required>
-                  <option value="">--</option>
-                </select>
+              <div class="col-md-12">
+                <label> Expiration Month
+                  <select name="customerCardMonth" ng-model="foodService.customerCardMonth" ng-options="c.month for c in cardMonth" required>
+                    <option value="">--</option>
+                  </select>
+                </label>
+              </div>
+              <div class="col-md-12">
+                <label> Expiration Year
+                  <select name="customerCardYear" ng-model="foodService.customerCardYear" ng-options="c.year for c in cardYear" required>
+                    <option value="">--</option>
+                  </select>
+                </label>
               </div>
               <div class="input-group col-md-3">
                 <input type="text" class="form-control" ng-model="foodService.customerCardSecurity" placeholder="Security Code" required>
-              </div>
-              <div class="input-group col-md-6">
-                <input type="text" class="form-control" ng-model="foodService.customerCardName" placeholder="Name On Card" required>
               </div>
               <label><input type="checkbox" ng-model="differentBilling"/> Billing address is different than delivery address</label>
               <div class="input-group col-md-6" ng-if="differentBilling">
