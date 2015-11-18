@@ -65,7 +65,13 @@ var config = {
         test: /\.(ttf|woff|eot|svg).*/,
         loader: 'file?name=fonts/[name].[ext]'
       },
-      {test:/\.(\.jpe?g|png|gif)$/, loader: 'file?name=images/[name].[ext]'},
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loaders: [
+            'file?hash=sha512&digest=hex&name=[hash].[ext]',
+            'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+        ]
+      },
       {test: /\.html$/, loader: 'html'}
 
     ]

@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"filter",
+				"filterPriceMax"
+			],
+			[
 				"rest",
 				"restaurant"
 			],
@@ -26,10 +30,6 @@
 			[
 				"dark",
 				"dark-gray"
-			],
-			[
-				"filter",
-				"filterCuisine"
 			],
 			[
 				"category",
@@ -87,31 +87,7 @@
 			"file": "app/services/foodService.js",
 			"settings":
 			{
-				"buffer_size": 9840,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/restaurants/index.js",
-			"settings":
-			{
-				"buffer_size": 1200,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/menu/index.js",
-			"settings":
-			{
-				"buffer_size": 276,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/menu/template.html",
-			"settings":
-			{
-				"buffer_size": 2951,
+				"buffer_size": 10078,
 				"line_ending": "Unix"
 			}
 		},
@@ -119,7 +95,7 @@
 			"file": "app/assets/css/kouen.scss",
 			"settings":
 			{
-				"buffer_size": 5066,
+				"buffer_size": 5088,
 				"line_ending": "Unix"
 			}
 		},
@@ -127,7 +103,31 @@
 			"file": "app/cart/template.html",
 			"settings":
 			{
-				"buffer_size": 2914,
+				"buffer_size": 4361,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/cart/index.js",
+			"settings":
+			{
+				"buffer_size": 310,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/checkout/template.html",
+			"settings":
+			{
+				"buffer_size": 6126,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/home/template.html",
+			"settings":
+			{
+				"buffer_size": 659,
 				"line_ending": "Unix"
 			}
 		}
@@ -160,25 +160,25 @@
 	},
 	"file_history":
 	[
+		"/Users/james/go/src/teamPrototype/app/home/template.html",
+		"/Users/james/go/src/teamPrototype/app/checkout/index.js",
+		"/Users/james/go/src/teamPrototype/app/checkout/template.html",
+		"/Users/james/go/src/teamPrototype/app/home/index.js",
 		"/Users/james/go/src/teamPrototype/app/cart/template.html",
-		"/Users/james/go/src/teamPrototype/app/cart/index.js",
+		"/Users/james/go/src/teamPrototype/app/restaurants/index.js",
+		"/Users/james/go/src/teamPrototype/app/menu/template.html",
 		"/Users/james/go/src/teamPrototype/app/index.html",
+		"/Users/james/go/src/teamPrototype/app/restaurants/template.html",
+		"/Users/james/go/src/teamPrototype/app/menu/index.js",
+		"/Users/james/go/src/teamPrototype/app/cart/index.js",
 		"/Users/james/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
 		"/Users/james/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
-		"/Users/james/go/src/teamPrototype/app/restaurants/template.html",
 		"/Users/james/go/src/teamPrototype/app/assets/css/kouen.scss",
 		"/Users/james/go/src/teamPrototype/app/index.js",
-		"/Users/james/go/src/teamPrototype/app/home/template.html",
-		"/Users/james/go/src/teamPrototype/app/home/index.js",
 		"/Users/james/go/src/teamPrototype/app/services/foodService.js",
-		"/Users/james/go/src/teamPrototype/app/restaurants/index.js",
 		"/Users/james/go/src/teamPrototype/app/feedback/template.html",
-		"/Users/james/go/src/teamPrototype/app/menu/template.html",
-		"/Users/james/go/src/teamPrototype/app/checkout/template.html",
-		"/Users/james/go/src/teamPrototype/app/checkout/index.js",
 		"/Users/james/go/src/teamPrototype/README.md",
 		"/Users/james/Desktop/Prototype/index.html",
-		"/Users/james/go/src/teamPrototype/app/menu/index.js",
 		"/Users/james/go/src/teamPrototype/app/feedback/index.js",
 		"/Users/james/go/src/teamPrototype/kouen.go",
 		"/Users/james/go/src/teamPrototype/app/learningJapanese/template.html",
@@ -243,6 +243,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"form",
+			"month",
+			"console",
 			"0",
 			"random",
 			"checkout",
@@ -295,7 +298,7 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -303,15 +306,15 @@
 					"file": "app/services/foodService.js",
 					"settings":
 					{
-						"buffer_size": 9840,
+						"buffer_size": 10078,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1647,
-								1647
+								1211,
+								1211
 							]
 						],
 						"settings":
@@ -321,31 +324,60 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 837.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "app/restaurants/index.js",
+					"file": "app/assets/css/kouen.scss",
 					"settings":
 					{
-						"buffer_size": 1200,
+						"buffer_size": 5088,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								127,
-								127
+								882,
+								882
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/SCSS/SCSS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 192.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "app/cart/template.html",
+					"settings":
+					{
+						"buffer_size": 4361,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								196,
+								156
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/AngularJS/AngularJS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -354,19 +386,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "app/menu/index.js",
+					"buffer": 3,
+					"file": "app/cart/index.js",
 					"settings":
 					{
-						"buffer_size": 276,
+						"buffer_size": 310,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								78,
-								78
+								283,
+								283
 							]
 						],
 						"settings":
@@ -380,19 +412,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "app/menu/template.html",
+					"buffer": 4,
+					"file": "app/checkout/template.html",
 					"settings":
 					{
-						"buffer_size": 2951,
+						"buffer_size": 6126,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1413,
-								1413
+								2434,
+								2434
 							]
 						],
 						"settings":
@@ -402,53 +434,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 585.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "app/assets/css/kouen.scss",
-					"settings":
-					{
-						"buffer_size": 5066,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1007,
-								1007
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/SCSS/SCSS.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 743.0,
+						"translation.y": 478.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "app/cart/template.html",
+					"file": "app/home/template.html",
 					"settings":
 					{
-						"buffer_size": 2914,
+						"buffer_size": 659,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								809,
-								809
+								421,
+								421
 							]
 						],
 						"settings":
@@ -458,7 +462,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 167.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

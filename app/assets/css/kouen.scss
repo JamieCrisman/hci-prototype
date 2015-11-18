@@ -1,10 +1,49 @@
 //Colors
+
+$green: #86BB9D;  // Main Primary color */
+$green-1: #E0EFE6;
+$green-2: #B5D8C4;
+$green-3: #5A9F78;
+$green-4: #328054;
+
+$blue: #7B99A8;  // Main Secondary color (1) */
+$blue-1: #DCE6EA;
+$blue-2: #ADC2CC;
+$blue-3: #537A8D;
+$blue-4: #305C71;
+
+$yellow: #FFDDB7;  // Main Secondary color (2) */
+$yellow-1: #FFF8EF;
+$yellow-2: #FFECD6;
+$yellow-3: #DFB27F;
+$yellow-4: #B38147;
+
+$red: #FFC6B7; // Main Complement color */
+$red-1: #FFF2EF;
+$red-2: #FFDFD6;
+$red-3: #DF937F;
+$red-4: #B35D47;
+
 $black: #333;
-$green: #53C566;
 $dark-gray: #555;
 $gray: #777;
 $light-gray: #F0F0F0;
 $blue: #00F;
+
+.btn {
+  transition: background-color 0.1s ease-in;
+}
+.btn.btn-primary {
+  background-color: $blue-3;
+  border-color: $blue-4;
+  &:hover {
+    background-color: $blue-4;
+  }
+}
+
+.label.label-success {
+  background-color: $yellow-3;
+}
 
 @mixin vendor($property, $value...){
   -webkit-#{$property}:$value;
@@ -17,6 +56,11 @@ $blue: #00F;
 html{
   height: 100%;
   overflow-y: scroll;
+}
+
+.background-image {
+  position: absolute;
+  width: 100vw;
 }
 
 a {
