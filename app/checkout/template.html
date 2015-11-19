@@ -1,14 +1,17 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-12">
-      <a href="#/cart" class="btn btn-default">Cart</a>
-    </div>
+    <ol class="breadcrumb">
+      <li><a href="#/">Home</a></li>
+      <li><a href="#/restaurants">Restaurants</a></li>
+      <li><a href="#/menu">Menu</a></li>
+      <li><a href="#/cart">Cart</a></li>
+      <li class="active">Checkout</li>
+    </ol>
   </div>
   <form ng-submit="completeOrder = true">
     <div class="row">
       <div class="col-md-6 col-md-offset-3 clearfix">
         <h1 class="pull-left">Checkout</h1>
-        <a href="#/feedback" class="btn btn-primary pull-right header-cart">Feedback</a>
       </div>
     </div>
     <div class="row">
@@ -81,6 +84,7 @@
         </div>
         <div ng-show="completeOrder">
           <h2>Order has been submitted!</h2>
+          <a href="#/feedback" class="btn btn-primary">Give Feedback</a>
         </div>
       </div>
       <div class="col-md-3" ng-show="foodService.cart.length > 0 && completeOrder != true">
