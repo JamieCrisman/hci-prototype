@@ -9,6 +9,7 @@ var app = require('../module');
 app.service('foodService', function($filter) {
 
   this.customerAddress = "";
+  this.customerName = "";
 
   this.selectedRestaurant;
 
@@ -94,6 +95,29 @@ app.service('foodService', function($filter) {
     return t;
   }
 
+  this.pastOrders = [];
+  this.checkoutFood = function() {
+    var order = {};
+    order.orderTime = Date.now();
+    order.items = angular.copy(this.cart);
+    this.pastOrders.push(order);
+    this.cart = [];
+    this.tip = null;
+  }
+
+  this.concatNames = function(items) {
+    return _.map(items, 'name').join(', ');
+  }
+
+  this.addReview = function(restaurantIndex, review) {
+    review.name = this.customerName;
+    this.restaurants[restaurantIndex].reviews.push(review);
+    var totalRating = 0;
+    _.each(this.restaurants[restaurantIndex].reviews, function(review) {
+        totalRating += parseInt(review.rating);
+    });
+    this.restaurants[restaurantIndex].rating = Math.ceil(totalRating / this.restaurants[restaurantIndex].reviews.length);
+  }
 
   this.operatingHours = [
     {
@@ -366,7 +390,8 @@ app.service('foodService', function($filter) {
         "deliveryMinimum": 15.00,
         "reviews": [{
           "name": "John",
-          "text": "This is the absolute best " + this.categories[i % this.categories.length] + " in the area! 10/10" 
+          "text": "This is the absolute best " + this.categories[i % this.categories.length] + " in the area!",
+          "rating": (i % 5) + 1
         }]
       }
       restaurants.push(rest);

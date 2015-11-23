@@ -30,6 +30,7 @@ $gray: #777;
 $light-gray: #F0F0F0;
 $blue: #00F;
 
+
 .btn {
   transition: background-color 0.1s ease-in;
 }
@@ -43,6 +44,13 @@ $blue: #00F;
 
 .label.label-success {
   background-color: $yellow-3;
+}
+.breadcrumb {
+  margin-bottom: 0;
+}
+
+label {
+  font-weight: normal;
 }
 
 @mixin vendor($property, $value...){
@@ -63,6 +71,15 @@ html{
   width: 100vw;
 }
 
+.review-row {
+  margin-bottom: 25px;
+  border-bottom: 1px solid #ccc;
+  padding: 5px 10px;
+  .review-row-input {
+    margin-bottom: 10px;
+  }
+}
+
 a {
   &:hover {
     text-decoration: none;
@@ -81,6 +98,10 @@ body {
   font-style: normal;
   font-size: 1.4em;
   line-height: 1.5em;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .navigation {
@@ -185,6 +206,16 @@ body {
       }
     }
   }
+}
+
+.text-total {
+  font-size: 1.5em;
+  font-weight: bold;
+  line-height: 1.4em;
+  margin-top: 20px;
+}
+.quick-tip-row {
+  margin-top: 5px;
 }
 
 main {

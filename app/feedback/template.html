@@ -1,14 +1,60 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-offset-2 col-md-8">
-      
-      <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-          <h1>Feedback</h1>
-          <a href="#/" class="btn btn-primary">Home</a>
+    <ol class="breadcrumb">
+      <li><a href="#/">Home</a></li>
+      <li><a href="#/restaurants">Restaurants</a></li>
+      <li class="active">Feedback</li>
+    </ol>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="clearfix">
+        <h2 class="pull-left">Feedback</h2>
+        <a href="#/restaurants" class="btn btn-default pull-right header-cart">Restaurants</a>
+      </div>
+      <div ng-if="foodService.pastOrders.length < 1">
+        <p class="lead">
+          Sorry, We don't have any previous orders for you.
+        </p>
+      </div>
+      <div ng-repeat="order in foodService.pastOrders">
+        <h3>{{order.orderTime | date:'MMMM d, yyyy'}}</h3>
+        <div class="review-row" ng-repeat="(key, value) in order.items | groupBy: 'restaurantIndex'">
+          <form ng-init="review = {'rating': '0', 'text': ''}" ng-submit="foodService.addReview(key, review); order.reviewSubmitted=true">
+            <h4>{{foodService.restaurants[key].name}}</h4>
+            <h5>
+              Ordered: {{foodService.concatNames(value)}}
+            </h5>
+            <div ng-hide="order.reviewSubmitted==true">
+              <div class="row review-row-input">
+                <div class="col-md-12">
+                  <select ng-model="review.rating" class="form-control" required>
+                    <option value="0" selected="selected">- Select A Rating -</option>
+                    <option value="1">★☆☆☆☆</option>
+                    <option value="2">★★☆☆☆</option>
+                    <option value="3">★★★☆☆</option>
+                    <option value="4">★★★★☆</option>
+                    <option value="5">★★★★★</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row review-row-input">
+                <div class="col-md-12">
+                  <textarea class="form-control" ng-model="review.text" placeholder="What did you think of {{foodService.restaurants[key].name}}?"></textarea>
+                </div>
+              </div>
+              <div class="row clearfix review-row-input">
+                <div class="col-md-12">
+                  <input type="submit" class="btn btn-primary pull-right" ng-disabled="review.rating == 0" value="Submit">
+                </div>
+              </div>
+            </div>
+            <div ng-show="order.reviewSubmitted == true">
+              Review has been submitted!
+            </div>
+          </form>
         </div>
       </div>
-
     </div>
   </div>
 </div>

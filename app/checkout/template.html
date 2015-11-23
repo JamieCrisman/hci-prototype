@@ -8,40 +8,43 @@
       <li class="active">Checkout</li>
     </ol>
   </div>
-  <form ng-submit="completeOrder = true">
-    <div class="row">
-      <div class="col-md-6 col-md-offset-3 clearfix">
-        <h1 class="pull-left">Checkout</h1>
-      </div>
-    </div>
+  <form ng-submit="completeOrder = true; foodService.checkoutFood()">
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
-        <div ng-show="foodService.cart < 1">
-          <h2>There's no items in your cart.</h2>
+        <div class="clearfix">
+          <h2 class="pull-left">Checkout</h2>
+        </div>
+        <div ng-show="foodService.cart < 1 && completeOrder != true">
+          <h3>There's no items in your cart.</h3>
           <p>
             You should add to your cart! <a href="#/menu" ng-show="foodService.selectedRestaurant" class="btn btn-default">{{foodService.selectedRestaurant.name}} Menu</a> <a href="#/restaurants" class="btn btn-default">View Restaurants</a>
           </p>
         </div>
         <div ng-hide="foodService.cart < 1 || completeOrder == true">
+          <div class="input-group col-md-6">
+              <label for="userName">Name</label>
+              <input type="text" name="userAddress" id="userName" class="form-control" ng-model="foodService.customerName" placeholder="Your name" required>
+            </div>
+
             <div class="input-group col-md-6">
               <label for="userAddress">Delivery Address</label>
-              <input type="text" name="userAddress" id="userAddress" class="form-control" ng-model="foodService.customerAddress" placeholder="Street Address, City, State, Zip" required>        
+              <input type="text" name="userAddress" id="userAddress" class="form-control" ng-model="foodService.customerAddress" placeholder="Street Address, City, State, Zip" required>
             </div>
 
             <div class="input-group col-md-6">
               <label for="phoneNumber">Phone Number</label>
-              <input type="text" name="phoneNumber" id="phoneNumber" class="form-control" ng-model="foodService.customerPhone" placeholder="(XXX) XXX XXXX" required> 
+              <input type="text" name="phoneNumber" id="phoneNumber" class="form-control" ng-model="foodService.customerPhone" placeholder="(XXX) XXX XXXX" required>
             </div>
 
             <div class="input-group col-md-6">
               <label for="emailAddress">Email</label>
-              <input type="email" name="emailAddress" id="emailAddress" class="form-control" ng-model="foodService.customerEmail" placeholder="example@email.com" required>        
+              <input type="email" name="emailAddress" id="emailAddress" class="form-control" ng-model="foodService.customerEmail" placeholder="example@email.com" required>
             </div>
 
             <h3>Payment Options</h3>
-            <a class="btn btn-default" ng-click="usingOther = true; usingCard = false">PayPal</a>
-            <a class="btn btn-default" ng-click="usingOther = true; usingCard = false">Amazon</a>
-            <a class="btn btn-default" ng-click="usingOther = false; usingCard = true">Card</a>
+            <a class="btn btn-default" ng-class="{active: usingOther == 'paypal'}" ng-click="usingOther = 'paypal'; usingCard = false">PayPal</a>
+            <a class="btn btn-default" ng-class="{active: usingOther == 'amazon'}" ng-click="usingOther = 'amazon'; usingCard = false">Amazon</a>
+            <a class="btn btn-default" ng-class="{active: usingCard}" ng-click="usingOther = ''; usingCard = true">Card</a>
 
             <div ng-if="usingCard">
               <div class="input-group col-md-6">
@@ -52,14 +55,14 @@
               </div>
               <div class="col-md-12">
                 <label> Expiration Month
-                  <select name="customerCardMonth" ng-model="foodService.customerCardMonth" ng-options="c.month for c in cardMonth" required>
+                  <select name="customerCardMonth" class="form-control" ng-model="foodService.customerCardMonth" ng-options="c.month for c in cardMonth" required>
                     <option value="">--</option>
                   </select>
                 </label>
               </div>
               <div class="col-md-12">
                 <label> Expiration Year
-                  <select name="customerCardYear" ng-model="foodService.customerCardYear" ng-options="c.year for c in cardYear" required>
+                  <select name="customerCardYear" class="form-control" ng-model="foodService.customerCardYear" ng-options="c.year for c in cardYear" required>
                     <option value="">--</option>
                   </select>
                 </label>
@@ -75,7 +78,7 @@
                 <input type="submit" class="btn btn-primary" value="Confirm"/>
               </div>
             </div>
-            <div ng-show="usingOther">
+            <div ng-show="usingOther && usingOther != ''">
               <div class="input-group col-md-6">
                 <input type="submit" class="btn btn-primary" value="Confirm"/>
               </div>
@@ -88,46 +91,89 @@
         </div>
       </div>
       <div class="col-md-3" ng-show="foodService.cart.length > 0 && completeOrder != true">
-        <h2>Total: {{foodService.getTotal() | currency}}</h2>
-        <dl>
-          <dt>Tax</dt>
-          <dd>{{foodService.getTax() | currency}}</dd>
-          <dt>Delivery Fees</dt>
-          <dd>{{foodService.getFees() | currency}}</dd>
-          <dt>SubTotal</dt>
-          <dd>{{foodService.getSubTotal() | currency}}</dd>
-          <dt>Tip</dt>
-          <dd>
+        <div class="row text-total">
+          <div class="col-md-5 text-right">
+            Total:
+          </div>
+          <div class="col-md-7">
+            {{foodService.getTotal() | currency}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-5 text-right">
+            Tax:
+          </div>
+          <div class="col-md-7">
+            {{foodService.getTax() | currency}}
+          </div>
+        </div>
+        <div class="row" ng-show="foodService.getFees() != 0">
+          <div class="col-md-5 text-right">
+            Delivery Fee:
+          </div>
+          <div class="col-md-7">
+            {{foodService.getFees() | currency}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-5 text-right">
+            SubTotal:
+          </div>
+          <div class="col-md-7">
+            {{foodService.getSubTotal() | currency}}
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-5 text-right">
+            <label for="cashTip">
+              Cash Tip
+            </label>
+          </div>
+          <div class="col-md-7">
             <div class="input-group">
-              <label>
                 <input type="checkbox"
+                  name="cashTip"
+                  id="cashTip"
                   ng-model="foodService.cashTip"
                   ng-click="foodService.setTipPercent(0)"
                   ng-true-value="true"
                   ng-false-value="false" />
-                  Cash Tip
-              </label>
             </div>
-            <div ng-if="!foodService.cashTip">
+          </div>
+        </div>
+
+        <div ng-if="!foodService.cashTip">
+          <div class="row">
+            <div class="col-md-5 text-right">
+              Tip Amount:
+            </div>
+            <div class="col-md-7">
               <div class="input-group">
                 <span class="input-group-addon">$</span>
-                <input type="number" ng-model="foodService.tip" step="any" min="0" placeholder="Ex. {{foodService.getTotal() * 0.15 | currency}}" required>
-              </div>
-              <div class="form-group">
-                <label>Quick Tip</label>
-                <a class="btn btn-primary" ng-click="foodService.setTipPercent(15)">
-                  15%
-                </a>
-                <a class="btn btn-primary" ng-click="foodService.setTipPercent(20)">
-                  20%
-                </a>
-                <a class="btn btn-primary" ng-click="foodService.setTipPercent(25)">
-                  25%
-                </a>
+                <input type="number" ng-model="foodService.tip" class="col-md-6 form-control" step="any" min="0" placeholder="Ex. {{foodService.getTotal() * 0.15 | currency}}" required>
               </div>
             </div>
-          </dd>
-        </dl>
+          </div>
+          <div class="row quick-tip-row">
+            <div class="col-md-5 text-right">
+              Quick Tip:
+            </div>
+            <div class="col-md-7">
+              <a class="btn btn-default btn-sm" ng-click="foodService.setTipPercent(15)">
+                15%
+              </a>
+              <a class="btn btn-default btn-sm" ng-click="foodService.setTipPercent(20)">
+                20%
+              </a>
+              <a class="btn btn-default btn-sm" ng-click="foodService.setTipPercent(25)">
+                25%
+              </a>
+            </div>
+          </div>
+        </div>
+
+
       </div>
     </div>
   </form>

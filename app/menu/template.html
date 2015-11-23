@@ -8,7 +8,7 @@
   </div>
   <div class="row">
     <div class="col-md-3">
-      <h2>Images</h2>
+      <h3>Images</h3>
       <div class="row">
         <div class="col-md-6">
           <a href="#" class="thumbnail">
@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <div class="clearfix">
-      <h1 class="pull-left">{{foodService.selectedRestaurant.name}}</h1>
+      <h2 class="pull-left">{{foodService.selectedRestaurant.name}}</h2>
       </div>
       <div class="row menu-row" ng-repeat="item in foodService.menus[foodService.selectedRestaurant.cuisine]">
         <div class="col-md-4">
@@ -61,22 +61,56 @@
           <a class="btn btn-primary pull-right" ng-click="foodService.addToCart(item)">+{{item.price | currency}}</a>
         </div>
       </div>
-      <h2>
+      <h3>
         Reviews
-      </h2>
+      </h3>
       <div>
-        <div ng-repeat="review in foodService.selectedRestaurant.reviews">
-          <strong>{{review.name}}:</strong> {{review.text}}
+        <div class="review-row" ng-repeat="review in foodService.selectedRestaurant.reviews">
+          <strong>{{review.name}}:</strong> 
+          <span>
+            <i class="glyphicon" ng-class="{'glyphicon-star-empty': review.rating == 0, 'glyphicon-star': review.rating > 0}"></i>
+          </span> 
+          <span>
+            <i class="glyphicon" ng-class="{'glyphicon-star-empty': review.rating <= 1, 'glyphicon-star': review.rating >= 1}"></i>
+          </span> 
+          <span>
+            <i class="glyphicon" ng-class="{'glyphicon-star-empty': review.rating <= 2, 'glyphicon-star': review.rating >= 3}"></i>
+          </span>
+          <span>
+            <i class="glyphicon" ng-class="{'glyphicon-star-empty': review.rating <= 3, 'glyphicon-star': review.rating >= 4}"></i>
+          </span> 
+          <span>
+            <i class="glyphicon" ng-class="{'glyphicon-star-empty': review.rating <= 4, 'glyphicon-star': review.rating == 5}"></i>
+          </span>
+          <div>
+            {{review.text}}
+          </div>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <h2>Information</h2>
+      <h3>Information</h3>
       <dl>
         <dt>Cuisine</dt>
         <dd>{{foodService.selectedRestaurant.cuisine}}</dd>
         <dt>Rating</dt>
-        <dd>{{foodService.selectedRestaurant.rating}}/5</dd>
+        <dd>
+          <span>
+            <i class="glyphicon" ng-class="{'glyphicon-star-empty': foodService.selectedRestaurant.rating == 0, 'glyphicon-star': foodService.selectedRestaurant.rating > 0}"></i>
+          </span> 
+          <span>
+            <i class="glyphicon" ng-class="{'glyphicon-star-empty': foodService.selectedRestaurant.rating <= 1, 'glyphicon-star': foodService.selectedRestaurant.rating >= 1}"></i>
+          </span> 
+          <span>
+            <i class="glyphicon" ng-class="{'glyphicon-star-empty': foodService.selectedRestaurant.rating <= 2, 'glyphicon-star': foodService.selectedRestaurant.rating >= 3}"></i>
+          </span>
+          <span>
+            <i class="glyphicon" ng-class="{'glyphicon-star-empty': foodService.selectedRestaurant.rating <= 3, 'glyphicon-star': foodService.selectedRestaurant.rating >= 4}"></i>
+          </span> 
+          <span>
+            <i class="glyphicon" ng-class="{'glyphicon-star-empty': foodService.selectedRestaurant.rating <= 4, 'glyphicon-star': foodService.selectedRestaurant.rating == 5}"></i>
+          </span>
+        </dd>
         <dt ng-if="foodService.selectedRestaurant.orderType != 'carryout'">Delivery Fee</dt>
         <dd ng-if="foodService.selectedRestaurant.orderType != 'carryout'">{{foodService.selectedRestaurant.deliveryFee | currency}}</dd>
         <dt ng-if="foodService.selectedRestaurant.orderType != 'carryout'">Delivery Minimum</dt>
