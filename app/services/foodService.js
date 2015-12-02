@@ -182,6 +182,120 @@ app.service('foodService', function($filter) {
     'Mexican',
     'Japanese'
   ];
+
+  this.pictures = {
+    "Burgers": [
+        {
+            "url": "images/Burgers/burger1.jpg"
+        },
+        {
+            "url": "images/Burgers/burger2.jpg"
+        },
+        {
+            "url": "images/Burgers/burger3.jpeg"
+        },
+        {
+            "url": "images/Burgers/burger4.jpg"
+        }
+    ],
+    "Ramen": [
+        {
+            "url": "images/Ramen/ramen1.jpg"
+        },
+        {
+            "url": "images/Ramen/ramen2.jpg"
+        },
+        {
+            "url": "images/Ramen/ramen3.jpg"
+        }
+    ],
+    "Chinese": [
+        {
+            "url": "images/Chinese/chinese1.jpg"
+        },
+        {
+            "url": "images/Restaurant/restaurant1.jpg"
+        }
+    ],
+    "Sushi": [
+        {
+            "url": "images/Sushi/sushi1.jpg"
+        },
+        {
+            "url": "images/Restaurant/restaurant1.jpg"
+        }
+    ],
+    "Mexican": [
+        {
+            "url": "images/Mexican/mexican1.jpg"
+        },
+        {
+            "url": "images/Mexican/mexican2.jpg"
+        },
+        {
+            "url": "images/Restaurant/restaurant1.jpg"
+        }
+    ],
+    "Thai": [
+        {
+            "url": "images/Restaurant/restaurant1.jpg"
+        },
+        {
+            "url": "images/Restaurant/restaurant2.jpeg"
+        }
+    ],
+    "Pizza": [
+        {
+            "url": "images/Pizza/pizza1.jpg"
+        },
+        {
+            "url": "images/Pizza/pizza2.jpg"
+        },
+        {
+            "url": "images/Pizza/pizza3.jpg"
+        },
+        {
+            "url": "images/Pizza/pizza4.jpg"
+        }
+    ],
+    "Japanese": [
+        {
+            "url": "images/Japanese/japanese1.jpg"
+        },
+        {
+            "url": "images/Japanese/japanese2.jpg"
+        },
+        {
+            "url": "images/Japanese/japanese3.jpg"
+        }
+    ],
+    "Pho": [
+        {
+            "url": "images/Pho/pho1.jpg"
+        },
+        {
+            "url": "images/Pho/pho2.jpg"
+        },
+        {
+            "url": "images/Restaurant/restaurant1.jpg"
+        }
+    ],
+    "Italian": [
+        {
+            "url": "images/Italian/italian1.jpg"
+        },
+        {
+            "url": "images/Italian/italian2.jpg"
+        },
+        {
+            "url": "images/Italian/italian3.jpg"
+        },
+        {
+            "url": "images/Restaurant/restaurant3.jpg"
+        }
+    ]
+  }
+
   this.menus = {
     "Burgers": [
         {

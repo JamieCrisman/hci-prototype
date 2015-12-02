@@ -35,6 +35,10 @@ module.exports = {
   scripts: {
     dest: 'public/js'
   },
+  images: {
+    src: 'app/assets/images/*/**',
+    dest: 'public/images'
+  },
   styles: {
     dest: 'public/css'
   },

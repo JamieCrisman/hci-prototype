@@ -5,7 +5,7 @@ gulp.task('default', function() {
   runSequence(
     'clean',
     'build',
-    ['sass', 'scripts'],
+    ['sass', 'scripts', 'images'],
     'spawn',
     'watch'
   );

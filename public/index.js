@@ -328,6 +328,120 @@ webpackJsonp([0],[
 	    'Mexican',
 	    'Japanese'
 	  ];
+	
+	  this.pictures = {
+	    "Burgers": [
+	        {
+	            "url": "images/Burgers/burger1.jpg"
+	        },
+	        {
+	            "url": "images/Burgers/burger2.jpg"
+	        },
+	        {
+	            "url": "images/Burgers/burger3.jpeg"
+	        },
+	        {
+	            "url": "images/Burgers/burger4.jpg"
+	        }
+	    ],
+	    "Ramen": [
+	        {
+	            "url": "images/Ramen/ramen1.jpg"
+	        },
+	        {
+	            "url": "images/Ramen/ramen2.jpg"
+	        },
+	        {
+	            "url": "images/Ramen/ramen3.jpg"
+	        }
+	    ],
+	    "Chinese": [
+	        {
+	            "url": "images/Chinese/chinese1.jpg"
+	        },
+	        {
+	            "url": "images/Restaurant/restaurant1.jpg"
+	        }
+	    ],
+	    "Sushi": [
+	        {
+	            "url": "images/Sushi/sushi1.jpg"
+	        },
+	        {
+	            "url": "images/Restaurant/restaurant1.jpg"
+	        }
+	    ],
+	    "Mexican": [
+	        {
+	            "url": "images/Mexican/mexican1.jpg"
+	        },
+	        {
+	            "url": "images/Mexican/mexican2.jpg"
+	        },
+	        {
+	            "url": "images/Restaurant/restaurant1.jpg"
+	        }
+	    ],
+	    "Thai": [
+	        {
+	            "url": "images/Restaurant/restaurant1.jpg"
+	        },
+	        {
+	            "url": "images/Restaurant/restaurant2.jpeg"
+	        }
+	    ],
+	    "Pizza": [
+	        {
+	            "url": "images/Pizza/pizza1.jpg"
+	        },
+	        {
+	            "url": "images/Pizza/pizza2.jpg"
+	        },
+	        {
+	            "url": "images/Pizza/pizza3.jpg"
+	        },
+	        {
+	            "url": "images/Pizza/pizza4.jpg"
+	        }
+	    ],
+	    "Japanese": [
+	        {
+	            "url": "images/Japanese/japanese1.jpg"
+	        },
+	        {
+	            "url": "images/Japanese/japanese2.jpg"
+	        },
+	        {
+	            "url": "images/Japanese/japanese3.jpg"
+	        }
+	    ],
+	    "Pho": [
+	        {
+	            "url": "images/Pho/pho1.jpg"
+	        },
+	        {
+	            "url": "images/Pho/pho2.jpg"
+	        },
+	        {
+	            "url": "images/Restaurant/restaurant1.jpg"
+	        }
+	    ],
+	    "Italian": [
+	        {
+	            "url": "images/Italian/italian1.jpg"
+	        },
+	        {
+	            "url": "images/Italian/italian2.jpg"
+	        },
+	        {
+	            "url": "images/Italian/italian3.jpg"
+	        },
+	        {
+	            "url": "images/Restaurant/restaurant3.jpg"
+	        }
+	    ]
+	  }
+	
 	  this.menus = {
 	    "Burgers": [
 	        {
@@ -764,7 +878,7 @@ webpackJsonp([0],[
   \****************************/
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <ol class=\"breadcrumb\">\n      <li><a href=\"#/\">Home</a></li>\n      <li><a href=\"#/restaurants\">Restaurants</a></li>\n      <li class=\"active\">Menu</li>\n    </ol>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-md-3\">\n      <h3>Images</h3>\n      <div class=\"row\">\n        <div class=\"col-md-6\">\n          <a href=\"#\" class=\"thumbnail\">\n            <img src=\"http://placehold.it/120x120\">\n          </a>\n        </div>\n        <div class=\"col-md-6\">\n          <a href=\"#\" class=\"thumbnail\">\n            <img src=\"http://placehold.it/120x120\">\n          </a>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-md-6\">\n          <a href=\"#\" class=\"thumbnail\">\n            <img src=\"http://placehold.it/120x120\">\n          </a>\n        </div>\n        <div class=\"col-md-6\">\n          <a href=\"#\" class=\"thumbnail\">\n            <img src=\"http://placehold.it/120x120\">\n          </a>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-md-6\">\n          <a href=\"#\" class=\"thumbnail\">\n            <img src=\"http://placehold.it/120x120\">\n          </a>\n        </div>\n        <div class=\"col-md-6\">\n          <a href=\"#\" class=\"thumbnail\">\n            <img src=\"http://placehold.it/120x120\">\n          </a>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-md-6\">\n      <div class=\"clearfix\">\n      <h2 class=\"pull-left\">{{foodService.selectedRestaurant.name}}</h2>\n      </div>\n      <div class=\"row menu-row\" ng-repeat=\"item in foodService.menus[foodService.selectedRestaurant.cuisine]\">\n        <div class=\"col-md-4\">\n          <strong>{{item.name}}</strong>\n        </div>\n        <div class=\"col-md-6\">\n          {{item.description}}\n        </div>\n        <div class=\"col-md-2\">\n          <a class=\"btn btn-primary pull-right\" ng-click=\"foodService.addToCart(item)\">+{{item.price | currency}}</a>\n        </div>\n      </div>\n      <h3>\n        Reviews\n      </h3>\n      <div>\n        <div class=\"review-row\" ng-repeat=\"review in foodService.selectedRestaurant.reviews\">\n          <strong>{{review.name}}:</strong> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': review.rating == 0, 'glyphicon-star': review.rating > 0}\"></i>\n          </span> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': review.rating <= 1, 'glyphicon-star': review.rating >= 1}\"></i>\n          </span> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': review.rating <= 2, 'glyphicon-star': review.rating >= 3}\"></i>\n          </span>\n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': review.rating <= 3, 'glyphicon-star': review.rating >= 4}\"></i>\n          </span> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': review.rating <= 4, 'glyphicon-star': review.rating == 5}\"></i>\n          </span>\n          <div>\n            {{review.text}}\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-md-3\">\n      <h3>Information</h3>\n      <dl>\n        <dt>Cuisine</dt>\n        <dd>{{foodService.selectedRestaurant.cuisine}}</dd>\n        <dt>Rating</dt>\n        <dd>\n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': foodService.selectedRestaurant.rating == 0, 'glyphicon-star': foodService.selectedRestaurant.rating > 0}\"></i>\n          </span> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': foodService.selectedRestaurant.rating <= 1, 'glyphicon-star': foodService.selectedRestaurant.rating >= 1}\"></i>\n          </span> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': foodService.selectedRestaurant.rating <= 2, 'glyphicon-star': foodService.selectedRestaurant.rating >= 3}\"></i>\n          </span>\n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': foodService.selectedRestaurant.rating <= 3, 'glyphicon-star': foodService.selectedRestaurant.rating >= 4}\"></i>\n          </span> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': foodService.selectedRestaurant.rating <= 4, 'glyphicon-star': foodService.selectedRestaurant.rating == 5}\"></i>\n          </span>\n        </dd>\n        <dt ng-if=\"foodService.selectedRestaurant.orderType != 'carryout'\">Delivery Fee</dt>\n        <dd ng-if=\"foodService.selectedRestaurant.orderType != 'carryout'\">{{foodService.selectedRestaurant.deliveryFee | currency}}</dd>\n        <dt ng-if=\"foodService.selectedRestaurant.orderType != 'carryout'\">Delivery Minimum</dt>\n        <dd ng-if=\"foodService.selectedRestaurant.orderType != 'carryout'\">{{foodService.selectedRestaurant.deliveryMinimum | currency}}</dd>\n        <dt>Distance</dt>\n        <dd>{{foodService.selectedRestaurant.distance | number:2}} miles</dd>\n      </dl>\n    </div>\n  </div>\n</div>";
+	module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <ol class=\"breadcrumb\">\n      <li><a href=\"#/\">Home</a></li>\n      <li><a href=\"#/restaurants\">Restaurants</a></li>\n      <li class=\"active\">Menu</li>\n    </ol>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-md-3\">\n      <h3>Images</h3>\n      <div class=\"row\">\n        <div class=\"col-md-12\" ng-repeat=\"pic in foodService.pictures[foodService.selectedRestaurant.cuisine]\">\n          <a href=\"{{pic.url}}\" target=\"_blank\" class=\"thumbnail\">\n            <img src=\"{{pic.url}}\">\n          </a>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-md-6\">\n      <div class=\"clearfix\">\n      <h2 class=\"pull-left\">{{foodService.selectedRestaurant.name}}</h2>\n      </div>\n      <div class=\"row menu-row\" ng-repeat=\"item in foodService.menus[foodService.selectedRestaurant.cuisine]\">\n        <div class=\"col-md-4\">\n          <strong>{{item.name}}</strong>\n        </div>\n        <div class=\"col-md-6\">\n          {{item.description}}\n        </div>\n        <div class=\"col-md-2\">\n          <a class=\"btn btn-primary pull-right\" ng-click=\"foodService.addToCart(item)\">+{{item.price | currency}}</a>\n        </div>\n      </div>\n      <h3>\n        Reviews\n      </h3>\n      <div>\n        <div class=\"review-row\" ng-repeat=\"review in foodService.selectedRestaurant.reviews\">\n          <strong>{{review.name}}:</strong> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': review.rating == 0, 'glyphicon-star': review.rating > 0}\"></i>\n          </span> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': review.rating <= 1, 'glyphicon-star': review.rating >= 1}\"></i>\n          </span> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': review.rating <= 2, 'glyphicon-star': review.rating >= 3}\"></i>\n          </span>\n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': review.rating <= 3, 'glyphicon-star': review.rating >= 4}\"></i>\n          </span> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': review.rating <= 4, 'glyphicon-star': review.rating == 5}\"></i>\n          </span>\n          <div>\n            {{review.text}}\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-md-3\">\n      <h3>Information</h3>\n      <dl>\n        <dt>Cuisine</dt>\n        <dd>{{foodService.selectedRestaurant.cuisine}}</dd>\n        <dt>Rating</dt>\n        <dd>\n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': foodService.selectedRestaurant.rating == 0, 'glyphicon-star': foodService.selectedRestaurant.rating > 0}\"></i>\n          </span> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': foodService.selectedRestaurant.rating <= 1, 'glyphicon-star': foodService.selectedRestaurant.rating >= 1}\"></i>\n          </span> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': foodService.selectedRestaurant.rating <= 2, 'glyphicon-star': foodService.selectedRestaurant.rating >= 3}\"></i>\n          </span>\n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': foodService.selectedRestaurant.rating <= 3, 'glyphicon-star': foodService.selectedRestaurant.rating >= 4}\"></i>\n          </span> \n          <span>\n            <i class=\"glyphicon\" ng-class=\"{'glyphicon-star-empty': foodService.selectedRestaurant.rating <= 4, 'glyphicon-star': foodService.selectedRestaurant.rating == 5}\"></i>\n          </span>\n        </dd>\n        <dt ng-if=\"foodService.selectedRestaurant.orderType != 'carryout'\">Delivery Fee</dt>\n        <dd ng-if=\"foodService.selectedRestaurant.orderType != 'carryout'\">{{foodService.selectedRestaurant.deliveryFee | currency}}</dd>\n        <dt ng-if=\"foodService.selectedRestaurant.orderType != 'carryout'\">Delivery Minimum</dt>\n        <dd ng-if=\"foodService.selectedRestaurant.orderType != 'carryout'\">{{foodService.selectedRestaurant.deliveryMinimum | currency}}</dd>\n        <dt>Distance</dt>\n        <dd>{{foodService.selectedRestaurant.distance | number:2}} miles</dd>\n      </dl>\n    </div>\n  </div>\n</div>";
 
 /***/ },
 /* 23 */
