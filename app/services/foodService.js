@@ -207,6 +207,9 @@ app.service('foodService', function($filter) {
         },
         {
             "url": "images/Ramen/ramen3.jpg"
+        },
+        {
+            "url": "images/Ramen/ramen4.jpg"
         }
     ],
     "Chinese": [
@@ -214,7 +217,13 @@ app.service('foodService', function($filter) {
             "url": "images/Chinese/chinese1.jpg"
         },
         {
-            "url": "images/Restaurant/restaurant1.jpg"
+            "url": "images/Chinese/chinese2.jpg"
+        },
+        {
+            "url": "images/Chinese/chinese3.jpg"
+        },
+        {
+            "url": "images/Chinese/chinese4.jpg"
         }
     ],
     "Sushi": [
@@ -222,7 +231,13 @@ app.service('foodService', function($filter) {
             "url": "images/Sushi/sushi1.jpg"
         },
         {
-            "url": "images/Restaurant/restaurant1.jpg"
+            "url": "images/Sushi/sushi2.jpg"
+        },
+        {
+            "url": "images/Sushi/sushi3.jpg"
+        },
+        {
+            "url": "images/Sushi/sushi4.jpg"
         }
     ],
     "Mexican": [
@@ -233,12 +248,21 @@ app.service('foodService', function($filter) {
             "url": "images/Mexican/mexican2.jpg"
         },
         {
+            "url": "images/Mexican/mexican3.jpg"
+        },
+        {
             "url": "images/Restaurant/restaurant1.jpg"
         }
     ],
     "Thai": [
         {
-            "url": "images/Restaurant/restaurant1.jpg"
+            "url": "images/Thai/thai1.jpg"
+        },
+        {
+            "url": "images/Thai/thai2.jpg"
+        },
+        {
+            "url": "images/Thai/thai3.jpg"
         },
         {
             "url": "images/Restaurant/restaurant2.jpeg"
@@ -249,7 +273,7 @@ app.service('foodService', function($filter) {
             "url": "images/Pizza/pizza1.jpg"
         },
         {
-            "url": "images/Pizza/pizza2.jpg"
+            "url": "images/Pizza/pizza2.jpeg"
         },
         {
             "url": "images/Pizza/pizza3.jpg"
@@ -277,7 +301,10 @@ app.service('foodService', function($filter) {
             "url": "images/Pho/pho2.jpg"
         },
         {
-            "url": "images/Restaurant/restaurant1.jpg"
+            "url": "images/Pho/pho3.jpg"
+        },
+        {
+            "url": "images/Pho/pho4.jpg"
         }
     ],
     "Italian": [
@@ -289,6 +316,9 @@ app.service('foodService', function($filter) {
         },
         {
             "url": "images/Italian/italian3.jpg"
+        },
+        {
+            "url": "images/Italian/italian4.jpg"
         },
         {
             "url": "images/Restaurant/restaurant3.jpg"
